@@ -5,7 +5,7 @@ import Header from "components/Header";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import { geoData } from "state/geoData";
 
-const Geography = () => {
+const Donors = () => {
   const theme = useTheme();
   const { data } = useGetGeographyQuery();
 
@@ -99,4 +99,4 @@ const Geography = () => {
   );
 };
 
-export default Geography;
+export default Donors;

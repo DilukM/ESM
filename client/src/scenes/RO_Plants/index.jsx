@@ -6,7 +6,7 @@ import { useGetSalesQuery } from "state/api";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const Daily = () => {
+const RO_Plants = () => {
   const [startDate, setStartDate] = useState(new Date("2021-02-01"));
   const [endDate, setEndDate] = useState(new Date("2021-03-01"));
   const { data } = useGetSalesQuery();
@@ -184,4 +184,4 @@ const Daily = () => {
   );
 };
 
-export default Daily;
+export default RO_Plants;
