@@ -18,11 +18,11 @@ import {
   ChevronRightOutlined,
   HomeOutlined,
   ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
+  Inventory2Rounded,
+  InvertColorsRounded,
   PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
+  ForestRounded,
+  VolunteerActivismRounded,
   CalendarMonthOutlined,
   AdminPanelSettingsOutlined,
   TrendingUpOutlined,
@@ -31,7 +31,6 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
-import profileImage from "assets/profile.jpeg";
 
 const navItems = [
   {
@@ -44,29 +43,20 @@ const navItems = [
   },
   {
     text: "RO Plants",
-    icon: <ShoppingCartOutlined />,
+    icon: <InvertColorsRounded />,
   },
   {
     text: "Tree Plantation",
-    icon: <Groups2Outlined />,
+    icon: <ForestRounded />,
   },
   {
     text: "Inventory",
-    icon: <ReceiptLongOutlined />,
+    icon: <Inventory2Rounded />,
   },
   {
     text: "Donors",
-    icon: <PublicOutlined />,
+    icon: <VolunteerActivismRounded />,
   },
-  {
-    text: "Others",
-    icon: null,
-  },
-  {
-    text: "Settings",
-    icon: <SettingsOutlined />,
-  },
-
   {
     text: "Management",
     icon: null,
@@ -78,6 +68,10 @@ const navItems = [
   {
     text: "Performance",
     icon: <TrendingUpOutlined />,
+  },
+  {
+    text: "Settings",
+    icon: <SettingsOutlined />,
   },
 ];
 
