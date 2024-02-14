@@ -28,7 +28,7 @@ export const tokensDark = {
     900: "#070812",
   },
   secondary: {
-    // yellow
+    // red
     50: "#f0f0f0", // manually adjusted
     100: "#f5dfdc",
     200: "#ebbfba",
