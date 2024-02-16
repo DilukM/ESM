@@ -62,7 +62,7 @@ const Dashboard = () => {
       <FlexBetween>
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
 
-        <Box>
+        {/* <Box>
           <Button
             sx={{
               backgroundColor: theme.palette.secondary.light,
@@ -75,8 +75,9 @@ const Dashboard = () => {
             <DownloadOutlined sx={{ mr: "10px" }} />
             Download Reports
           </Button>
-        </Box>
+          </Box>*/}
       </FlexBetween>
+      {/*
 
       <Box
         mt="20px"
@@ -88,7 +89,7 @@ const Dashboard = () => {
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
-        {/* ROW 1 */}
+  
         <StatBox
           title="Total Customers"
           value={data && data.totalCustomers}
@@ -143,7 +144,7 @@ const Dashboard = () => {
           }
         />
 
-        {/* ROW 2 */}
+
         <Box
           gridColumn="span 8"
           gridRow="span 3"
@@ -200,7 +201,7 @@ const Dashboard = () => {
             made for this year and total sales.
           </Typography>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
