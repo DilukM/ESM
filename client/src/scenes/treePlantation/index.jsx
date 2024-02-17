@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, backdropClasses, useTheme } from "@mui/material";
 import Header from "components/Header";
 
 import GoogleMap from "components/GoogleMap"; // Import your GoogleMap component here
@@ -37,6 +37,17 @@ const TreePlantation = () => {
   const buttonStyleEvent = {
     margin: "10px",
     backgroundColor: isHoveredEvent ? theme.palette.secondary[500] : theme.palette.secondary[200],
+    position: "relative",
+  };
+
+  const dropdownStyle = {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    backgroundColor: theme.palette.secondary[200],
+    borderRadius: "5px",
+    padding: "5px",
+    display: isHoveredEvent ? "block" : "none",
   };
 
   const buttonStyleLocation = {
@@ -81,13 +92,20 @@ const TreePlantation = () => {
         }}
       >
         <Box display="flex">
-          <button
-            style={buttonStyleEvent}
+          <div  style={buttonStyleEvent}
             onMouseEnter={handleMouseEnterEvent}
-            onMouseLeave={handleMouseLeaveEvent}
-          >
-            Events
-          </button>
+            onMouseLeave={handleMouseLeaveEvent}>
+            <button 
+           
+            >
+              Events
+            </button>
+            <div style={dropdownStyle} >
+              {/* Dropdown content here */}
+              <p>Option 1</p>
+              <p>Option 2</p>
+            </div>
+          </div>
           <button
             style={buttonStyleLocation}
             onMouseEnter={handleMouseEnterLocation}
