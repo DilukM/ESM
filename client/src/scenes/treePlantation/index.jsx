@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Box, backdropClasses, useTheme } from "@mui/material";
+import { Box, backdropClasses, colors, useTheme } from "@mui/material";
 import Header from "components/Header";
 
 import GoogleMap from "components/GoogleMap"; // Import your GoogleMap component here
+import { green, grey } from "@mui/material/colors";
 
 const TreePlantation = () => {
   const theme = useTheme();
@@ -36,28 +37,25 @@ const TreePlantation = () => {
 
   const buttonStyleEvent = {
     margin: "10px",
-    backgroundColor: isHoveredEvent ? theme.palette.secondary[500] : theme.palette.secondary[200],
+    backgroundColor: isHoveredEvent ? "grey": theme.palette.secondary[400],
     position: "relative",
-  };
-
-  const dropdownStyle = {
-    position: "absolute",
-    top: "100%",
-    left: 0,
-    backgroundColor: theme.palette.secondary[200],
-    borderRadius: "5px",
-    padding: "5px",
-    display: isHoveredEvent ? "block" : "none",
+    color: "white",
+    border:"none",
   };
 
   const buttonStyleLocation = {
     margin: "10px",
-    backgroundColor: isHoveredLocation ? theme.palette.secondary[500] : theme.palette.secondary[200],
+    backgroundColor: isHoveredLocation ? "grey" : theme.palette.secondary[400],
+    color: "white",
+    border:"none",
+    
   };
 
   const buttonStyleReport = {
     margin: "10px",
-    backgroundColor: isHoveredReport ? theme.palette.secondary[500] : theme.palette.secondary[200],
+    backgroundColor: isHoveredReport ? "grey" : theme.palette.secondary[400],
+    color: "white",
+    border:"none",
   };
 
   return (
@@ -92,20 +90,16 @@ const TreePlantation = () => {
         }}
       >
         <Box display="flex">
-          <div  style={buttonStyleEvent}
-            onMouseEnter={handleMouseEnterEvent}
-            onMouseLeave={handleMouseLeaveEvent}>
-            <button 
            
+            <button 
+              style={buttonStyleEvent}
+              onMouseEnter={handleMouseEnterEvent}
+              onMouseLeave={handleMouseLeaveEvent}
             >
               Events
             </button>
-            <div style={dropdownStyle} >
-              {/* Dropdown content here */}
-              <p>Option 1</p>
-              <p>Option 2</p>
-            </div>
-          </div>
+           
+         
           <button
             style={buttonStyleLocation}
             onMouseEnter={handleMouseEnterLocation}
