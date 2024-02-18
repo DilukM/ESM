@@ -1,100 +1,333 @@
-import React from "react";
-import { Box, useTheme } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Tab,
+  Tabs,
+  useTheme,
+  Typography,
+} from "@mui/material";
 import { useGetGeographyQuery } from "state/api";
 import Header from "components/Header";
+import DataGridCustomToolbar from "components/DataGridCustomToolbar";
+import { DataGrid } from "@mui/x-data-grid";
+import { useGetTransactionsQuery } from "state/api";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import { geoData } from "state/geoData";
+import { JoinRight } from "@mui/icons-material";
 
 const Donors = () => {
   const theme = useTheme();
-  const { data } = useGetGeographyQuery();
+
+  // values to be sent to the backend
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(20);
+  const [sort, setSort] = useState({});
+  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState(0); // State to manage active tab
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading } = useGetTransactionsQuery({
+    page,
+    pageSize,
+    sort: JSON.stringify(sort),
+    search,
+  });
+
+  const tabsLabelColor =
+    theme.palette.mode === "dark"
+      ? theme.palette.primary[700]
+      : theme.palette.secondary[300];
+
+  const tabsBackgroundColor =
+    theme.palette.mode === "dark"
+      ? theme.palette.secondary[400]
+      : "transparent";
+
+  const columns = [
+    {
+      field: "rank",
+      headerName: "Rank",
+      flex: 0.2,
+    },
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      flex: 0.2,
+      renderCell: (params) => <Avatar src={params.row.photoURL} />,
+      sortable: false,
+      filterable: false,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    },
+    {
+      field: "score",
+      headerName: "Score",
+      flex: 0.5,
+      renderCell: (params) => params.value.length,
+    },
+    {
+      field: "action",
+      headerName: "",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+    },
+  ];
+
+  const donorColumns = [
+    {
+      field: "_id",
+      headerName: "ID",
+      flex: 0.2,
+    },
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      flex: 0.2,
+      renderCell: (params) => <Avatar src={params.row.photoURL} />,
+      sortable: false,
+      filterable: false,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+    },
+    {
+      field: "contact",
+      headerName: "Contact Number",
+      flex: 0.5,
+      sortable: false,
+      renderCell: (params) => params.value.length,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 0.5,
+      sortable: false,
+      renderCell: (params) => params.value.length,
+    },
+    {
+      field: "action",
+      headerName: "",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+    },
+  ];
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="GEOGRAPHY" subtitle="Find where your users are located." />
-      <Box
-        mt="40px"
-        height="75vh"
-        border={`1px solid ${theme.palette.secondary[200]}`}
-        borderRadius="4px"
+      <Header
+        title="Donor Management"
+        subtitle="Manage all the donor actions in one place."
+      />
+      <Tabs
+        value={activeTab}
+        onChange={handleTabChange}
+        variant="fullWidth"
+        indicatorColor="secondary"
+        textColor={tabsLabelColor}
+        backgroundColor="{tabsBackgroundColor}"
+        aria-label="Donor management tabs"
       >
-        {data ? (
-          <ResponsiveChoropleth
-            data={data}
-            theme={{
-              axis: {
-                domain: {
-                  line: {
-                    stroke: theme.palette.secondary[200],
-                  },
-                },
-                legend: {
-                  text: {
-                    fill: theme.palette.secondary[200],
-                  },
-                },
-                ticks: {
-                  line: {
-                    stroke: theme.palette.secondary[200],
-                    strokeWidth: 1,
-                  },
-                  text: {
-                    fill: theme.palette.secondary[200],
-                  },
-                },
-              },
-              legends: {
-                text: {
-                  fill: theme.palette.secondary[200],
-                },
-              },
-              tooltip: {
-                container: {
-                  color: theme.palette.primary.main,
-                },
+        <Tab label="Donors" />
+        <Tab label="Leaderboard" />
+        <Tab label="Events" />
+      </Tabs>
+      {activeTab === 0 && (
+        <Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mb={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
               },
             }}
-            features={geoData.features}
-            margin={{ top: 0, right: 0, bottom: 0, left: -50 }}
-            domain={[0, 60]}
-            unknownColor="#666666"
-            label="properties.name"
-            valueFormat=".2s"
-            projectionScale={150}
-            projectionTranslation={[0.45, 0.6]}
-            projectionRotation={[0, 0, 0]}
-            borderWidth={1.3}
-            borderColor="#ffffff"
-            legends={[
-              {
-                anchor: "bottom-right",
-                direction: "column",
-                justify: true,
-                translateX: 0,
-                translateY: -125,
-                itemsSpacing: 0,
-                itemWidth: 94,
-                itemHeight: 18,
-                itemDirection: "left-to-right",
-                itemTextColor: theme.palette.secondary[200],
-                itemOpacity: 0.85,
-                symbolSize: 18,
-                effects: [
-                  {
-                    on: "hover",
-                    style: {
-                      itemTextColor: theme.palette.background.alt,
-                      itemOpacity: 1,
-                    },
-                  },
-                ],
+          >
+            <Button variant="contained" sx={{ marginTop: 2 }}>
+              Add New Donor
+            </Button>
+          </Box>
+          <Box
+            height="80vh"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
               },
-            ]}
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: theme.palette.primary.light,
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${theme.palette.secondary[200]} !important`,
+              },
+            }}
+          >
+            <DataGrid
+              loading={isLoading || !data}
+              getRowId={(row) => row._id}
+              rows={(data && data.transactions) || []}
+              columns={donorColumns}
+              rowCount={(data && data.total) || 0}
+              rowsPerPageOptions={[20, 50, 100]}
+              pagination
+              page={page}
+              pageSize={pageSize}
+              paginationMode="server"
+              sortingMode="server"
+              onPageChange={(newPage) => setPage(newPage)}
+              onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
+              components={{ Toolbar: DataGridCustomToolbar }}
+              componentsProps={{
+                toolbar: { searchInput, setSearchInput, setSearch },
+              }}
+            />
+          </Box>
+        </Box>
+      )}
+      {activeTab === 1 && (
+        <Box
+          height="80vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.primary.light,
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.secondary[200]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            loading={isLoading || !data}
+            getRowId={(row) => row._id}
+            rows={(data && data.transactions) || []}
+            columns={columns}
+            rowCount={(data && data.total) || 0}
+            rowsPerPageOptions={[20, 50, 100]}
+            pagination
+            page={page}
+            pageSize={pageSize}
+            paginationMode="server"
+            sortingMode="server"
+            onPageChange={(newPage) => setPage(newPage)}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            onSortModelChange={(newSortModel) => setSort(...newSortModel)}
+            components={{ Toolbar: DataGridCustomToolbar }}
+            componentsProps={{
+              toolbar: { searchInput, setSearchInput, setSearch },
+            }}
           />
-        ) : (
-          <>Loading...</>
-        )}
-      </Box>
+        </Box>
+      )}
+      {activeTab === 2 && (
+        <Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mb={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button variant="contained" sx={{ marginTop: 2 }}>
+              Add New Event
+            </Button>
+          </Box>
+          <Box
+            height="80vh"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: theme.palette.primary.light,
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${theme.palette.secondary[200]} !important`,
+              },
+            }}
+          >
+            <DataGrid
+              loading={isLoading || !data}
+              getRowId={(row) => row._id}
+              rows={(data && data.transactions) || []}
+              columns={donorColumns}
+              rowCount={(data && data.total) || 0}
+              rowsPerPageOptions={[20, 50, 100]}
+              pagination
+              page={page}
+              pageSize={pageSize}
+              paginationMode="server"
+              sortingMode="server"
+              onPageChange={(newPage) => setPage(newPage)}
+              onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
+              components={{ Toolbar: DataGridCustomToolbar }}
+              componentsProps={{
+                toolbar: { searchInput, setSearchInput, setSearch },
+              }}
+            />
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };

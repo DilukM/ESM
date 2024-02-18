@@ -56,7 +56,10 @@ const Inventory = () => {
 
   return (
     <Box m="1.5rem 2.5rem">
-      <Header title="TRANSACTIONS" subtitle="Entire list of transactions" />
+      <Header
+        title="Inventory"
+        subtitle="Manage all incoming and outgoing donations"
+      />
       <Box
         height="80vh"
         sx={{

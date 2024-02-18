@@ -9,7 +9,7 @@ import Dashboard from "scenes/dashboard";
 import TreePlantation from "scenes/treePlantation";
 import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
-import RO_Plants from "scenes/RO_Plants";
+import RO_Plants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 import Performance from "scenes/performance";
 
@@ -52,3 +52,5 @@ function App() {
 }
 
 export default App;
+
+//https://youtu.be/0cPCMIuDk2I?t=7911

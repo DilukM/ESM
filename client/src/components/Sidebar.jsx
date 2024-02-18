@@ -17,21 +17,16 @@ import {
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
-  ShoppingCartOutlined,
-  Groups2Outlined,
-  ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
+  Inventory2Rounded,
+  InvertColorsRounded,
+  ForestRounded,
+  VolunteerActivismRounded,
   AdminPanelSettingsOutlined,
   TrendingUpOutlined,
-  PieChartOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
-import profileImage from "assets/profile.jpeg";
 
 const navItems = [
   {
@@ -44,29 +39,20 @@ const navItems = [
   },
   {
     text: "RO Plants",
-    icon: <ShoppingCartOutlined />,
+    icon: <InvertColorsRounded />,
   },
   {
     text: "Tree Plantation",
-    icon: <Groups2Outlined />,
+    icon: <ForestRounded />,
   },
   {
     text: "Inventory",
-    icon: <ReceiptLongOutlined />,
+    icon: <Inventory2Rounded />,
   },
   {
     text: "Donors",
-    icon: <PublicOutlined />,
+    icon: <VolunteerActivismRounded />,
   },
-  {
-    text: "Others",
-    icon: null,
-  },
-  {
-    text: "Settings",
-    icon: <SettingsOutlined />,
-  },
-
   {
     text: "Management",
     icon: null,
@@ -78,6 +64,10 @@ const navItems = [
   {
     text: "Performance",
     icon: <TrendingUpOutlined />,
+  },
+  {
+    text: "Settings",
+    icon: <SettingsOutlined />,
   },
 ];
 
@@ -152,11 +142,11 @@ const Sidebar = ({
                       sx={{
                         backgroundColor:
                           active === lcText
-                            ? theme.palette.secondary[300]
+                            ? theme.palette.secondary[400]
                             : "transparent",
                         color:
                           active === lcText
-                            ? theme.palette.primary[600]
+                            ? theme.palette.primary[900]
                             : theme.palette.secondary[100],
                       }}
                     >
@@ -165,7 +155,7 @@ const Sidebar = ({
                           ml: "2rem",
                           color:
                             active === lcText
-                              ? theme.palette.primary[600]
+                              ? theme.palette.primary[900]
                               : theme.palette.secondary[200],
                         }}
                       >
@@ -180,42 +170,6 @@ const Sidebar = ({
                 );
               })}
             </List>
-          </Box>
-
-          <Box position="absolute" bottom="2rem">
-            <Divider />
-            <FlexBetween textTransform="none" gap="1rem" m="1.5rem 2rem 0 3rem">
-              <Box
-                component="img"
-                alt="profile"
-                src={profileImage}
-                height="40px"
-                width="40px"
-                borderRadius="50%"
-                sx={{ objectFit: "cover" }}
-              />
-              <Box textAlign="left">
-                <Typography
-                  fontWeight="bold"
-                  fontSize="0.9rem"
-                  sx={{ color: theme.palette.secondary[100] }}
-                >
-                  {user.name}
-                </Typography>
-                <Typography
-                  fontSize="0.8rem"
-                  sx={{ color: theme.palette.secondary[200] }}
-                >
-                  {user.occupation}
-                </Typography>
-              </Box>
-              <SettingsOutlined
-                sx={{
-                  color: theme.palette.secondary[300],
-                  fontSize: "25px ",
-                }}
-              />
-            </FlexBetween>
           </Box>
         </Drawer>
       )}
