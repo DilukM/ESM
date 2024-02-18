@@ -13,6 +13,12 @@ import RO_Plants from "scenes/RO_Plants";
 import Admin from "scenes/admin";
 import Performance from "scenes/performance";
 
+import React from "react";
+import MainContent from "scenes/inventory/MainContent";
+import AddItems from "scenes/inventory/AddItems";
+import ReleaseItems from "scenes/inventory/ReleaseItems";
+import CreateEvent from "scenes/inventory/CreateEvent";
+
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -31,6 +37,12 @@ function App() {
               <Route path="/RO Plants" element={<RO_Plants />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/performance" element={<Performance />} />
+
+              <Route path="/inventory/MainContent" element={<MainContent />} />
+              <Route path="/inventory/AddItems" element={<AddItems />} />
+              <Route path="/inventory/ReleaseItems" element={<ReleaseItems />} />
+              <Route path="/inventory/CreateEvent" element={<CreateEvent />} />
+
             </Route>
           </Routes>
         </ThemeProvider>
