@@ -18,6 +18,7 @@ import MainContent from "scenes/inventory/MainContent";
 import AddItems from "scenes/inventory/AddItems";
 import ReleaseItems from "scenes/inventory/ReleaseItems";
 import CreateEvent from "scenes/inventory/CreateEvent";
+//import GenerateReport from "scenes/inventory/GenerateReport";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -42,6 +43,7 @@ function App() {
               <Route path="/inventory/AddItems" element={<AddItems />} />
               <Route path="/inventory/ReleaseItems" element={<ReleaseItems />} />
               <Route path="/inventory/CreateEvent" element={<CreateEvent />} />
+              
 
             </Route>
           </Routes>
