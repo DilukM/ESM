@@ -12,6 +12,12 @@ import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 
+import React from "react";
+import MainContent from "scenes/inventory/MainContent";
+import AddItems from "scenes/inventory/AddItems";
+import ReleaseItems from "scenes/inventory/ReleaseItems";
+import CreateEvent from "scenes/inventory/CreateEvent";
+
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -29,6 +35,7 @@ function App() {
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/performance" element={<Performance />} />
             </Route>
           </Routes>
         </ThemeProvider>
