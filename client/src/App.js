@@ -9,9 +9,8 @@ import Dashboard from "scenes/dashboard";
 import TreePlantation from "scenes/treePlantation";
 import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
-import RO_Plants from "scenes/ROPlants";
+import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
-import Performance from "scenes/performance";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -28,9 +27,8 @@ function App() {
               <Route path="/Tree Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
               <Route path="/Donors" element={<Donors />} />
-              <Route path="/RO Plants" element={<RO_Plants />} />
+              <Route path="/RO Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/performance" element={<Performance />} />
             </Route>
           </Routes>
         </ThemeProvider>
@@ -40,5 +38,3 @@ function App() {
 }
 
 export default App;
-
-//https://youtu.be/0cPCMIuDk2I?t=7911

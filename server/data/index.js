@@ -22976,3 +22976,15 @@ export const dataUser = [
     role: "admin",
   },
 ];
+
+export const dataDonor = [
+  {
+    _id: "63701cc1f03239d40b000084",
+    avatar: "NULL",
+    name: "Konstantine",
+    email: "diluk@narod.ru",
+    phone: "0772684541",
+    password: "omMDCh",
+    score: 12,
+  },
+];

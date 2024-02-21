@@ -1,21 +1,10 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Tab,
-  Tabs,
-  useTheme,
-  Typography,
-} from "@mui/material";
-import { useGetGeographyQuery } from "state/api";
+import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
+import { useGetDonorQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetTransactionsQuery } from "state/api";
-import { ResponsiveChoropleth } from "@nivo/geo";
-import { geoData } from "state/geoData";
-import { JoinRight } from "@mui/icons-material";
+import CustomColumnMenu from "components/DataGridCustomColumnMenu";
 
 const Donors = () => {
   const theme = useTheme();
@@ -23,8 +12,8 @@ const Donors = () => {
   // values to be sent to the backend
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
+  const [setSort] = useState({});
+  const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
 
   const handleTabChange = (event, newValue) => {
@@ -32,56 +21,12 @@ const Donors = () => {
   };
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetTransactionsQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
+  const { data, isLoading } = useGetDonorQuery();
 
   const tabsLabelColor =
     theme.palette.mode === "dark"
       ? theme.palette.primary[700]
       : theme.palette.secondary[300];
-
-  const tabsBackgroundColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.secondary[400]
-      : "transparent";
-
-  const columns = [
-    {
-      field: "rank",
-      headerName: "Rank",
-      flex: 0.2,
-    },
-    {
-      field: "avatar",
-      headerName: "Avatar",
-      flex: 0.2,
-      renderCell: (params) => <Avatar src={params.row.photoURL} />,
-      sortable: false,
-      filterable: false,
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-    },
-    {
-      field: "score",
-      headerName: "Score",
-      flex: 0.5,
-      renderCell: (params) => params.value.length,
-    },
-    {
-      field: "action",
-      headerName: "",
-      flex: 1,
-      sortable: false,
-      filterable: false,
-    },
-  ];
 
   const donorColumns = [
     {
@@ -103,7 +48,7 @@ const Donors = () => {
       flex: 1,
     },
     {
-      field: "contact",
+      field: "phone",
       headerName: "Contact Number",
       flex: 0.5,
       sortable: false,
@@ -117,8 +62,8 @@ const Donors = () => {
       renderCell: (params) => params.value.length,
     },
     {
-      field: "action",
-      headerName: "",
+      field: "",
+      headerName: "Actions",
       flex: 1,
       sortable: false,
       filterable: false,
@@ -134,10 +79,9 @@ const Donors = () => {
       <Tabs
         value={activeTab}
         onChange={handleTabChange}
-        variant="fullWidth"
+        variant="standard"
         indicatorColor="secondary"
         textColor={tabsLabelColor}
-        backgroundColor="{tabsBackgroundColor}"
         aria-label="Donor management tabs"
       >
         <Tab label="Donors" />
@@ -148,6 +92,7 @@ const Donors = () => {
         <Box>
           <Box
             display="flex"
+            flex={0.2}
             justifyContent="flex-end"
             mb={2}
             sx={{
@@ -162,7 +107,8 @@ const Donors = () => {
             </Button>
           </Box>
           <Box
-            height="80vh"
+            mt="40px"
+            height="75vh"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
@@ -191,21 +137,10 @@ const Donors = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={data || []}
               columns={donorColumns}
-              rowCount={(data && data.total) || 0}
-              rowsPerPageOptions={[20, 50, 100]}
-              pagination
-              page={page}
-              pageSize={pageSize}
-              paginationMode="server"
-              sortingMode="server"
-              onPageChange={(newPage) => setPage(newPage)}
-              onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
-              components={{ Toolbar: DataGridCustomToolbar }}
-              componentsProps={{
-                toolbar: { searchInput, setSearchInput, setSearch },
+              components={{
+                ColumnMenu: CustomColumnMenu,
               }}
             />
           </Box>
@@ -242,8 +177,8 @@ const Donors = () => {
           <DataGrid
             loading={isLoading || !data}
             getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
-            columns={columns}
+            rows={data || []}
+            columns={donorColumns}
             rowCount={(data && data.total) || 0}
             rowsPerPageOptions={[20, 50, 100]}
             pagination
