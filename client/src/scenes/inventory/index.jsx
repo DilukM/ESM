@@ -3,6 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
+import MainContent from "./MainContent";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 const Inventory = () => {
@@ -106,6 +107,9 @@ const Inventory = () => {
             toolbar: { searchInput, setSearchInput, setSearch },
           }}
         />
+      </Box>
+      <Box>
+        <MainContent/>
       </Box>
     </Box>
   );
