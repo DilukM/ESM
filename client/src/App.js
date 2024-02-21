@@ -35,7 +35,14 @@ function App() {
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/performance" element={<Performance />} />
+
+              <Route path="/inventory/MainContent" element={<MainContent />} />
+              <Route path="/inventory/AddItems" element={<AddItems />} />
+              <Route
+                path="/inventory/ReleaseItems"
+                element={<ReleaseItems />}
+              />
+              <Route path="/inventory/CreateEvent" element={<CreateEvent />} />
             </Route>
           </Routes>
         </ThemeProvider>
