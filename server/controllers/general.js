@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import OverallStat from "../models/OverallStat.js";
 import Transaction from "../models/Transaction.js";
-import Donor from "../models/Donor.js";
+import Donors from "../models/Donor.js";
 
 export const getUser = async (req, res) => {
   try {
@@ -13,9 +13,9 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const getDonor = async (req, res) => {
+export const getDonors = async (req, res) => {
   try {
-    const donors = await Donor.find();
+    const donors = await Donors.find();
     res.status(200).json(donors);
   } catch (error) {
     res.status(404).json({ message: error.message });

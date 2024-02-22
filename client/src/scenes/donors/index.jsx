@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
-import { useGetDonorQuery } from "state/api";
+import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
@@ -10,6 +10,7 @@ const Donors = () => {
   const theme = useTheme();
 
   // values to be sent to the backend
+  const [deleteDonor] = useDeleteDonorMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [setSort] = useState({});
@@ -21,12 +22,24 @@ const Donors = () => {
   };
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetDonorQuery();
+  const { data, isLoading } = useGetDonorsQuery();
 
-  const tabsLabelColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.primary[700]
-      : theme.palette.secondary[300];
+  const handleDelete = (donorId) => {
+    deleteDonor(donorId)
+      .unwrap()
+      .then((response) => {
+        console.log("Donor deleted successfully");
+        // Optionally, you can trigger a refetch of the donors list
+      })
+      .catch((error) => {
+        console.error("Error deleting donor:", error);
+      });
+  };
+
+  const handleChangePassword = (id) => {
+    // Handle change password logic here
+    console.log("Changing password for record with ID:", id);
+  };
 
   const donorColumns = [
     {
@@ -52,21 +65,37 @@ const Donors = () => {
       headerName: "Contact Number",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
     },
     {
       field: "email",
       headerName: "Email",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
     },
     {
-      field: "",
+      field: "actions",
       headerName: "Actions",
       flex: 1,
       sortable: false,
       filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDelete(params.row._id)}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => handleChangePassword(params.row._id)}
+          >
+            Change Password
+          </Button>
+        </Box>
+      ),
     },
   ];
 
@@ -81,7 +110,7 @@ const Donors = () => {
         onChange={handleTabChange}
         variant="standard"
         indicatorColor="secondary"
-        textColor={tabsLabelColor}
+        textColor="secondary"
         aria-label="Donor management tabs"
       >
         <Tab label="Donors" />
@@ -139,8 +168,19 @@ const Donors = () => {
               getRowId={(row) => row._id}
               rows={data || []}
               columns={donorColumns}
-              components={{
-                ColumnMenu: CustomColumnMenu,
+              rowCount={(data && data.total) || 0}
+              rowsPerPageOptions={[20, 50, 100]}
+              pagination
+              page={page}
+              pageSize={pageSize}
+              paginationMode="server"
+              sortingMode="server"
+              onPageChange={(newPage) => setPage(newPage)}
+              onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
+              components={{ Toolbar: DataGridCustomToolbar }}
+              componentsProps={{
+                toolbar: { searchInput, setSearchInput, setSearch },
               }}
             />
           </Box>

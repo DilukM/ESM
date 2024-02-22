@@ -39,5 +39,5 @@ const DonorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Donor = mongoose.model("Donor", DonorSchema);
-export default Donor;
+const Donors = mongoose.model("Donors", DonorSchema);
+export default Donors;
