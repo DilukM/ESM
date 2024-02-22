@@ -9,9 +9,8 @@ import Dashboard from "scenes/dashboard";
 import TreePlantation from "scenes/treePlantation";
 import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
-import RO_Plants from "scenes/ROPlants";
+import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
-import Performance from "scenes/performance";
 
 import React from "react";
 import MainContent from "scenes/inventory/MainContent";
@@ -35,15 +34,16 @@ function App() {
               <Route path="/Tree Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
               <Route path="/Donors" element={<Donors />} />
-              <Route path="/RO Plants" element={<RO_Plants />} />
+              <Route path="/RO Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/performance" element={<Performance />} />
 
               <Route path="/inventory/MainContent" element={<MainContent />} />
               <Route path="/inventory/AddItems" element={<AddItems />} />
-              <Route path="/inventory/ReleaseItems" element={<ReleaseItems />} />
+              <Route
+                path="/inventory/ReleaseItems"
+                element={<ReleaseItems />}
+              />
               <Route path="/inventory/CreateEvent" element={<CreateEvent />} />
-              
 
             </Route>
           </Routes>
@@ -54,5 +54,3 @@ function App() {
 }
 
 export default App;
-
-//https://youtu.be/0cPCMIuDk2I?t=7911
