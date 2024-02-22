@@ -30,11 +30,6 @@ const Inventory = () => {
     search,
   });
 
-  const tabsLabelColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.primary[700]
-      : theme.palette.secondary[300];
-
   const columns = [
     {
       field: "_id",
@@ -77,8 +72,7 @@ const Inventory = () => {
         onChange={handleTabChange}
         variant="standard"
         indicatorColor="secondary"
-        textColor={tabsLabelColor}
-        backgroundColor="{tabsBackgroundColor}"
+        textColor="Primary"
         aria-label="Donor management tabs"
       >
         <Tab label="OverView" />

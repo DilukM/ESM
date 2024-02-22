@@ -13,6 +13,29 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const addDonor = async (req, res) => {
+  try {
+    const { avatar, name, phone, email, password, score } = req.body;
+
+    // Create a new donor instance
+    const newDonor = new Donors({
+      name,
+      phone,
+      email,
+      password,
+      score,
+    });
+
+    // Save the donor to the database
+    const savedDonor = await newDonor.save();
+
+    res.status(201).json(savedDonor); // Respond with the saved donor
+  } catch (error) {
+    console.error("Error adding new donor:", error);
+    res.status(500).json({ error: "Failed to add new donor" });
+  }
+};
+
 export const getDonors = async (req, res) => {
   try {
     const donors = await Donors.find();
@@ -22,8 +45,18 @@ export const getDonors = async (req, res) => {
   }
 };
 
+export const getDonor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const donors = await Donors.findById(id);
+    res.status(200).json(donors);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 export const deleteDonors = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
   try {
     const deletedDonor = await Donors.findByIdAndDelete(id);
     if (!deletedDonor) {

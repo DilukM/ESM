@@ -1,6 +1,22 @@
-import React, { useState } from "react";
-import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
-import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
+import React, { useState, useEffect } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Tab,
+  Tabs,
+  useTheme,
+} from "@mui/material";
+import {
+  useGetDonorsQuery,
+  useDeleteDonorMutation,
+  useAddDonorQuery,
+} from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
@@ -16,6 +32,14 @@ const Donors = () => {
   const [setSort] = useState({});
   const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedDonorId, setSelectedDonorId] = useState(null);
+  const [donorDetails, setDonorDetails] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    password: "",
+  });
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -37,8 +61,72 @@ const Donors = () => {
   };
 
   const handleChangePassword = (id) => {
-    // Handle change password logic here
-    console.log("Changing password for record with ID:", id);
+    setSelectedDonorId(id); // Set the selected donor ID
+    fetchDonorDetails(id); // Fetch donor details
+    setOpenDialog(true); // Open the dialog
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleUpdate = () => {
+    // Handle update logic here
+    console.log("Updating values...", donorDetails);
+    setOpenDialog(false); // Close the dialog after update
+  };
+
+  const fetchDonorDetails = (id) => {
+    // Make an API call to fetch donor details
+    // For demonstration, assuming an API that fetches details by ID
+    // Replace this with your actual API call
+    fetch(`your-api-url/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setDonorDetails({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          // Set other fields as needed
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching donor details:", error);
+      });
+  };
+
+  const handleAddNewDonor = () => {
+    setOpenDialog(true);
+    setSelectedDonorId(null);
+    // Clear existing donor details
+    setDonorDetails({
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+    });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/general/donors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(donorDetails),
+      });
+      if (response.ok) {
+        console.log("New donor added successfully");
+        // Optionally, you can fetch updated donor list or perform other actions
+        setOpenDialog(false);
+      } else {
+        console.error("Failed to add new donor:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding new donor:", error.message);
+    }
   };
 
   const donorColumns = [
@@ -92,12 +180,18 @@ const Donors = () => {
             color="info"
             onClick={() => handleChangePassword(params.row._id)}
           >
-            Change Password
+            Update
           </Button>
         </Box>
       ),
     },
   ];
+
+  useEffect(() => {
+    if (selectedDonorId) {
+      fetchDonorDetails(selectedDonorId);
+    }
+  }, [selectedDonorId]);
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -131,7 +225,11 @@ const Donors = () => {
               },
             }}
           >
-            <Button variant="contained" sx={{ marginTop: 2 }}>
+            <Button
+              variant="contained"
+              sx={{ marginTop: 2 }}
+              onClick={handleAddNewDonor} // Call the function to open dialog
+            >
               Add New Donor
             </Button>
           </Box>
@@ -184,6 +282,70 @@ const Donors = () => {
               }}
             />
           </Box>
+          <Dialog open={openDialog} onClose={handleDialogClose}>
+            <DialogTitle>
+              {selectedDonorId ? "Update Donor" : "Add New Donor"}
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                required
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Name"
+                type="text"
+                fullWidth
+                value={donorDetails.name}
+                onChange={(e) =>
+                  setDonorDetails({ ...donorDetails, name: e.target.value })
+                }
+              />
+              <TextField
+                required
+                margin="dense"
+                id="phone"
+                label="Contact Number"
+                type="number"
+                fullWidth
+                value={donorDetails.phone}
+                onChange={(e) =>
+                  setDonorDetails({ ...donorDetails, phone: e.target.value })
+                }
+              />
+              <TextField
+                required
+                margin="dense"
+                id="email"
+                label="Email"
+                type="email"
+                fullWidth
+                value={donorDetails.email}
+                onChange={(e) =>
+                  setDonorDetails({ ...donorDetails, email: e.target.value })
+                }
+              />
+              <TextField
+                required
+                margin="dense"
+                id="password"
+                label="Password"
+                type="password"
+                fullWidth
+                value={donorDetails.passwordl}
+                onChange={(e) =>
+                  setDonorDetails({ ...donorDetails, password: e.target.value })
+                }
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose} color="error">
+                Cancel
+              </Button>
+              <Button onClick={handleUpdate} color="info">
+                {selectedDonorId ? "Update" : "Add"}
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       )}
       {activeTab === 1 && (

@@ -24,6 +24,10 @@ export const api = createApi({
       query: () => `general/donors`,
       providesTags: ["Donors"],
     }),
+    getDonor: build.query({
+      query: (id) => `general/donors/${id}`,
+      providesTags: ["Donors"],
+    }),
     getProducts: build.query({
       query: () => "client/products",
       providesTags: ["Products"],
@@ -62,10 +66,14 @@ export const api = createApi({
     }),
     deleteDonor: build.mutation({
       query: (donorId) => ({
-        url: `general/dltdonors/${donorId}`,
-        method: "DELETE",
+        url: `general/donors/${donorId}`,
+        method: "Delete",
       }),
       invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
+    }),
+    addDonor: build.query({
+      query: () => `general/donors`,
+      providesTags: ["Donors"],
     }),
   }),
 });
@@ -82,4 +90,6 @@ export const {
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
   useDeleteDonorMutation,
+  useGetDonorQuery,
+  useAddDonorQuery,
 } = api;
