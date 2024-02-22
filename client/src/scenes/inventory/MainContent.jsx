@@ -32,11 +32,7 @@ const MainContent = () => {
             </div>
         </Link>
 
-
         <Link to="releaseitems">
-
-        <Link to="/release-items">
-
             <div class="release_items">
               <div class="status">
                 
@@ -54,9 +50,6 @@ const MainContent = () => {
         </Link>
 
         <Link to="createevent">
-
-        <Link to="/create-event">
-
             <div class="create_event">
                 <div class="status">
                   
