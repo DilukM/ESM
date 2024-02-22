@@ -22,6 +22,20 @@ export const getDonors = async (req, res) => {
   }
 };
 
+export const deleteDonors = async (req, res) => {
+  const { id } = req.params.id;
+  try {
+    const deletedDonor = await Donors.findByIdAndDelete(id);
+    if (!deletedDonor) {
+      return res.status(404).json({ error: "Donor not found" });
+    }
+    res.json({ message: "Donor deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting donor:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const getDashboardStats = async (req, res) => {
   try {
     // hardcoded values

@@ -62,7 +62,7 @@ export const api = createApi({
     }),
     deleteDonor: build.mutation({
       query: (donorId) => ({
-        url: `donors/${donorId}`,
+        url: `general/dltdonors/${donorId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
