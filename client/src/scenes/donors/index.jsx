@@ -1,30 +1,20 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Tab,
-  Tabs,
-  useTheme,
-  Typography,
-} from "@mui/material";
-import { useGetGeographyQuery } from "state/api";
+import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
+import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetTransactionsQuery } from "state/api";
-import { ResponsiveChoropleth } from "@nivo/geo";
-import { geoData } from "state/geoData";
-import { JoinRight } from "@mui/icons-material";
+import CustomColumnMenu from "components/DataGridCustomColumnMenu";
 
 const Donors = () => {
   const theme = useTheme();
 
   // values to be sent to the backend
+  const [deleteDonor] = useDeleteDonorMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
+  const [setSort] = useState({});
+  const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
 
   const handleTabChange = (event, newValue) => {
@@ -32,56 +22,24 @@ const Donors = () => {
   };
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetTransactionsQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
+  const { data, isLoading } = useGetDonorsQuery();
 
-  const tabsLabelColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.primary[700]
-      : theme.palette.secondary[300];
+  const handleDelete = (donorId) => {
+    deleteDonor(donorId)
+      .unwrap()
+      .then((response) => {
+        console.log("Donor deleted successfully");
+        // Optionally, you can trigger a refetch of the donors list
+      })
+      .catch((error) => {
+        console.error("Error deleting donor:", error);
+      });
+  };
 
-  const tabsBackgroundColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.secondary[400]
-      : "transparent";
-
-  const columns = [
-    {
-      field: "rank",
-      headerName: "Rank",
-      flex: 0.2,
-    },
-    {
-      field: "avatar",
-      headerName: "Avatar",
-      flex: 0.2,
-      renderCell: (params) => <Avatar src={params.row.photoURL} />,
-      sortable: false,
-      filterable: false,
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-    },
-    {
-      field: "score",
-      headerName: "Score",
-      flex: 0.5,
-      renderCell: (params) => params.value.length,
-    },
-    {
-      field: "action",
-      headerName: "",
-      flex: 1,
-      sortable: false,
-      filterable: false,
-    },
-  ];
+  const handleChangePassword = (id) => {
+    // Handle change password logic here
+    console.log("Changing password for record with ID:", id);
+  };
 
   const donorColumns = [
     {
@@ -103,25 +61,41 @@ const Donors = () => {
       flex: 1,
     },
     {
-      field: "contact",
+      field: "phone",
       headerName: "Contact Number",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
     },
     {
       field: "email",
       headerName: "Email",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
     },
     {
-      field: "action",
-      headerName: "",
+      field: "actions",
+      headerName: "Actions",
       flex: 1,
       sortable: false,
       filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleDelete(params.row._id)}
+          >
+            Delete
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            onClick={() => handleChangePassword(params.row._id)}
+          >
+            Change Password
+          </Button>
+        </Box>
+      ),
     },
   ];
 
@@ -134,10 +108,9 @@ const Donors = () => {
       <Tabs
         value={activeTab}
         onChange={handleTabChange}
-        variant="fullWidth"
+        variant="standard"
         indicatorColor="secondary"
-        textColor={tabsLabelColor}
-        backgroundColor="{tabsBackgroundColor}"
+        textColor="secondary"
         aria-label="Donor management tabs"
       >
         <Tab label="Donors" />
@@ -148,6 +121,7 @@ const Donors = () => {
         <Box>
           <Box
             display="flex"
+            flex={0.2}
             justifyContent="flex-end"
             mb={2}
             sx={{
@@ -162,7 +136,8 @@ const Donors = () => {
             </Button>
           </Box>
           <Box
-            height="80vh"
+            mt="40px"
+            height="75vh"
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
@@ -191,7 +166,7 @@ const Donors = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={data || []}
               columns={donorColumns}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
@@ -242,8 +217,8 @@ const Donors = () => {
           <DataGrid
             loading={isLoading || !data}
             getRowId={(row) => row._id}
-            rows={(data && data.transactions) || []}
-            columns={columns}
+            rows={data || []}
+            columns={donorColumns}
             rowCount={(data && data.total) || 0}
             rowsPerPageOptions={[20, 50, 100]}
             pagination
