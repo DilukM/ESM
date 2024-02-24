@@ -7,6 +7,7 @@ const RoPlants = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="RO Plants" subtitle="Locate RO plants" />
+      Zai
     </Box>
   );
 };
