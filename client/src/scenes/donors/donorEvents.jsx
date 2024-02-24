@@ -8,9 +8,9 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import Header from "components/Header";
-import { DataGrid } from "@mui/x-data-grid";
 
+import { DataGrid } from "@mui/x-data-grid";
+import Header from "components/Header";
 function TabPanel({ value, index, children }) {
   return (
     <div
@@ -24,7 +24,7 @@ function TabPanel({ value, index, children }) {
   );
 }
 
-export default function Events() {
+export default function DonorEvents() {
   const theme = useTheme();
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -101,13 +101,10 @@ export default function Events() {
 
   const buttonStyle = {
     backgroundColor: "transparent",
-  border: "none",
-  color: "inherit",
-  cursor: "pointer",
-  outline: "none",
-  "&:hover": {
-    backgroundColor:  theme.palette.secondary[400],
-  }
+    border: "none",
+    color: "inherit",
+    cursor: "pointer",
+    outline: "none",
   };
 
   const columns1 = [
@@ -209,75 +206,38 @@ export default function Events() {
   ];
 
   return (
-    <Box m="1.5rem 2.5rem" position="relative">
-      <Header title="Tree Plantation" subtitle="Manage tree plantations" />
+    <Box>
       <Box
-        className="btnBox"
-        style={btnBoxStyle}
-        onMouseEnter={handleMouseEnterBtn}
-        onMouseLeave={handleMouseLeaveBtn}
+        display="flex"
+        flex={1}
+        justifyContent="flex-end"
+        mb={2}
+        sx={{
+          "& button": {
+            backgroundColor: theme.palette.secondary[400],
+            color: "white",
+          },
+        }}
       >
-        <button style={buttonStyle} onClick={handleOpenModal}>
-          Create Events
-        </button>
+        <Button
+          variant="contained"
+          sx={{ marginTop: 2 }}
+          onClick={handleOpenModal}
+        >
+          Create Event
+        </Button>
       </Box>
       <Box mt={2}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          TabIndicatorProps={{
-            style: { background: theme.palette.secondary[400] },
-          }}
-        >
-          <Tab
-            label="Events"
-            sx={{
-              color:
-                tabValue === 0
-                  ? theme.palette.primary.main
-                  : theme.palette.text.primary,
-              "&.Mui-selected": {
-                color: theme.palette.secondary[400],
-              },
-            }}
+        <Box height="80vh" position={"relative"}>
+          <DataGrid
+            rows={rows1}
+            columns={columns1}
+            pageSize={5}
+            checkboxSelection
+            disableSelectionOnClick
+            getRowHeight={() => 150}
           />
-          <Tab
-            label="Upcoming Events"
-            sx={{
-              color:
-                tabValue === 1
-                  ? theme.palette.primary.main
-                  : theme.palette.text.primary,
-              "&.Mui-selected": {
-                color: theme.palette.secondary[400],
-              },
-            }}
-          />
-        </Tabs>
-        <TabPanel value={tabValue} index={0}>
-          <Box height="80vh">
-            <DataGrid
-              rows={rows1}
-              columns={columns1}
-              pageSize={5}
-              checkboxSelection
-              disableSelectionOnClick
-              getRowHeight={() => 150}
-            />
-          </Box>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <Box height="80vh">
-            <DataGrid
-              rows={rows2}
-              columns={columns2}
-              pageSize={5}
-              checkboxSelection
-              disableSelectionOnClick
-              getRowHeight={() => 150}
-            />
-          </Box>
-        </TabPanel>
+        </Box>
       </Box>
       <Modal
         open={openModal}
@@ -325,10 +285,7 @@ export default function Events() {
             value={eventDetails.date}
             onChange={handleInputChange}
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{ mr: 1,mb: 2  }}
+            sx={{ mb: 2 }}
           />
           <Box
             display="flex"
@@ -382,12 +339,8 @@ export default function Events() {
             name="coverImage"
             onChange={handleFileInputChange}
             fullWidth
-           
+            sx={{ mb: 2 }}
             rows={4}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{ mr: 1,mb: 2  }}
           />
 
           <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>

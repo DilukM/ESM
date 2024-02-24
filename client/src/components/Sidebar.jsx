@@ -37,11 +37,11 @@ const navItems = [
     icon: null,
   },
   {
-    text: "RO Plants",
+    text: "RO_Plants",
     icon: <InvertColorsRounded />,
   },
   {
-    text: "Tree Plantation",
+    text: "Tree_Plantation",
     icon: <ForestRounded />,
   },
   {
