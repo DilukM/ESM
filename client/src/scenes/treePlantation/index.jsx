@@ -1,54 +1,62 @@
-import React from "react";
-import { Box, useTheme } from "@mui/material";
-import { useGetCustomersQuery } from "state/api";
+import React, { useState } from "react";
+import { Box, backdropClasses, colors, useTheme } from "@mui/material";
 import Header from "components/Header";
-import { DataGrid } from "@mui/x-data-grid";
+
+import GoogleMap from "components/GoogleMap"; // Import your GoogleMap component here
+import { green, grey } from "@mui/material/colors";
 
 const TreePlantation = () => {
   const theme = useTheme();
-  const { data, isLoading } = useGetCustomersQuery();
-  console.log("data", data);
+  const [isHoveredEvent, setIsHoveredEvent] = useState(false);
+  const [isHoveredLocation, setIsHoveredLocation] = useState(false);
+  const [isHoveredReport, setIsHoveredReport] = useState(false);
 
-  const columns = [
-    {
-      field: "_id",
-      headerName: "ID",
-      flex: 1,
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 0.5,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "phoneNumber",
-      headerName: "Phone Number",
-      flex: 0.5,
-      renderCell: (params) => {
-        return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "($1)$2-$3");
-      },
-    },
-    {
-      field: "country",
-      headerName: "Country",
-      flex: 0.4,
-    },
-    {
-      field: "occupation",
-      headerName: "Occupation",
-      flex: 1,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      flex: 0.5,
-    },
-  ];
+  const handleMouseEnterEvent = () => {
+    setIsHoveredEvent(true);
+  };
+
+  const handleMouseLeaveEvent = () => {
+    setIsHoveredEvent(false);
+  };
+
+  const handleMouseEnterLocation = () => {
+    setIsHoveredLocation(true);
+  };
+
+  const handleMouseLeaveLocation = () => {
+    setIsHoveredLocation(false);
+  };
+
+  const handleMouseEnterReport = () => {
+    setIsHoveredReport(true);
+  };
+
+  const handleMouseLeaveReport = () => {
+    setIsHoveredReport(false);
+  };
+
+  const buttonStyleEvent = {
+    margin: "10px",
+    backgroundColor: isHoveredEvent ? "grey": theme.palette.secondary[400],
+    position: "relative",
+    color: "white",
+    border:"none",
+  };
+
+  const buttonStyleLocation = {
+    margin: "10px",
+    backgroundColor: isHoveredLocation ? "grey" : theme.palette.secondary[400],
+    color: "white",
+    border:"none",
+    
+  };
+
+  const buttonStyleReport = {
+    margin: "10px",
+    backgroundColor: isHoveredReport ? "grey" : theme.palette.secondary[400],
+    color: "white",
+    border:"none",
+  };
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -81,12 +89,35 @@ const TreePlantation = () => {
           },
         }}
       >
-        <DataGrid
-          loading={isLoading || !data}
-          getRowId={(row) => row._id}
-          rows={data || []}
-          columns={columns}
-        />
+        <Box display="flex">
+           
+            <button 
+              style={buttonStyleEvent}
+              onMouseEnter={handleMouseEnterEvent}
+              onMouseLeave={handleMouseLeaveEvent}
+            >
+              Events
+            </button>
+           
+         
+          <button
+            style={buttonStyleLocation}
+            onMouseEnter={handleMouseEnterLocation}
+            onMouseLeave={handleMouseLeaveLocation}
+          >
+            Locations
+          </button>
+          <button
+            style={buttonStyleReport}
+            onMouseEnter={handleMouseEnterReport}
+            onMouseLeave={handleMouseLeaveReport}
+          >
+            Reports
+          </button>
+        </Box>
+        <Box mt={3}>
+          <GoogleMap />
+        </Box>
       </Box>
     </Box>
   );
