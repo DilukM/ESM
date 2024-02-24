@@ -101,10 +101,13 @@ export default function Events() {
 
   const buttonStyle = {
     backgroundColor: "transparent",
-    border: "none",
-    color: "inherit",
-    cursor: "pointer",
-    outline: "none",
+  border: "none",
+  color: "inherit",
+  cursor: "pointer",
+  outline: "none",
+  "&:hover": {
+    backgroundColor:  theme.palette.secondary[400],
+  }
   };
 
   const columns1 = [
@@ -322,7 +325,10 @@ export default function Events() {
             value={eventDetails.date}
             onChange={handleInputChange}
             fullWidth
-            sx={{ mb: 2 }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{ mr: 1,mb: 2  }}
           />
           <Box
             display="flex"
@@ -376,8 +382,12 @@ export default function Events() {
             name="coverImage"
             onChange={handleFileInputChange}
             fullWidth
-            sx={{ mb: 2 }}
+           
             rows={4}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{ mr: 1,mb: 2  }}
           />
 
           <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>
