@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Box, backdropClasses, colors, useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import Header from "components/Header";
-
-import GoogleMap from "components/GoogleMap"; // Import your GoogleMap component here
-import { green, grey } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom"; 
+import GoogleMap from "components/GoogleMap"; 
 
 const TreePlantation = () => {
   const theme = useTheme();
+  const navigate = useNavigate(); 
   const [isHoveredEvent, setIsHoveredEvent] = useState(false);
   const [isHoveredLocation, setIsHoveredLocation] = useState(false);
   const [isHoveredReport, setIsHoveredReport] = useState(false);
@@ -35,27 +35,36 @@ const TreePlantation = () => {
     setIsHoveredReport(false);
   };
 
+  // const handleEventButtonClick = () => {
+  //   navigate.push('./Events');
+  // };
+
   const buttonStyleEvent = {
     margin: "10px",
-    backgroundColor: isHoveredEvent ? "grey": theme.palette.secondary[400],
+    backgroundColor: isHoveredEvent ? "grey" : theme.palette.secondary[400],
     position: "relative",
     color: "white",
-    border:"none",
+    border: "none",
+    padding: "5px 10px", 
+    borderRadius: "5px" 
   };
 
   const buttonStyleLocation = {
     margin: "10px",
     backgroundColor: isHoveredLocation ? "grey" : theme.palette.secondary[400],
     color: "white",
-    border:"none",
-    
+    border: "none",
+    padding: "5px 10px", 
+    borderRadius: "5px"
   };
 
   const buttonStyleReport = {
     margin: "10px",
     backgroundColor: isHoveredReport ? "grey" : theme.palette.secondary[400],
     color: "white",
-    border:"none",
+    border: "none",
+    padding: "5px 10px", 
+    borderRadius: "5px"
   };
 
   return (
@@ -90,16 +99,14 @@ const TreePlantation = () => {
         }}
       >
         <Box display="flex">
-           
-            <button 
-              style={buttonStyleEvent}
-              onMouseEnter={handleMouseEnterEvent}
-              onMouseLeave={handleMouseLeaveEvent}
-            >
-              Events
-            </button>
-           
-         
+          <button
+            style={buttonStyleEvent}
+            onMouseEnter={handleMouseEnterEvent}
+            onMouseLeave={handleMouseLeaveEvent}
+            onClick={() => navigate('/Events')} 
+          >
+            Events
+          </button>
           <button
             style={buttonStyleLocation}
             onMouseEnter={handleMouseEnterLocation}
@@ -111,6 +118,7 @@ const TreePlantation = () => {
             style={buttonStyleReport}
             onMouseEnter={handleMouseEnterReport}
             onMouseLeave={handleMouseLeaveReport}
+            onClick={() => navigate('/Reports')} 
           >
             Reports
           </button>

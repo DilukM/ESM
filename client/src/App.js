@@ -6,12 +6,18 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { themeSettings } from "theme";
 import Layout from "scenes/layout";
 import Dashboard from "scenes/dashboard";
-import TreePlantation from "scenes/treePlantation";
+import TreePlantation from "scenes/treePlantation/index";
 import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
 import RO_Plants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 import Performance from "scenes/performance";
+// import Event from "scenes/treePlantation/Events";
+import Events from "scenes/treePlantation/Events";
+import EventsReg from "scenes/treePlantation/EventsReg";
+import Reports from "scenes/treePlantation/Reports"
+
+
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -31,6 +37,9 @@ function App() {
               <Route path="/RO Plants" element={<RO_Plants />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/performance" element={<Performance />} />
+              <Route path="/Events" element={<Events/>}/>
+              <Route path="/EventsReg"  element={<EventsReg/>}/>
+              <Route path="/Reports" element={<Reports/>}/>
             </Route>
           </Routes>
         </ThemeProvider>
