@@ -172,54 +172,6 @@ const Donors = () => {
       headerName: "Score",
       flex: 0.5,
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      flex: 1,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <Box display="flex" justifyContent="space-around">
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            mr={2}
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.secondary[400],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => handleDelete(params.row._id)}
-            >
-              Delete
-            </Button>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.primary[700],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="info"
-              onClick={() => setShowUpdateForm(true)}
-            >
-              Update
-            </Button>
-          </Box>
-        </Box>
-      ),
-    },
   ];
 
   return (
