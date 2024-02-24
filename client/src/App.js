@@ -12,12 +12,9 @@ import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 
-// import Events from "scenes/treePlantation/Events";
 
-// import Reports from "scenes/treePlantation/Reports"
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
-
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -31,16 +28,13 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/Tree Plantation" element={<TreePlantation />} />
+              <Route path="/Tree_Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
               <Route path="/Donors" element={<Donors />} />
-              <Route path="/RO Plants" element={<RoPlants />} />
+              <Route path="/RO_Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path = "/Events" element={<Events />}/>
-              <Route path = "/Reports" element={<Reports />}/>
-
-
-             
+              <Route path="/Events" element={<Events />} />
+              <Route path="/Reports" element={<Reports />} />
             </Route>
           </Routes>
         </ThemeProvider>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Grid, Typography } from "@mui/material";
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -31,12 +31,12 @@ export default function Reports() {
   // Handle filter changes
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    let formattedValue = value; 
-    
-    
-    if (name === 'startDate') {
-      const [year, month, day] = value.split('-'); 
-      formattedValue = `${day}/${month}/${year}`; 
+
+    let formattedValue = value;
+
+    // Check if the name is startDate or endDate and format the value accordingly
+    if (name === 'startDate' || name === 'endDate') {
+      formattedValue = value; // No need to format for now
     }
 
     setFilterValues((prevValues) => ({
@@ -44,11 +44,6 @@ export default function Reports() {
       [name]: formattedValue 
     }));
   };
-
-  // Determine whether to display the start date label
-  const isStartDateSelected = filterValues.startDate !== '';
-  const isEndDateSelected = filterValues.endDate !== '';
-
 
   // Filtered rows based on filter values
   const filteredRows = rows.filter(row => {
@@ -59,8 +54,8 @@ export default function Reports() {
     return (
       (filterValues.startDate === '' || rowDate >= startDate) &&
       (filterValues.endDate === '' || rowDate <= endDate) &&
-      row.Amountoftrees.includes(filterValues.amountOfTrees) &&
-      row.status.includes(filterValues.status)
+      (filterValues.amountOfTrees === '' || row.Amountoftrees.includes(filterValues.amountOfTrees)) &&
+      (filterValues.status === '' || row.status.includes(filterValues.status))
     );
   });
 
@@ -72,20 +67,28 @@ export default function Reports() {
           <TextField
             fullWidth
             type="date"
-            label={isStartDateSelected ? "Start Date" : ''} 
+            label="Start Date"
             name="startDate"
             value={filterValues.startDate}
             onChange={handleFilterChange}
+            InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{ mr: 1 }}
           />
         </Grid>
         <Grid item xs={3}>
           <TextField
             fullWidth
             type="date"
-            label={isEndDateSelected ? "End Date" : ''} 
+            label="End Date"
             name="endDate"
             value={filterValues.endDate}
             onChange={handleFilterChange}
+            InputLabelProps={{
+                shrink: true,
+              }}
+              sx={{ mr: 1 }}
           />
         </Grid>
         <Grid item xs={3}>
@@ -121,6 +124,13 @@ export default function Reports() {
           rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
+          components={{
+            header: {
+              cell: () => (
+                <Typography variant="h6" style={{ fontWeight: 'bold', color: 'white', backgroundColor: '#333333', padding: '10px' }} />
+              ),
+            },
+          }}
         />
       </div>
     </Box>
