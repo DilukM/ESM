@@ -6,7 +6,7 @@ import { DataGrid } from "@mui/x-data-grid";
 export default function Reports() {
   // Sample data for the DataGrid
   const rows = [
-    { id: 1, EventName: 'Manusath derana tree plantation 2020', date: '2024-02-21', Locations:'Dabulla', Amountoftrees:'100', status: 'Completed' },
+    { id: 1, EventName: 'Manusath derana tree plantation 2020', date: '2024-02-21', Locations:'Dabulla', Amountoftrees:'50', status: 'Completed' },
     { id: 2, EventName: 'Manusath derana tree plantation 2021', date: '2024-02-22', Locations:'Ampara', Amountoftrees:'100', status: 'Pending' },
     { id: 3, EventName: 'Manusath derana tree plantation 2022', date: '2024-02-23', Locations:'Anuradhapura', Amountoftrees:'100', status: 'In Progress' },
   ];
@@ -31,17 +31,17 @@ export default function Reports() {
   // Handle filter changes
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
-    let formattedValue = value; // Initialize with the value as is
+    let formattedValue = value; 
     
-    // If it's the start date field, format the date to dd/mm/yyyy
+    
     if (name === 'startDate') {
-      const [year, month, day] = value.split('-'); // Split the received value
-      formattedValue = `${day}/${month}/${year}`; // Reconstruct with the desired format
+      const [year, month, day] = value.split('-'); 
+      formattedValue = `${day}/${month}/${year}`; 
     }
 
     setFilterValues((prevValues) => ({
       ...prevValues,
-      [name]: formattedValue // Use the formatted value
+      [name]: formattedValue 
     }));
   };
 
@@ -67,12 +67,12 @@ export default function Reports() {
   return (
     <Box m="1.5rem 2.5rem" position="relative">
       <Header title="Tree Plantation" subtitle="Manage tree plantations" />
-      <Grid container spacing={2} mt={2} mb={2}> {/* Increased margin at the top */}
+      <Grid container spacing={2} mt={2} mb={2}> 
         <Grid item xs={3}>
           <TextField
             fullWidth
             type="date"
-            label={isStartDateSelected ? "Start Date" : ''} // Conditional rendering of the label
+            label={isStartDateSelected ? "Start Date" : ''} 
             name="startDate"
             value={filterValues.startDate}
             onChange={handleFilterChange}
@@ -82,7 +82,7 @@ export default function Reports() {
           <TextField
             fullWidth
             type="date"
-            label={isEndDateSelected ? "End Date" : ''} // Conditional rendering of the label
+            label={isEndDateSelected ? "End Date" : ''} 
             name="endDate"
             value={filterValues.endDate}
             onChange={handleFilterChange}
