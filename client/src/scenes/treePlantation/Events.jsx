@@ -295,7 +295,7 @@ export default function Events() {
             rows={4}
           />
           
-          <Button variant="contained" onClick={handleCreateEvent}  sx={{ mr: 2 }}>Create</Button>
+          <Button variant="contained" onClick={handleCreateEvent}  sx={{ m: 2 }}>Create</Button>
           <Button variant="contained" onClick={handleCreateEvent}>close</Button>
           
         </Box>
