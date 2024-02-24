@@ -61,10 +61,6 @@ const navItems = [
     icon: <AdminPanelSettingsOutlined />,
   },
   {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
-  },
-  {
     text: "Settings",
     icon: <SettingsOutlined />,
   },

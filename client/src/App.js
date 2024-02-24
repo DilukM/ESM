@@ -13,11 +13,6 @@ import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 
 import React from "react";
-import MainContent from "scenes/inventory/MainContent";
-import AddItems from "scenes/inventory/AddItems";
-import ReleaseItems from "scenes/inventory/ReleaseItems";
-import CreateEvent from "scenes/inventory/CreateEvent";
-//import GenerateReport from "scenes/inventory/GenerateReport";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -36,15 +31,6 @@ function App() {
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
-
-              <Route path="/inventory/MainContent" element={<MainContent />} />
-              <Route path="/inventory/AddItems" element={<AddItems />} />
-              <Route
-                path="/inventory/ReleaseItems"
-                element={<ReleaseItems />}
-              />
-              <Route path="/inventory/CreateEvent" element={<CreateEvent />} />
-
             </Route>
           </Routes>
         </ThemeProvider>
