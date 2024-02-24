@@ -12,9 +12,7 @@ import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 
-// import Events from "scenes/treePlantation/Events";
 
-// import Reports from "scenes/treePlantation/Reports"
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
 
