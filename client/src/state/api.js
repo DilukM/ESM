@@ -71,8 +71,11 @@ export const api = createApi({
       }),
       invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
     }),
-    addDonor: build.query({
-      query: () => `general/donors`,
+    addDonor: build.mutation({
+      query: () => ({
+        url: `general/donors`,
+        method: "post",
+      }),
       providesTags: ["Donors"],
     }),
   }),
@@ -91,5 +94,5 @@ export const {
   useGetDashboardQuery,
   useDeleteDonorMutation,
   useGetDonorQuery,
-  useAddDonorQuery,
+  useAddDonorMutation,
 } = api;

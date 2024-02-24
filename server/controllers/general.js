@@ -15,7 +15,7 @@ export const getUser = async (req, res) => {
 
 export const addDonor = async (req, res) => {
   try {
-    const { avatar, name, phone, email, password, score } = req.body;
+    const { name, phone, email, password } = req.body;
 
     // Create a new donor instance
     const newDonor = new Donors({
@@ -23,7 +23,6 @@ export const addDonor = async (req, res) => {
       phone,
       email,
       password,
-      score,
     });
 
     // Save the donor to the database
