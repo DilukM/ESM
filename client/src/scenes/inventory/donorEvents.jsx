@@ -24,7 +24,7 @@ function TabPanel({ value, index, children }) {
   );
 }
 
-export default function ReleaseItems() {
+export default function DonorEvents() {
   const theme = useTheme();
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
