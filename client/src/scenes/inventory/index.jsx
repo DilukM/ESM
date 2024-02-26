@@ -11,7 +11,7 @@ import {
   Button,
   Tab,
   Tabs,
-  
+  //Divider,
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -259,6 +259,7 @@ const Inventory = () => {
             </Button>
             </Link>
             <br />
+            {/* <Divider /> */}
             <Link to="releaseitems">
             <Button variant="contained" sx={{ marginTop: 2 }}>
               Release Items
