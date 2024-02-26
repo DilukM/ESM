@@ -15,6 +15,7 @@ import Admin from "scenes/admin";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
+import ReleaseItems from "scenes/inventory/ReleaseItems";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -30,6 +31,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Tree_Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
+              <Route path="/Inventory/ReleaseItems" element={<ReleaseItems />} />
+              
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO_Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />

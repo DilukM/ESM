@@ -5,6 +5,7 @@ import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
 //import MainContent from "./MainContent";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
+import ReleaseItems from "./ReleaseItems";
 
 import { Avatar, Button, Tab, Tabs, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
