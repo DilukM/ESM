@@ -4,7 +4,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_BASE_URL }),
   reducerPath: "adminApi",
   tagTypes: [
-    "Donor",
+    "Donors",
     "User",
     "Products",
     "Customers",
@@ -20,9 +20,13 @@ export const api = createApi({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
     }),
+    getDonors: build.query({
+      query: () => `general/donors`,
+      providesTags: ["Donors"],
+    }),
     getDonor: build.query({
-      query: () => `general/donor`,
-      providesTags: ["Donor"],
+      query: (id) => `general/donors/${id}`,
+      providesTags: ["Donors"],
     }),
     getProducts: build.query({
       query: () => "client/products",
@@ -60,11 +64,25 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+    deleteDonor: build.mutation({
+      query: (donorId) => ({
+        url: `general/donors/${donorId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
+    }),
+    addDonor: build.mutation({
+      query: () => ({
+        url: `general/donors`,
+        method: "post",
+      }),
+      providesTags: ["Donors"],
+    }),
   }),
 });
 
 export const {
-  useGetDonorQuery,
+  useGetDonorsQuery,
   useGetUserQuery,
   useGetProductsQuery,
   useGetCustomersQuery,
@@ -74,4 +92,7 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+  useDeleteDonorMutation,
+  useGetDonorQuery,
+  useAddDonorMutation,
 } = api;

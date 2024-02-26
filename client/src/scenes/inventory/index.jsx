@@ -5,15 +5,8 @@ import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
 //import MainContent from "./MainContent";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-import {
-  Avatar,
-  
-  Button,
-  Tab,
-  Tabs,
-  //Divider,
-  Typography,
-} from "@mui/material";
+
+import { Avatar, Button, Tab, Tabs, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const Inventory = () => {
@@ -37,17 +30,6 @@ const Inventory = () => {
     sort: JSON.stringify(sort),
     search,
   });
-
-  const tabsLabelColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.primary[700]
-      : theme.palette.secondary[300];
-
-  const tabsBackgroundColor =
-    theme.palette.mode === "dark"
-      ? theme.palette.secondary[400]
-      : "transparent";
-
 
   const columns = [
     {
@@ -89,10 +71,9 @@ const Inventory = () => {
       <Tabs
         value={activeTab}
         onChange={handleTabChange}
-        variant="fullWidth"
+        variant="standard"
         indicatorColor="secondary"
-        textColor={tabsLabelColor}
-        backgroundColor="{tabsBackgroundColor}"
+        textColor="Primary"
         aria-label="Donor management tabs"
       >
         <Tab label="OverView" />
@@ -114,9 +95,9 @@ const Inventory = () => {
             }}
           >
             <Link to="generatereport">
-            <Button variant="contained" sx={{ marginTop: 2 }}>
-              Generate Report 
-            </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                Generate Report
+              </Button>
             </Link>
           </Box>
           <Box
@@ -184,9 +165,9 @@ const Inventory = () => {
             }}
           >
             <Link to="additems">
-            <Button variant="contained" sx={{ marginTop: 2 }}>
-              Add Items 
-            </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                Add Items
+              </Button>
             </Link>
           </Box>
           <Box
@@ -252,18 +233,18 @@ const Inventory = () => {
                 color: "white",
               },
             }}
-          > 
+          >
             <Link to="createevent">
-            <Button variant="contained" sx={{ marginTop: 2 }}>
-              Create Event
-            </Button>
+              <Button variant="contained" sx={{ marginTop: 2, marginRight: 2 }}>
+                Create Event
+              </Button>
             </Link>
             <br />
-            {/* <Divider /> */}
+
             <Link to="releaseitems">
-            <Button variant="contained" sx={{ marginTop: 2 }}>
-              Release Items
-            </Button>
+              <Button variant="contained" sx={{ marginTop: 2 }}>
+                Release Items
+              </Button>
             </Link>
           </Box>
           <Box
@@ -316,7 +297,6 @@ const Inventory = () => {
           </Box>
         </Box>
       )}
-
     </Box>
   );
 };

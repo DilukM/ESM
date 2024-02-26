@@ -5,7 +5,6 @@ const DonorSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default: "NULL",
-      min: 2,
     },
     name: {
       type: String,
@@ -22,8 +21,6 @@ const DonorSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-      max: 50,
-      min: 10,
       unique: true,
     },
     password: {
@@ -39,5 +36,5 @@ const DonorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Donor = mongoose.model("Donor", DonorSchema);
-export default Donor;
+const Donors = mongoose.model("Donors", DonorSchema);
+export default Donors;
