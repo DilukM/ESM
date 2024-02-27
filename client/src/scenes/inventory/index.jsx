@@ -3,9 +3,9 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-//import MainContent from "./MainContent";
+
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-import ReleaseItems from "./ReleaseItems";
+
 
 import { Avatar, Button, Tab, Tabs, Typography,Modal,
   TextField} from "@mui/material";
@@ -22,18 +22,28 @@ const Inventory = () => {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
+
+
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
-  const [eventDetails, setEventDetails] = useState({
-    eventName: "",
+  //Add Item...
+  const [addItem, setAddItem] = useState({
+    itemName: "",
     date: "",
-    location: "",
-    comments: "",
-    coverImage: null,
-    province: "",
-    district: "",
-    town: "",
+    itemId: "",
+    donorId: "",
+    itemQuantity: "",
+   
+  });
+//Release Item...
+  const [releaseItem, setReleaseItem] = useState({
+    itemName: "",
+    date: "",
+    itemId: "",
+    eventId: "",
+    itemQuantity: "",
+   
   });
 
   const handleTabChange = (event, newValue) => {
@@ -55,10 +65,10 @@ const Inventory = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
+//Add Item
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEventDetails((prev) => ({
+    setAddItem((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -66,15 +76,37 @@ const Inventory = () => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    setEventDetails((prev) => ({
+    setAddItem((prev) => ({
       ...prev,
       coverImage: file,
     }));
   };
 
-  const handleCreateEvent = () => {
-    // Here you can perform actions with eventDetails like sending it to an API
-    console.log(eventDetails);
+  const handleAddItem = () => {
+    
+    console.log(addItem);
+    handleCloseModal();
+  };
+//Release Item
+  const handleInputChange1 = (e) => {
+    const { name, value } = e.target;
+    setReleaseItem((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileInputChange1 = (e) => {
+    const file = e.target.files[0];
+    setReleaseItem((prev) => ({
+      ...prev,
+      coverImage: file,
+    }));
+  };
+
+  const handleReleaseItem= () => {
+    
+    console.log(releaseItem);
     handleCloseModal();
   };
 
@@ -212,12 +244,93 @@ const Inventory = () => {
               },
             }}
           >
-            <Link to="additems">
-              <Button variant="contained" sx={{ marginTop: 2 }}>
-                Add Items
-              </Button>
-            </Link>
+             <Button
+          variant="contained"
+          sx={{ marginTop: 2 }}
+          onClick={handleOpenModal}
+        >
+         Add Item
+        </Button>
           </Box>
+
+          <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2 id="modal-modal-title">Add Item</h2>
+
+          <TextField
+            label="Item Name"
+            variant="outlined"
+            name="itemName"
+            value={addItem.itemName}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Id"
+            variant="outlined"
+            name="itemId"
+            value={addItem.itemId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Donor Id"
+            variant="outlined"
+            name="donorId"
+            value={addItem.donorId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Quantity"
+            variant="outlined"
+            name="itemQuantity"
+            value={addItem.itemQuantity}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Date"
+            type="date"
+            variant="outlined"
+            name="date"
+            value={addItem.date}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          
+
+          <Button variant="contained" onClick={handleAddItem} sx={{ m: 2 }}>
+            Add 
+          </Button>
+          <Button variant="contained" onClick={handleAddItem}>
+            close
+          </Button>
+        </Box>
+      </Modal>
+
           <Box
             height="80vh"
             sx={{
@@ -314,21 +427,39 @@ const Inventory = () => {
             p: 4,
           }}
         >
-          <h2 id="modal-modal-title">Create New Event</h2>
+          <h2 id="modal-modal-title">Release Item</h2>
           <TextField
-            label="Event ID"
+            label="Item Name"
             variant="outlined"
-            name="eventID"
-            value={eventDetails.eventName}
+            name="itemName"
+            value={releaseItem.itemName}
             onChange={handleInputChange}
             fullWidth
             sx={{ mb: 2 }}
           />
           <TextField
-            label="Event Name"
+            label="Item Id"
             variant="outlined"
-            name="eventName"
-            value={eventDetails.eventName}
+            name="itemId"
+            value={releaseItem.itemId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Event Id"
+            variant="outlined"
+            name="eventId"
+            value={releaseItem.eventId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Quantity"
+            variant="outlined"
+            name="itemQuantity"
+            value={releaseItem.itemQuantity}
             onChange={handleInputChange}
             fullWidth
             sx={{ mb: 2 }}
@@ -338,71 +469,17 @@ const Inventory = () => {
             type="date"
             variant="outlined"
             name="date"
-            value={eventDetails.date}
+            value={releaseItem.date}
             onChange={handleInputChange}
             fullWidth
             sx={{ mb: 2 }}
           />
-          <Box
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            sx={{ mb: 2 }}
-          >
-            <Box mr={2}>
-              <TextField
-                label="Province"
-                variant="outlined"
-                name="province"
-                value={eventDetails.province}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box mr={2}>
-              <TextField
-                label="District"
-                variant="outlined"
-                name="district"
-                value={eventDetails.district}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box>
-              <TextField
-                label="Town"
-                variant="outlined"
-                name="town"
-                value={eventDetails.town}
-                onChange={handleInputChange}
-              />
-            </Box>
-          </Box>
-          <TextField
-            label="Comments"
-            variant="outlined"
-            name="comments"
-            value={eventDetails.comments}
-            onChange={handleInputChange}
-            fullWidth
-            multiline
-            rows={4}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            type="file"
-            label="Cover Image"
-            variant="outlined"
-            name="coverImage"
-            onChange={handleFileInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-            rows={4}
-          />
+          
 
-          <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>
-            Create
+          <Button variant="contained" onClick={handleReleaseItem} sx={{ m: 2 }}>
+            Release
           </Button>
-          <Button variant="contained" onClick={handleCreateEvent}>
+          <Button variant="contained" onClick={handleReleaseItem}>
             close
           </Button>
         </Box>
@@ -458,11 +535,13 @@ const Inventory = () => {
           </Box>
         </Box>
       )}
+
       {activeTab === 3 && (
         <Box>
           <DonorEvents />
         </Box>
       )}
+
     </Box>
   );
 };
