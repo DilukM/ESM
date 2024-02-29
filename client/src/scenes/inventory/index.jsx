@@ -3,10 +3,14 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-//import MainContent from "./MainContent";
+
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-import { Avatar, Button, Tab, Tabs, Typography } from "@mui/material";
+
+
+import { Avatar, Button, Tab, Tabs, Typography,Modal,
+  TextField} from "@mui/material";
 import { Link } from "react-router-dom";
+import DonorEvents from "./donorEvents";
 
 const Inventory = () => {
   const theme = useTheme();
@@ -16,7 +20,31 @@ const Inventory = () => {
   const [pageSize, setPageSize] = useState(20);
   const [sort, setSort] = useState({});
   const [search, setSearch] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
+
+
+  const [isHoveredBtn, setIsHoveredBtn] = useState(false);
+  const [tabValue, setTabValue] = useState(0);
+
+  //Add Item...
+  const [addItem, setAddItem] = useState({
+    itemName: "",
+    date: "",
+    itemId: "",
+    donorId: "",
+    itemQuantity: "",
+   
+  });
+//Release Item...
+  const [releaseItem, setReleaseItem] = useState({
+    itemName: "",
+    date: "",
+    itemId: "",
+    eventId: "",
+    itemQuantity: "",
+   
+  });
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -29,6 +57,58 @@ const Inventory = () => {
     sort: JSON.stringify(sort),
     search,
   });
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+//Add Item
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAddItem((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    setAddItem((prev) => ({
+      ...prev,
+      coverImage: file,
+    }));
+  };
+
+  const handleAddItem = () => {
+    
+    console.log(addItem);
+    handleCloseModal();
+  };
+//Release Item
+  const handleInputChange1 = (e) => {
+    const { name, value } = e.target;
+    setReleaseItem((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileInputChange1 = (e) => {
+    const file = e.target.files[0];
+    setReleaseItem((prev) => ({
+      ...prev,
+      coverImage: file,
+    }));
+  };
+
+  const handleReleaseItem= () => {
+    
+    console.log(releaseItem);
+    handleCloseModal();
+  };
 
   const columns = [
     {
@@ -78,6 +158,7 @@ const Inventory = () => {
         <Tab label="OverView" />
         <Tab label="Current Items" />
         <Tab label="Release Items" />
+        <Tab label="Events" />
       </Tabs>
 
       {activeTab === 0 && (
@@ -163,12 +244,93 @@ const Inventory = () => {
               },
             }}
           >
-            <Link to="additems">
-              <Button variant="contained" sx={{ marginTop: 2 }}>
-                Add Items
-              </Button>
-            </Link>
+             <Button
+          variant="contained"
+          sx={{ marginTop: 2 }}
+          onClick={handleOpenModal}
+        >
+         Add Item
+        </Button>
           </Box>
+
+          <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2 id="modal-modal-title">Add Item</h2>
+
+          <TextField
+            label="Item Name"
+            variant="outlined"
+            name="itemName"
+            value={addItem.itemName}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Id"
+            variant="outlined"
+            name="itemId"
+            value={addItem.itemId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Donor Id"
+            variant="outlined"
+            name="donorId"
+            value={addItem.donorId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Quantity"
+            variant="outlined"
+            name="itemQuantity"
+            value={addItem.itemQuantity}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Date"
+            type="date"
+            variant="outlined"
+            name="date"
+            value={addItem.date}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          
+
+          <Button variant="contained" onClick={handleAddItem} sx={{ m: 2 }}>
+            Add 
+          </Button>
+          <Button variant="contained" onClick={handleAddItem}>
+            close
+          </Button>
+        </Box>
+      </Modal>
+
           <Box
             height="80vh"
             sx={{
@@ -222,29 +384,107 @@ const Inventory = () => {
 
       {activeTab === 2 && (
         <Box>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            mb={2}
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.secondary[400],
-                color: "white",
-              },
-            }}
-          >
-            <Link to="createevent">
-              <Button variant="contained" sx={{ marginTop: 2, marginRight: 2 }}>
-                Create Event
-              </Button>
-            </Link>
-            <br />
-            <Link to="releaseitems">
-              <Button variant="contained" sx={{ marginTop: 2 }}>
-                Release Items
-              </Button>
-            </Link>
-          </Box>
+
+  
+
+            <Box
+        display="flex"
+        flex={1}
+        justifyContent="flex-end"
+        mb={2}
+        sx={{
+          "& button": {
+            backgroundColor: theme.palette.secondary[400],
+            color: "white",
+          },
+        }}
+      >
+        <Button
+          variant="contained"
+          sx={{ marginTop: 2 }}
+          onClick={handleOpenModal}
+        >
+         Release Item
+        </Button>
+      </Box>
+
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 800,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2 id="modal-modal-title">Release Item</h2>
+          <TextField
+            label="Item Name"
+            variant="outlined"
+            name="itemName"
+            value={releaseItem.itemName}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Id"
+            variant="outlined"
+            name="itemId"
+            value={releaseItem.itemId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Event Id"
+            variant="outlined"
+            name="eventId"
+            value={releaseItem.eventId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Item Quantity"
+            variant="outlined"
+            name="itemQuantity"
+            value={releaseItem.itemQuantity}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Date"
+            type="date"
+            variant="outlined"
+            name="date"
+            value={releaseItem.date}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          
+
+          <Button variant="contained" onClick={handleReleaseItem} sx={{ m: 2 }}>
+            Release
+          </Button>
+          <Button variant="contained" onClick={handleReleaseItem}>
+            close
+          </Button>
+        </Box>
+      </Modal>
+
           <Box
             height="80vh"
             sx={{
@@ -295,6 +535,13 @@ const Inventory = () => {
           </Box>
         </Box>
       )}
+
+      {activeTab === 3 && (
+        <Box>
+          <DonorEvents />
+        </Box>
+      )}
+
     </Box>
   );
 };

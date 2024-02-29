@@ -16,6 +16,7 @@ import Admin from "scenes/admin";
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
 
+
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -30,6 +31,8 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Tree_Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
+             
+              
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO_Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
