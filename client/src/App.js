@@ -11,16 +11,17 @@ import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
-
+import axios from "axios";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
 import Location from "scenes/treePlantation/Location";
 
-
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  axios.defaults.withCredentials = true;
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -32,8 +33,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Tree_Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
-             
-              
+
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO_Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
