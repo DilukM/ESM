@@ -111,6 +111,7 @@ const TreePlantation = () => {
             style={buttonStyleLocation}
             onMouseEnter={handleMouseEnterLocation}
             onMouseLeave={handleMouseLeaveLocation}
+            onClick={() => navigate('/Location')}
           >
             Locations
           </button>

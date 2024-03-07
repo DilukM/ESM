@@ -15,6 +15,7 @@ import Admin from "scenes/admin";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
+import Location from "scenes/treePlantation/Location";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/Events" element={<Events />} />
               <Route path="/Reports" element={<Reports />} />
+              <Route path="/Location" element = {<Location/>}/>
             </Route>
           </Routes>
         </ThemeProvider>
