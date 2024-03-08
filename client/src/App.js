@@ -15,6 +15,7 @@ import axios from "axios";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
+import Reports1 from "scenes/ROPlants/Reports1";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -38,6 +39,7 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/Events" element={<Events />} />
               <Route path="/Reports" element={<Reports />} />
+              <Route path="/Reports1" element={<Reports1 />} />
             </Route>
           </Routes>
         </ThemeProvider>
