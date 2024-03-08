@@ -11,7 +11,6 @@ import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
-import axios from "axios";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
@@ -19,7 +18,6 @@ import Reports from "scenes/treePlantation/Reports";
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  axios.defaults.withCredentials = true;
 
   return (
     <div className="app">
