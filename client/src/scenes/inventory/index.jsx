@@ -113,22 +113,23 @@ const Inventory = () => {
   const columns = [
     {
       field: "_id",
-      headerName: "ID",
+      headerName: "Event ID",
       flex: 1,
     },
+    
     {
-      field: "userId",
-      headerName: "User ID",
+      field: "itemId",
+      headerName: "Item ID",
       flex: 1,
     },
     {
       field: "createdAt",
-      headerName: "CreatedAt",
+      headerName: "Date",
       flex: 1,
     },
     {
       field: "products",
-      headerName: "# of Products",
+      headerName: "Quantity",
       flex: 0.5,
       sortable: false,
       renderCell: (params) => params.value.length,
