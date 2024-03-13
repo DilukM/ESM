@@ -148,9 +148,9 @@ const Inventory = () => {
     handleCloseModal();
   };
 
-  const columns = [
+  const overview = [
     {
-      field: "_id",
+      field: "eventid",
       headerName: "Event ID",
       flex: 1,
     },
@@ -161,23 +161,174 @@ const Inventory = () => {
       flex: 1,
     },
     {
-      field: "createdAt",
+      field: "date",
       headerName: "Date",
       flex: 1,
     },
     {
-      field: "products",
+      field: "quantity",
       headerName: "Quantity",
       flex: 0.5,
       sortable: false,
-      renderCell: (params) => params.value.length,
+      
     },
     {
-      field: "cost",
-      headerName: "Cost",
+      field: "donorId",
+      headerName: "Donor Id",
       flex: 1,
-      renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
+     
     },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => setShowUpdateForm(true)}
+            >
+              Update
+            </Button>
+          </Box>
+        </Box>
+      ),
+    },
+  ];
+
+  const currentItems = [
+    {
+      field: "itemId",
+      headerName: "Item ID",
+      flex: 1,
+    },
+    
+    {
+      field: "itemName",
+      headerName: "Item Name",
+      flex: 1,
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 0.5,
+      sortable: false,
+      
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+    },
+    
+    
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => setShowUpdateForm(true)}
+            >
+              Update
+            </Button>
+          </Box>
+        </Box>
+      ),
+    },
+  ];
+
+  const releaseItems = [
+    {
+      field: "eventid",
+      headerName: "Event ID",
+      flex: 1,
+    },
+    
+    {
+      field: "itemId",
+      headerName: "Item ID",
+      flex: 1,
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 0.5,
+      sortable: false,
+      
+    },
+    
     {
       field: "actions",
       headerName: "Actions",
@@ -305,7 +456,7 @@ const Inventory = () => {
               loading={isLoading || !data}
               getRowId={(row) => row._id}
               rows={(data && data.transactions) || []}
-              columns={columns}
+              columns={overview}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
               pagination
@@ -462,7 +613,7 @@ const Inventory = () => {
               loading={isLoading || !data}
               getRowId={(row) => row._id}
               rows={(data && data.transactions) || []}
-              columns={columns}
+              columns={currentItems}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
               pagination
@@ -622,7 +773,7 @@ const Inventory = () => {
               loading={isLoading || !data}
               getRowId={(row) => row._id}
               rows={(data && data.transactions) || []}
-              columns={columns}
+              columns={releaseItems}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
               pagination

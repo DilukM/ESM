@@ -14,12 +14,15 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
+
+    "CurrentItems",
   ],
   endpoints: (build) => ({
     getUser: build.query({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
     }),
+
     getDonors: build.query({
       query: () => `general/donors`,
       providesTags: ["Donors"],
@@ -28,6 +31,16 @@ export const api = createApi({
       query: (id) => `general/donors/${id}`,
       providesTags: ["Donors"],
     }),
+
+    getCurrentItems: build.query({
+      query: () => `general/currentItems`,
+      providesTags: ["CurrentItems"],
+    }),
+    getCurrentItem: build.query({
+      query: (id) => `general/currentItems/${id}`,
+      providesTags: ["CurrentItems"],
+    }),
+
     getProducts: build.query({
       query: () => "client/products",
       providesTags: ["Products"],
@@ -64,6 +77,7 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+
     deleteDonor: build.mutation({
       query: (donorId) => ({
         url: `general/donors/${donorId}`,
@@ -78,11 +92,29 @@ export const api = createApi({
       }),
       providesTags: ["Donors"],
     }),
+
+    deleteCurrentItems: build.mutation({
+      query: (itemId) => ({
+        url: `general/currentItems/${itemId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["CurrentItems"], // Invalidate the cache for "Items" after deletion
+    }),
+    addCurrentItem: build.mutation({
+      query: () => ({
+        url: `general/currentItems`,
+        method: "post",
+      }),
+      providesTags: ["CurrentItems"],
+    }),
+
   }),
 });
 
 export const {
   useGetDonorsQuery,
+  useGetCurrentItemsQuery,
+
   useGetUserQuery,
   useGetProductsQuery,
   useGetCustomersQuery,
@@ -92,7 +124,13 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+
   useDeleteDonorMutation,
+  useDeleteCurrentItemsMutation,
+
   useGetDonorQuery,
+  useGetCurrentItemQuery,
+
   useAddDonorMutation,
+  useAddCurrentItemMutation,
 } = api;

@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import OverallStat from "../models/OverallStat.js";
 import Transaction from "../models/Transaction.js";
 import Donors from "../models/Donor.js";
+import CurrentItems from "../models/CurrentItems.js";
 
 export const getUser = async (req, res) => {
   try {
@@ -12,6 +13,8 @@ export const getUser = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 };
+
+//Doners....
 
 export const addDonor = async (req, res) => {
   try {
@@ -67,6 +70,67 @@ export const deleteDonors = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+//...
+
+//CurrentItems....
+
+export const addCurrentItem = async (req, res) => {
+  try {
+    const { itemId, itemName, quantity, date } = req.body;
+
+    // Create a new donor instance
+    const newCurrentItem = new CurrentItems({
+      itemId,
+      itemName,
+      quantity,
+      date,
+    });
+
+    // Save the donor to the database
+    const savedCurrentItem = await newCurrentItem.save();
+
+    res.status(201).json(savedCurrentItem); // Respond with the saved donor
+  } catch (error) {
+    console.error("Error adding new Item:", error);
+    res.status(500).json({ error: "Failed to add new Item" });
+  }
+};
+
+export const getCurrentItems = async (req, res) => {
+  try {
+    const currentItems = await CurrentItems.find();
+    res.status(200).json(currentItems);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getCurrentItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const currentItems = await CurrentItems.findById(id);
+    res.status(200).json(currentItems);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const deleteCurrentItems = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedCurrentItem = await CurrentItems.findByIdAndDelete(id);
+    if (!deletedCurrentItem) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+    res.json({ message: "Item deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting Item:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+//....
 
 export const getDashboardStats = async (req, res) => {
   try {
