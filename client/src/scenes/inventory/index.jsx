@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-
+import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 
@@ -11,11 +11,15 @@ import { Avatar, Button, Tab, Tabs, Typography,Modal,
   TextField} from "@mui/material";
 import { Link } from "react-router-dom";
 import DonorEvents from "./donorEvents";
+import UpdateForm from "./updateForm";
 
 const Inventory = () => {
   const theme = useTheme();
+  const [showForm, setShowForm] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   // values to be sent to the backend
+  const [deleteDonor] = useDeleteDonorMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [sort, setSort] = useState({});
@@ -26,6 +30,40 @@ const Inventory = () => {
 
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading, refetch } = useGetDonorsQuery();
+  const [rowIndex, setRowIndex] = useState(0); // State for custom index
+
+  useEffect(() => {
+    if (data) {
+      setRowIndex(0); // Reset the index when data changes
+    }
+  }, [data]);
+
+  const handleDelete = (donorId) => {
+    deleteDonor(donorId)
+      .unwrap()
+      .then((response) => {
+        console.log("Donor deleted successfully");
+        // Optionally, you can trigger a refetch of the donors list
+      })
+      .catch((error) => {
+        console.error("Error deleting donor:", error);
+      });
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setShowUpdateForm(false);
+  };
+  const generateRowsWithIndex = (rows) => {
+    return rows.map((row, index) => ({ ...row, index: rowIndex + index + 1 }));
+  };
 
   //Add Item...
   const [addItem, setAddItem] = useState({
@@ -46,17 +84,17 @@ const Inventory = () => {
    
   });
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
+  // const handleTabChange = (event, newValue) => {
+  //   setActiveTab(newValue);
+  // };
 
-  const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading } = useGetTransactionsQuery({
-    page,
-    pageSize,
-    sort: JSON.stringify(sort),
-    search,
-  });
+  // const [searchInput, setSearchInput] = useState("");
+  // const { data, isLoading } = useGetTransactionsQuery({
+  //   page,
+  //   pageSize,
+  //   sort: JSON.stringify(sort),
+  //   search,
+  // });
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -140,6 +178,54 @@ const Inventory = () => {
       flex: 1,
       renderCell: (params) => `$${Number(params.value).toFixed(2)}`,
     },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => setShowUpdateForm(true)}
+            >
+              Update
+            </Button>
+          </Box>
+        </Box>
+      ),
+    },
   ];
 
   return (
@@ -181,6 +267,13 @@ const Inventory = () => {
               </Button>
             </Link>
           </Box>
+
+          <UpdateForm
+            open={showUpdateForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
+
           <Box
             height="80vh"
             sx={{
@@ -253,6 +346,12 @@ const Inventory = () => {
          Add Item
         </Button>
           </Box>
+
+          <UpdateForm
+            open={showUpdateForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
 
           <Modal
         open={openModal}
@@ -408,6 +507,12 @@ const Inventory = () => {
          Release Item
         </Button>
       </Box>
+
+      <UpdateForm
+            open={showUpdateForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
 
       <Modal
         open={openModal}
