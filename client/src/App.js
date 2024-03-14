@@ -12,14 +12,13 @@ import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
 import axios from "axios";
+
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
-import Location from "scenes/treePlantation/Location";
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  axios.defaults.withCredentials = true;
 
   return (
     <div className="app">
@@ -37,7 +36,6 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/Events" element={<Events />} />
               <Route path="/Reports" element={<Reports />} />
-              <Route path="/Location" element = {<Location/>}/>
             </Route>
           </Routes>
         </ThemeProvider>
