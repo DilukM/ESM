@@ -9,43 +9,43 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
-import { useAddDonorMutation } from "state/api";
+import { useAddCurrentItemMutation } from "state/api";
 
-const UpdateForm = ({ open, handleClose, refetch }) => {
+const UpdateFormCI = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [itemId, setItemId] = useState("");
+  const [itemName, setItemName] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [date, setDate] = useState("");
 
-  const [addDonor] = useAddDonorMutation();
+  const [addCurrentItem] = useAddCurrentItemMutation();
 
-  const handleUpdateDonor = () => {
-    addDonor({ name, email, phone, password })
+  const handleUpdateCurrentItem = () => {
+    addCurrentItem({ itemId, itemName, quantity, date })
       .unwrap()
       .then((response) => {
-        console.log("Donor Updated successfully:", response);
+        console.log("Item Updated successfully:", response);
         // Clear form fields
-        setName("");
-        setEmail("");
-        setPhone("");
-        setPassword("");
+        setItemId("");
+        setItemName("");
+        setQuantity("");
+        setDate("");
         // Close the dialog
         handleClose();
         // Refetch the donors list
         refetch();
       })
       .catch((error) => {
-        console.error("Error updating donor:", error);
+        console.error("Error updating item:", error);
       });
   };
 
   const handleCancel = () => {
     // Clear form fields
-    setName("");
-    setEmail("");
-    setPhone("");
-    setPassword("");
+    setItemId("");
+    setItemName("");
+    setQuantity("");
+    setDate("");
     // Close the dialog
     handleClose();
   };
@@ -53,37 +53,37 @@ const UpdateForm = ({ open, handleClose, refetch }) => {
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
-        Update Donor
+        Update Item
       </DialogTitle>
       <DialogContent>
         <TextField
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          label="Item Id"
+          value={itemId}
+          onChange={(e) => setItemId(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
         />
         <TextField
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          label="Item Name"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
         />
         <TextField
-          label="Phone"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          label="Quantity"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
         />
         <TextField
-          label="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          label="Date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
@@ -104,7 +104,7 @@ const UpdateForm = ({ open, handleClose, refetch }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateDonor}
+            onClick={handleUpdateCurrentItem}
           >
             Update
           </Button>
@@ -128,4 +128,4 @@ const UpdateForm = ({ open, handleClose, refetch }) => {
   );
 };
 
-export default UpdateForm;
+export default UpdateFormCI;

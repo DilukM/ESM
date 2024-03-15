@@ -11,12 +11,12 @@ import { Avatar, Button, Tab, Tabs, Typography,Modal,
   TextField} from "@mui/material";
 import { Link } from "react-router-dom";
 import DonorEvents from "./donorEvents";
-import UpdateForm from "./updateForm";
+import UpdateFormCI from "./updateFormCI";
 
 const Inventory = () => {
   const theme = useTheme();
   const [showForm, setShowForm] = useState(false);
-  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [showUpdateFormCI, setShowUpdateFormCI] = useState(false);
 
   // values to be sent to the backend
   const [deleteDonor] = useDeleteDonorMutation();
@@ -59,7 +59,7 @@ const Inventory = () => {
 
   const handleCloseForm = () => {
     setShowForm(false);
-    setShowUpdateForm(false);
+    setShowUpdateFormCI(false);
   };
   const generateRowsWithIndex = (rows) => {
     return rows.map((row, index) => ({ ...row, index: rowIndex + index + 1 }));
@@ -218,7 +218,7 @@ const Inventory = () => {
             <Button
               variant="contained"
               color="info"
-              onClick={() => setShowUpdateForm(true)}
+              onClick={() => setShowUpdateFormCI(true)}
             >
               Update
             </Button>
@@ -294,7 +294,7 @@ const Inventory = () => {
             <Button
               variant="contained"
               color="info"
-              onClick={() => setShowUpdateForm(true)}
+              onClick={() => setShowUpdateFormCI(true)}
             >
               Update
             </Button>
@@ -369,7 +369,7 @@ const Inventory = () => {
             <Button
               variant="contained"
               color="info"
-              onClick={() => setShowUpdateForm(true)}
+              onClick={() => setShowUpdateFormCI(true)}
             >
               Update
             </Button>
@@ -419,8 +419,8 @@ const Inventory = () => {
             </Link>
           </Box>
 
-          <UpdateForm
-            open={showUpdateForm}
+          <UpdateFormCI
+            open={showUpdateFormCI}
             handleClose={handleCloseForm}
             refetch={refetch}
           />
@@ -498,8 +498,8 @@ const Inventory = () => {
         </Button>
           </Box>
 
-          <UpdateForm
-            open={showUpdateForm}
+          <UpdateFormCI
+            open={showUpdateFormCI}
             handleClose={handleCloseForm}
             refetch={refetch}
           />
@@ -659,8 +659,8 @@ const Inventory = () => {
         </Button>
       </Box>
 
-      <UpdateForm
-            open={showUpdateForm}
+      <UpdateFormCI
+            open={showUpdateFormCI}
             handleClose={handleCloseForm}
             refetch={refetch}
           />
