@@ -14,12 +14,16 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
+
+    "CurrentItems",
+    "ReleaseItems",
   ],
   endpoints: (build) => ({
     getUser: build.query({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
     }),
+
     getDonors: build.query({
       query: () => `general/donors`,
       providesTags: ["Donors"],
@@ -28,6 +32,25 @@ export const api = createApi({
       query: (id) => `general/donors/${id}`,
       providesTags: ["Donors"],
     }),
+
+    getCurrentItems: build.query({
+      query: () => `general/currentItems`,
+      providesTags: ["CurrentItems"],
+    }),
+    getCurrentItem: build.query({
+      query: (id) => `general/currentItems/${id}`,
+      providesTags: ["CurrentItems"],
+    }),
+
+    getReleaseItems: build.query({
+      query: () => `general/releaseItems`,
+      providesTags: ["ReleaseItems"],
+    }),
+    getReleaseItem: build.query({
+      query: (id) => `general/releaseItems/${id}`,
+      providesTags: ["ReleaseItems"],
+    }),
+
     getProducts: build.query({
       query: () => "client/products",
       providesTags: ["Products"],
@@ -64,6 +87,7 @@ export const api = createApi({
       query: () => "general/dashboard",
       providesTags: ["Dashboard"],
     }),
+
     deleteDonor: build.mutation({
       query: (donorId) => ({
         url: `general/donors/${donorId}`,
@@ -78,11 +102,46 @@ export const api = createApi({
       }),
       providesTags: ["Donors"],
     }),
+
+    deleteCurrentItems: build.mutation({
+      query: (itemId) => ({
+        url: `general/currentItems/${itemId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["CurrentItems"], // Invalidate the cache for "Items" after deletion
+    }),
+    addCurrentItem: build.mutation({
+      query: () => ({
+        url: `general/currentItems`,
+        method: "post",
+      }),
+      providesTags: ["CurrentItems"],
+    }),
+
+
+    deleteReleaseItems: build.mutation({
+      query: (itemId) => ({
+        url: `general/releaseItems/${itemId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["ReleaseItems"], // Invalidate the cache for "Items" after deletion
+    }),
+    addReleaseItem: build.mutation({
+      query: () => ({
+        url: `general/releaseItems`,
+        method: "post",
+      }),
+      providesTags: ["ReleaseItems"],
+    }),
+
   }),
 });
 
 export const {
   useGetDonorsQuery,
+  useGetCurrentItemsQuery,
+  useGetReleaseItemsQuery,
+
   useGetUserQuery,
   useGetProductsQuery,
   useGetCustomersQuery,
@@ -92,7 +151,16 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+
   useDeleteDonorMutation,
+  useDeleteCurrentItemsMutation,
+  useDeleteReleaseItemsMutation,
+
   useGetDonorQuery,
+  useGetCurrentItemQuery,
+  useGetReleaseItemQuery,
+
   useAddDonorMutation,
+  useAddCurrentItemMutation,
+  useAddReleaseItemMutation,
 } = api;

@@ -12,6 +12,9 @@ import salesRoutes from "./routes/sales.js";
 
 // data imports
 import Donor from "./models/Donor.js";
+import CurrentItems from "./models/CurrentItems.js";
+import ReleaseItems from "./models/ReleaseItems.js";
+
 import User from "./models/User.js";
 import Product from "./models/Product.js";
 import ProductStat from "./models/ProductStat.js";
@@ -21,6 +24,9 @@ import AffiliateStat from "./models/AffiliateStat.js";
 import {
   dataUser,
   dataDonor,
+  dataCurrentItems,
+  dataReleaseItems,
+
   dataProduct,
   dataProductStat,
   dataTransaction,
@@ -63,5 +69,7 @@ mongoose
     // Transaction.insertMany(dataTransaction);
     // User.insertMany(dataUser);
     // Donor.insertMany(dataDonor);
+     // CurrentItems.insertMany(dataCurrentItems);
+      // ReleaseItems.insertMany(dataReleaseItems);
   })
   .catch((error) => console.log(`${error} did not connect`));
