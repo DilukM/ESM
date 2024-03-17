@@ -154,9 +154,45 @@ export default function Events() {
       width: 200,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleViewClick(params.row.id)} style={{background:"yellow",color:"black"}} sx={{mr:"4"}}>View</Button>
-          <Button onClick={() => handleUpdateClick(params.row.id)} style={{background:"lightGreen",color:"black"}} sx={{mr:"4"}}>Update</Button>
-          <Button onClick={() => handleDeleteClick(params.row.id)} style={{background:"red",color:"black"}}>Delete</Button>
+          <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              // onClick={() => setShowUpdateForm(true)}
+            >
+              Update
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              // onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          </Box>
         </div>
       ),
     },
@@ -191,9 +227,46 @@ export default function Events() {
       width: 200,
       renderCell: (params) => (
         <div>
-          <Button onClick={() => handleViewClick(params.row.id)}>View</Button>
-          <Button onClick={() => handleUpdateClick(params.row.id)}>Update</Button>
-          <Button onClick={() => handleDeleteClick(params.row.id)}>Delete</Button>
+          <Box display="flex" justifyContent="space-around">
+        <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              // onClick={() => setShowUpdateForm(true)}
+            >
+              Update
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              // onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          </Box>
+         
         </div>
       ),
     },
@@ -262,9 +335,9 @@ export default function Events() {
         onMouseEnter={handleMouseEnterBtn}
         onMouseLeave={handleMouseLeaveBtn}
       >
-        <button style={buttonStyle} onClick={handleOpenModal}>
+        {/* <button style={buttonStyle} onClick={handleOpenModal}>
           Create Events
-        </button>
+        </button> */}
       </Box>
       <Box mt={2}>
         <Tabs
@@ -324,7 +397,7 @@ export default function Events() {
           </Box>
         </TabPanel>
       </Box>
-      <Modal
+      {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -441,7 +514,7 @@ export default function Events() {
             Close
           </Button>
         </Box>
-      </Modal>
+      </Modal> */}
     </Box>
   );
 }
