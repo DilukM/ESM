@@ -11,10 +11,12 @@ import Inventory from "scenes/inventory";
 import Donors from "scenes/donors";
 import RoPlants from "scenes/ROPlants";
 import Admin from "scenes/admin";
+import axios from "axios";
 
 import Events from "scenes/treePlantation/Events";
 import Reports from "scenes/treePlantation/Reports";
-import Reports1 from "scenes/ROPlants/Reports1";
+import Location from "scenes/treePlantation/Location";
+
 
 function App() {
   const mode = useSelector((state) => state.global.mode);
@@ -31,13 +33,12 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/Tree_Plantation" element={<TreePlantation />} />
               <Route path="/Inventory" element={<Inventory />} />
-
               <Route path="/Donors" element={<Donors />} />
               <Route path="/RO_Plants" element={<RoPlants />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/Events" element={<Events />} />
               <Route path="/Reports" element={<Reports />} />
-              <Route path="/Reports1" element={<Reports1 />} />
+              <Route path="/Location" element={<Location/>}/>
             </Route>
           </Routes>
         </ThemeProvider>
