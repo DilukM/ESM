@@ -11,6 +11,12 @@ import {
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 
+// import Slider from "react-slick";
+// import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 function TabPanel({ value, index, children }) {
   return (
     <div
@@ -23,6 +29,7 @@ function TabPanel({ value, index, children }) {
     </div>
   );
 }
+
 
 export default function Events() {
   const theme = useTheme();
@@ -40,6 +47,8 @@ export default function Events() {
     town: "",
   });
 
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
   const handleMouseEnterBtn = () => {
     setIsHoveredBtn(true);
     setTabValue(0);
@@ -53,6 +62,11 @@ export default function Events() {
     setTabValue(newValue);
   };
 
+  const handleRowClick = (params) => {
+    setSelectedEvent(params.row); // Set the selected event details
+    setOpenDetailsModal(true); // Open the details modal
+  };
+  
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -198,6 +212,14 @@ export default function Events() {
     },
   ];
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   const columns2 = [
     {
       field: "id",
@@ -335,9 +357,7 @@ export default function Events() {
         onMouseEnter={handleMouseEnterBtn}
         onMouseLeave={handleMouseLeaveBtn}
       >
-        {/* <button style={buttonStyle} onClick={handleOpenModal}>
-          Create Events
-        </button> */}
+       
       </Box>
       <Box mt={2}>
         <Tabs
@@ -381,6 +401,7 @@ export default function Events() {
               checkboxSelection
               disableSelectionOnClick
               getRowHeight={() => 150}
+              onRowClick={handleRowClick}
             />
           </Box>
         </TabPanel>
@@ -393,13 +414,14 @@ export default function Events() {
               checkboxSelection
               disableSelectionOnClick
               getRowHeight={() => 150}
+              onRowClick={handleRowClick}
             />
           </Box>
         </TabPanel>
       </Box>
-      {/* <Modal
-        open={openModal}
-        onClose={handleCloseModal}
+      <Modal
+        open={openDetailsModal}
+        onClose={() => setOpenDetailsModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -409,112 +431,23 @@ export default function Events() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 800,
+            width: 400,
             bgcolor: "background.paper",
             border: "2px solid #000",
             boxShadow: 24,
             p: 4,
           }}
         >
-          <h2 id="modal-modal-title">Create New Event</h2>
-          <TextField
-            label="Event ID"
-            variant="outlined"
-            name="eventID"
-            value={eventDetails.eventName}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Event Name"
-            variant="outlined"
-            name="eventName"
-            value={eventDetails.eventName}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Date"
-            type="date"
-            variant="outlined"
-            name="date"
-            value={eventDetails.date}
-            onChange={handleInputChange}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{ mr: 1, mb: 2 }}
-          />
-          <Box
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            sx={{ mb: 2 }}
-          >
-            <Box mr={2}>
-              <TextField
-                label="Province"
-                variant="outlined"
-                name="province"
-                value={eventDetails.province}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box mr={2}>
-              <TextField
-                label="District"
-                variant="outlined"
-                name="district"
-                value={eventDetails.district}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box>
-              <TextField
-                label="Town"
-                variant="outlined"
-                name="town"
-                value={eventDetails.town}
-                onChange={handleInputChange}
-              />
-            </Box>
-          </Box>
-          <TextField
-            label="Comments"
-            variant="outlined"
-            name="comments"
-            value={eventDetails.comments}
-            onChange={handleInputChange}
-            fullWidth
-            multiline
-            rows={4}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            type="file"
-            label="Cover Image"
-            variant="outlined"
-            name="coverImage"
-            onChange={handleFileInputChange}
-            fullWidth
-            rows={4}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            sx={{ mr: 1, mb: 2 }}
-          />
-
-          <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>
-            Create
-          </Button>
-          <Button variant="contained" onClick={handleCreateEvent}>
-            Close
-          </Button>
+           <h2 id="modal-modal-title">Event Details</h2>
+          <p>ID: {selectedEvent?.id}</p>
+          <div style={{ width: "100%", textAlign: "center" }}>
+            <img src={selectedEvent?.coverImage} alt="Cover" style={{ width: "100%" }} />
+          </div>
+          <p>Event Name: {selectedEvent?.eventName}</p>
+          <p>Date: {selectedEvent?.date}</p>
+          <p>Location: {selectedEvent?.location}</p>
         </Box>
-      </Modal> */}
+      </Modal>
     </Box>
   );
 }
