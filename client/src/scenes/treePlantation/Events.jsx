@@ -11,11 +11,7 @@ import {
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 
-// import Slider from "react-slick";
-// import Slider from "react-slick";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 function TabPanel({ value, index, children }) {
   return (
@@ -212,14 +208,7 @@ export default function Events() {
     },
   ];
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
+  
   const columns2 = [
     {
       field: "id",
