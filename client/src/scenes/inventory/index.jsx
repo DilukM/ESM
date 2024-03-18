@@ -3,7 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
+import { useGetReleaseItemsQuery, useDeleteDonorMutation } from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 
@@ -36,7 +36,7 @@ const Inventory = () => {
   };
 
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetDonorsQuery();
+  const { data, isLoading, refetch } = useGetReleaseItemsQuery();
   const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   useEffect(() => {
@@ -255,7 +255,7 @@ const Inventory = () => {
     
     
     {
-      field: "actions",
+      field: "",
       headerName: "Actions",
       flex: 1,
       sortable: false,
@@ -306,31 +306,31 @@ const Inventory = () => {
 
   const releaseItems = [
     {
-      field: "eventid",
-      headerName: "Event ID",
+      field: "itemID",
+      headerName: "Item ID",
       flex: 1,
     },
     
     {
-      field: "itemId",
-      headerName: "Item ID",
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 1,
+    },
+    {
+      field: "eventId",
+      headerName: "Event Id",
       flex: 1,
     },
     {
       field: "date",
       headerName: "Date",
-      flex: 1,
-    },
-    {
-      field: "quantity",
-      headerName: "Quantity",
       flex: 0.5,
       sortable: false,
       
     },
     
     {
-      field: "actions",
+      field: "",
       headerName: "Actions",
       flex: 1,
       sortable: false,
@@ -356,7 +356,7 @@ const Inventory = () => {
               Delete
             </Button>
           </Box>
-          <Box
+          {/* <Box
             display="flex"
             justifyContent="flex-end"
             sx={{
@@ -373,7 +373,7 @@ const Inventory = () => {
             >
               Update
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       ),
     },
@@ -455,7 +455,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={data  || []}
               columns={overview}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
@@ -772,7 +772,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={data  || []}
               columns={releaseItems}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}

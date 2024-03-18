@@ -4,6 +4,7 @@ import Transaction from "../models/Transaction.js";
 import Donors from "../models/Donor.js";
 import CurrentItems from "../models/CurrentItems.js";
 import ReleaseItems from "../models/ReleaseItems.js";
+import Items_out from "../models/Items_out.js";
 
 export const getUser = async (req, res) => {
   try {
@@ -159,8 +160,8 @@ export const addReleaseItem = async (req, res) => {
 
 export const getReleaseItems = async (req, res) => {
   try {
-    const ReleaseItems = await ReleaseItems.find();
-    res.status(200).json(releaseItems);
+    const ReleaseItems = await Items_out.find();
+    res.status(200).json(ReleaseItems);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
