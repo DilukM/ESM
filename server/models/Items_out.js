@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ItemsSchema = new mongoose.Schema(
+const Items_outSchema = new mongoose.Schema(
   {
    
     itemID: {
@@ -10,26 +10,28 @@ const ItemsSchema = new mongoose.Schema(
       max: 100,
       unique: true,
     },
-    itemName: {
+    quantity: {
       type: String,
       required: true,
       max: 50,
       
     },
-    points: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    type: {
+    
+    eventId: {
       type: String,
       required: true,
       min: 8,
+      unique: true,
     },
+    date: {
+        type: Date,
+      required: true,
+      min: 8,
+    }
    
   },
   { timestamps: true }
 );
 
-const Items = mongoose.model("Items", ItemsSchema);
-export default Items;
+const Items_out = mongoose.model("Items_out", Items_outSchema);
+export default Items_out;

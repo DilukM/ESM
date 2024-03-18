@@ -21,11 +21,14 @@ import ProductStat from "./models/ProductStat.js";
 import Transaction from "./models/Transaction.js";
 import OverallStat from "./models/OverallStat.js";
 import AffiliateStat from "./models/AffiliateStat.js";
+import Items from "./models/Items.js";
+import Items_In from "./models/Items_In.js";
+import Items_out from "./models/Items_out.js";
+
 import {
   dataUser,
   dataDonor,
-  dataCurrentItems,
-  dataReleaseItems,
+  
 
   dataProduct,
   dataProductStat,
@@ -33,6 +36,7 @@ import {
   dataOverallStat,
   dataAffiliateStat,
 } from "./data/index.js";
+import { dataItems_In, dataItems,dataItems_out } from "./data/ESM_Data.js";
 
 /* CONFIGURATION */
 dotenv.config();
@@ -71,5 +75,8 @@ mongoose
     // Donor.insertMany(dataDonor);
      // CurrentItems.insertMany(dataCurrentItems);
       // ReleaseItems.insertMany(dataReleaseItems);
+      // Items.insertMany(dataItems);
+      // Items_In.insertMany(dataItems_In);
+      // Items_out.insertMany(dataItems_out);
   })
   .catch((error) => console.log(`${error} did not connect`));
