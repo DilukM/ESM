@@ -47,7 +47,7 @@ export const api = createApi({
       providesTags: ["Donors"],
     }),
     updateDonor: build.mutation({
-      query: (donorId, { name, email, phone, password }) => ({
+      query: ({ donorId, name, email, phone, password }) => ({
         url: `donors/update/${donorId}`,
         method: "PUT",
         body: { name, email, phone, password },

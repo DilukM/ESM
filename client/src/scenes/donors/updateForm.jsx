@@ -29,10 +29,12 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
     }
   }, [donorToUpdate]);
 
+  const donorId = donorToUpdate._id;
+
   const handleUpdateDonor = () => {
-    updateDonor({ ...donorToUpdate, name, email, phone, password })
+    updateDonor({ donorId, name, email, phone, password })
       .then((response) => {
-        console.log("Donor updated successfully from frontend:", response);
+        console.log("Donor updated successfully:", response);
         // Clear form fields
         setName("");
         setEmail("");
@@ -112,7 +114,7 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={() => handleUpdateDonor}
+            onClick={handleUpdateDonor}
           >
             Update
           </Button>

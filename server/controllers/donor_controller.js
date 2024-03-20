@@ -45,18 +45,21 @@ export const deleteDonors = async (req, res) => {
 };
 
 export const updateDonors = async (req, res) => {
-  Donors.findByIdAndUpdate(
-    req.params.id,
-    {
-      $set: req.body,
-    },
-    (err, donor) => {
-      if (err) {
-        return res.status(400).json({ error: err });
-      }
-      return res.status(200).json({
-        success: "Updateed Successfully",
-      });
-    }
-  );
+  try {
+    const donorId = req.params.id;
+    const updatedDonorData = req.body; // Updated donor data from the request body
+
+    // Find the donor by ID in the database and update its information
+    // Example using Mongoose:
+    const updatedDonor = await Donors.findByIdAndUpdate(
+      donorId,
+      updatedDonorData,
+      { new: true }
+    );
+
+    res.json(updatedDonor); // Send back the updated donor object
+  } catch (error) {
+    console.error("Error updating donor:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
