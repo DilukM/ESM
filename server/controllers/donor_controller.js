@@ -2,9 +2,9 @@ import Donors from "../models/Donor.js";
 
 export const addDonor = async (req, res) => {
   let newDonor = new Donors(req.body);
-
   newDonor.save((err) => {
     if (err) {
+      console.log(newDonor);
       return res.status(400).json({ error: err });
     }
     return res.status(200).json({ success: "Donor saved successfully" });

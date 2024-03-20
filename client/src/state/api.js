@@ -24,11 +24,34 @@ export const api = createApi({
     }),
 
     getDonors: build.query({
-      query: () => `donors/donors`,
+      query: () => `donors/gets`,
       providesTags: ["Donors"],
     }),
     getDonor: build.query({
       query: (id) => `donors/donors/${id}`,
+      providesTags: ["Donors"],
+    }),
+    deleteDonor: build.mutation({
+      query: (donorId) => ({
+        url: `donors/delete/${donorId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
+    }),
+    addDonor: build.mutation({
+      query: ({ name, email, phone, password }) => ({
+        url: `donors/add`,
+        method: "POST",
+        body: { name, email, phone, password },
+      }),
+      providesTags: ["Donors"],
+    }),
+    updateDonor: build.mutation({
+      query: (donorId, { name, email, phone, password }) => ({
+        url: `donors/update/${donorId}`,
+        method: "PUT",
+        body: { name, email, phone, password },
+      }),
       providesTags: ["Donors"],
     }),
 
@@ -87,21 +110,6 @@ export const api = createApi({
       providesTags: ["Dashboard"],
     }),
 
-    deleteDonor: build.mutation({
-      query: (donorId) => ({
-        url: `donors/donors/${donorId}`,
-        method: "Delete",
-      }),
-      invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
-    }),
-    addDonor: build.mutation({
-      query: () => ({
-        url: `donors/donors/add`,
-        method: "post",
-      }),
-      providesTags: ["Donors"],
-    }),
-
     deleteCurrentItems: build.mutation({
       query: (itemId) => ({
         url: `general/currentItems/${itemId}`,
@@ -136,6 +144,11 @@ export const api = createApi({
 
 export const {
   useGetDonorsQuery,
+  useDeleteDonorMutation,
+  useGetDonorQuery,
+  useAddDonorMutation,
+  useUpdateDonorMutation,
+
   useGetCurrentItemsQuery,
   useGetReleaseItemsQuery,
 
@@ -149,15 +162,12 @@ export const {
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
 
-  useDeleteDonorMutation,
   useDeleteCurrentItemsMutation,
   useDeleteReleaseItemsMutation,
 
-  useGetDonorQuery,
   useGetCurrentItemQuery,
   useGetReleaseItemQuery,
 
-  useAddDonorMutation,
   useAddCurrentItemMutation,
   useAddReleaseItemMutation,
 } = api;

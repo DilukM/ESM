@@ -18,26 +18,77 @@ const DonorForm = ({ open, handleClose, refetch }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
+  // State variables for validation
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   const [addDonor] = useAddDonorMutation();
 
+  const validateInputs = () => {
+    let isValid = true;
+
+    // Validate name
+    if (!name.trim()) {
+      setNameError("Name is required");
+      isValid = false;
+    } else {
+      setNameError("");
+    }
+
+    // Validate email
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Email is invalid");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    // Validate phone
+    if (!phone.trim()) {
+      setPhoneError("Phone is required");
+      isValid = false;
+    } else {
+      setPhoneError("");
+    }
+
+    // Validate password
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      isValid = false;
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters long");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
   const handleAddDonor = () => {
-    addDonor({ name, email, phone, password })
-      .unwrap()
-      .then((response) => {
-        console.log("Donor added successfully:", response);
-        // Clear form fields
-        setName("");
-        setEmail("");
-        setPhone("");
-        setPassword("");
-        // Close the dialog
-        handleClose();
-        // Refetch the donors list
-        refetch();
-      })
-      .catch((error) => {
-        console.error("Error adding donor:", error);
-      });
+    if (validateInputs()) {
+      addDonor({ name, email, phone, password })
+        .then((response) => {
+          console.log("Donor added successfully from frontend:", response);
+          // Clear form fields
+          setName("");
+          setEmail("");
+          setPhone("");
+          setPassword("");
+          // Close the dialog
+          handleClose();
+          // Refetch the donors list
+          refetch();
+        })
+        .catch((error) => {
+          console.error("Error adding donor:", error);
+        });
+    }
   };
 
   const handleCancel = () => {
@@ -46,6 +97,10 @@ const DonorForm = ({ open, handleClose, refetch }) => {
     setEmail("");
     setPhone("");
     setPassword("");
+    setNameError("");
+    setEmailError("");
+    setPhoneError("");
+    setPasswordError("");
     // Close the dialog
     handleClose();
   };
@@ -63,6 +118,8 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           fullWidth
           variant="outlined"
           margin="normal"
+          error={!!nameError}
+          helperText={nameError}
         />
         <TextField
           label="Email"
@@ -71,6 +128,8 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           fullWidth
           variant="outlined"
           margin="normal"
+          error={!!emailError}
+          helperText={emailError}
         />
         <TextField
           label="Phone"
@@ -79,6 +138,8 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           fullWidth
           variant="outlined"
           margin="normal"
+          error={!!phoneError}
+          helperText={phoneError}
         />
         <TextField
           label="Password"
@@ -87,6 +148,8 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           fullWidth
           variant="outlined"
           margin="normal"
+          error={!!passwordError}
+          helperText={passwordError}
         />
       </DialogContent>
       <DialogActions>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -9,22 +9,30 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
-import { useAddDonorMutation } from "state/api";
+import { useUpdateDonorMutation } from "state/api";
 
-const UpdateForm = ({ open, handleClose, refetch }) => {
+const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
   const theme = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const [addDonor] = useAddDonorMutation();
+  const [updateDonor] = useUpdateDonorMutation();
+  // Populate form fields with donorToUpdate data when it's available
+  useEffect(() => {
+    if (donorToUpdate) {
+      setName(donorToUpdate.name);
+      setEmail(donorToUpdate.email);
+      setPhone(donorToUpdate.phone);
+      setPassword(donorToUpdate.password);
+    }
+  }, [donorToUpdate]);
 
   const handleUpdateDonor = () => {
-    addDonor({ name, email, phone, password })
-      .unwrap()
+    updateDonor({ ...donorToUpdate, name, email, phone, password })
       .then((response) => {
-        console.log("Donor Updated successfully:", response);
+        console.log("Donor updated successfully from frontend:", response);
         // Clear form fields
         setName("");
         setEmail("");
@@ -104,7 +112,7 @@ const UpdateForm = ({ open, handleClose, refetch }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateDonor}
+            onClick={() => handleUpdateDonor}
           >
             Update
           </Button>
