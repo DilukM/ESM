@@ -9,6 +9,7 @@ import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
+import donorRoutes from "./routes/donor_routes.js";
 
 // data imports
 import Donor from "./models/Donor.js";
@@ -28,15 +29,13 @@ import Items_out from "./models/Items_out.js";
 import {
   dataUser,
   dataDonor,
-  
-
   dataProduct,
   dataProductStat,
   dataTransaction,
   dataOverallStat,
   dataAffiliateStat,
 } from "./data/index.js";
-import { dataItems_In, dataItems,dataItems_out } from "./data/ESM_Data.js";
+import { dataItems_In, dataItems, dataItems_out } from "./data/ESM_Data.js";
 
 /* CONFIGURATION */
 dotenv.config();
@@ -54,6 +53,7 @@ app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+app.use("/donors", donorRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
@@ -73,10 +73,10 @@ mongoose
     // Transaction.insertMany(dataTransaction);
     // User.insertMany(dataUser);
     // Donor.insertMany(dataDonor);
-     // CurrentItems.insertMany(dataCurrentItems);
-      // ReleaseItems.insertMany(dataReleaseItems);
-      // Items.insertMany(dataItems);
-      // Items_In.insertMany(dataItems_In);
-      // Items_out.insertMany(dataItems_out);
+    // CurrentItems.insertMany(dataCurrentItems);
+    // ReleaseItems.insertMany(dataReleaseItems);
+    // Items.insertMany(dataItems);
+    // Items_In.insertMany(dataItems_In);
+    // Items_out.insertMany(dataItems_out);
   })
   .catch((error) => console.log(`${error} did not connect`));

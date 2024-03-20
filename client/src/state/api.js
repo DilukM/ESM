@@ -14,7 +14,6 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
-
     "CurrentItems",
     "ReleaseItems",
   ],
@@ -23,15 +22,13 @@ export const api = createApi({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
     }),
- 
-
 
     getDonors: build.query({
-      query: () => `general/donors`,
+      query: () => `donors/donors`,
       providesTags: ["Donors"],
     }),
     getDonor: build.query({
-      query: (id) => `general/donors/${id}`,
+      query: (id) => `donors/donors/${id}`,
       providesTags: ["Donors"],
     }),
 
@@ -92,14 +89,14 @@ export const api = createApi({
 
     deleteDonor: build.mutation({
       query: (donorId) => ({
-        url: `general/donors/${donorId}`,
+        url: `donors/donors/${donorId}`,
         method: "Delete",
       }),
       invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
     }),
     addDonor: build.mutation({
       query: () => ({
-        url: `general/donors`,
+        url: `donors/donors/add`,
         method: "post",
       }),
       providesTags: ["Donors"],
@@ -120,7 +117,6 @@ export const api = createApi({
       providesTags: ["CurrentItems"],
     }),
 
-
     deleteReleaseItems: build.mutation({
       query: (itemId) => ({
         url: `general/releaseItems/${itemId}`,
@@ -135,12 +131,10 @@ export const api = createApi({
       }),
       providesTags: ["ReleaseItems"],
     }),
-
   }),
 });
 
 export const {
-  
   useGetDonorsQuery,
   useGetCurrentItemsQuery,
   useGetReleaseItemsQuery,
@@ -162,7 +156,6 @@ export const {
   useGetDonorQuery,
   useGetCurrentItemQuery,
   useGetReleaseItemQuery,
-  
 
   useAddDonorMutation,
   useAddCurrentItemMutation,
