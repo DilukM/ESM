@@ -1,14 +1,72 @@
 import Donors from "../models/Donor.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const addDonor = async (req, res) => {
-  let newDonor = new Donors(req.body);
-  newDonor.save((err) => {
-    if (err) {
-      console.log(newDonor);
-      return res.status(400).json({ error: err });
+  const { name, email, phone, password } = req.body;
+  try {
+    // Check if the donor already exists
+    const existingDonor = await Donors.findOne({ email });
+
+    // If donor exists, send error response
+    if (existingDonor) {
+      return res.status(400).json({ error: "Donor already exists" });
     }
-    return res.status(200).json({ success: "Donor saved successfully" });
-  });
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new donor instance with hashed password
+    const newDonor = new Donors({
+      name,
+      email,
+      phone,
+      password: hashedPassword,
+    });
+
+    // Save the donor to the database
+    await newDonor.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { donorId: newDonor._id },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+
+    // Send success response with token
+    res.status(200).json({ token });
+  } catch (error) {
+    console.error("Error registering donor:", error);
+    res
+      .status(500)
+      .json({ error: "Registration failed. Please try again later." });
+  }
+};
+
+export const donorLogin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    // Find donor by email
+    const donor = await Donors.findOne({ email });
+
+    // If donor not found or password doesn't match, send error response
+    if (!donor || !bcrypt.compareSync(password, donor.password)) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ donorId: donor._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h", // Token expiration time
+    });
+
+    res.json({ token });
+  } catch (error) {
+    console.error("Login failed:", error);
+    res.status(500).json({ message: "Login failed. Please try again later." });
+  }
 };
 
 export const getDonors = async (req, res) => {
@@ -50,7 +108,6 @@ export const updateDonors = async (req, res) => {
     const updatedDonorData = req.body; // Updated donor data from the request body
 
     // Find the donor by ID in the database and update its information
-    // Example using Mongoose:
     const updatedDonor = await Donors.findByIdAndUpdate(
       donorId,
       updatedDonorData,

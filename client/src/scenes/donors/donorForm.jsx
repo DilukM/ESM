@@ -8,7 +8,10 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAddDonorMutation } from "state/api";
 
 const DonorForm = ({ open, handleClose, refetch }) => {
@@ -17,6 +20,7 @@ const DonorForm = ({ open, handleClose, refetch }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // State variables for validation
   const [nameError, setNameError] = useState("");
@@ -105,6 +109,10 @@ const DonorForm = ({ open, handleClose, refetch }) => {
     handleClose();
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
@@ -120,6 +128,13 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           margin="normal"
           error={!!nameError}
           helperText={nameError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
         />
         <TextField
           label="Email"
@@ -130,6 +145,13 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           margin="normal"
           error={!!emailError}
           helperText={emailError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
         />
         <TextField
           label="Phone"
@@ -140,9 +162,17 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           margin="normal"
           error={!!phoneError}
           helperText={phoneError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
         />
         <TextField
           label="Password"
+          type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           fullWidth
@@ -150,6 +180,22 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           margin="normal"
           error={!!passwordError}
           helperText={passwordError}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={togglePasswordVisibility}>
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
         />
       </DialogContent>
       <DialogActions>
