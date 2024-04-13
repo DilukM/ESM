@@ -3,7 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-import { useGetReleaseItemsQuery, useDeleteDonorMutation } from "state/api";
+import { useGetItemssQuery, useDeleteItemsMutation } from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 
@@ -18,16 +18,18 @@ const Inventory = () => {
   const theme = useTheme();
   const [showForm, setShowForm] = useState(false);
   const [showUpdateFormCI, setShowUpdateFormCI] = useState(false);
-  const [selectedItems, setSelectedDonor] = useState(null);
+  const [selectedItems, setSelectedItems] = useState(null);
   // values to be sent to the backend
-  const [deleteDonor] = useDeleteDonorMutation();
+  const [deleteItems] = useDeleteItemsMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [setSort] = useState({});
+  const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
-
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading, refetch } = useGetItemssQuery();
+  const [rowIndex, setRowIndex] = useState(0); // State for custom index
+  
 
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -36,9 +38,7 @@ const Inventory = () => {
     setActiveTab(newValue);
   };
 
-  const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetReleaseItemsQuery();
-  const [rowIndex, setRowIndex] = useState(0); // State for custom index
+  
 
   useEffect(() => {
     if (data) {
@@ -46,20 +46,20 @@ const Inventory = () => {
     }
   }, [data]);
 
-  const handleDelete = (donorId) => {
-    deleteDonor(donorId)
+  const handleDelete = (itemID) => {
+    deleteItems(itemID)
       .unwrap()
       .then((response) => {
-        console.log("Donor deleted successfully");
+        console.log("item deleted successfully");
         // Optionally, you can trigger a refetch of the donors list
       })
       .catch((error) => {
-        console.error("Error deleting donor:", error);
+        console.error("Error deleting item:", error);
       });
   };
 
-  const handleUpdateClick = (donor) => {
-    setSelectedDonor(donor); // Set the selected donor data
+  const handleUpdateClick = (item) => {
+    setSelectedItems(item); // Set the selected donor data
     setShowUpdateFormCI(true); // Show the update form
   };
 
@@ -309,7 +309,7 @@ const Inventory = () => {
             <Button
               variant="contained"
               color="info"
-              onClick={() => setShowUpdateFormCI(true)}
+              onClick={() => handleUpdateClick(true)}
             >
               Update
             </Button>
