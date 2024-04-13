@@ -16,16 +16,31 @@ const ItemsSchema = new mongoose.Schema(
       max: 50,
       
     },
-    points: {
+    quantity: {
+      type: String,
+      required: true,
+      max: 50,
+      
+    },
+
+    donorId: {
       type: String,
       required: true,
       unique: true,
     },
-    type: {
-      type: String,
-      required: true,
-      min: 8,
-    },
+    
+    
+    // points: {
+    //   type: String,
+    //   required: true,
+    //   unique: true,
+    // },
+    date: {
+      type: Date,
+    required: true,
+    min: 8,
+  }
+    
    
   },
   { timestamps: true }
