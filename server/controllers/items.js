@@ -6,7 +6,7 @@ export const addItem = async (req, res) => {
   const { itemID, itemName, quantity, donorId, date } = req.body;
   try {
     // Check if the item already exists
-    const existingItem = await Items.findOne({ email });
+    const existingItem = await Items.findOne({ itemID });
 
     // If item exists, send error response
     if (existingItem) {
@@ -30,7 +30,7 @@ export const addItem = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { donorId: newItem._id },
+      { itemID: newItem._id },
       process.env.JWT_SECRET_KEY,
       {
         expiresIn: "1h",
@@ -106,7 +106,7 @@ export const deleteItems = async (req, res) => {
 export const updateItems = async (req, res) => {
   try {
     const itemID = req.params.id;
-    const updatedItemData = req.body; // Updated donor data from the request body
+    const updatedItemData = req.body; // Updated item data from the request body
 
     // Find the item by ID in the database and update its information
     const updatedItem = await Items.findByIdAndUpdate(

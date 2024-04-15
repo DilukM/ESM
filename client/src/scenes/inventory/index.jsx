@@ -639,7 +639,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={data || []}
               columns={items}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
