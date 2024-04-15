@@ -30,7 +30,7 @@ const Items = ({ open, handleClose, refetch }) => {
   const [donorIdError, setdonorIdError] = useState("");
   const [dateError, setdateError] = useState("");
 
-  const [addItems] = useAddItemsMutation();
+  const [addItem] = useAddItemsMutation();
 
   const validateInputs = () => {
     let isValid = true;
@@ -84,7 +84,7 @@ const Items = ({ open, handleClose, refetch }) => {
 
   const handleAddItems = () => {
     if (validateInputs()) {
-      addItems({ itemID, itemName, quantity, donorId, date })
+      addItem({ itemID, itemName, quantity, donorId, date })
         .then((response) => {
           console.log("Item added successfully from frontend:", response);
           // Clear form fields
