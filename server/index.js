@@ -12,6 +12,7 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 import donorRoutes from "./routes/donor_routes.js";
+import itemsRoutes from "./routes/items_routes.js";
 
 // data imports
 import Donor from "./models/Donor.js";
@@ -31,6 +32,7 @@ import Items_out from "./models/Items_out.js";
 import {
   dataUser,
   dataDonor,
+  dataItems,
   dataProduct,
   dataProductStat,
   dataTransaction,
@@ -56,6 +58,7 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 app.use("/donors", donorRoutes);
+app.use("/items", itemsRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;

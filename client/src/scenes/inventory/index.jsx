@@ -3,7 +3,7 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-import { useGetReleaseItemsQuery, useDeleteDonorMutation } from "state/api";
+import { useGetItemssQuery, useDeleteItemsMutation } from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 
@@ -12,21 +12,24 @@ import { Avatar, Button, Tab, Tabs, Typography,Modal,
 import { Link } from "react-router-dom";
 import DonorEvents from "./donorEvents";
 import UpdateFormCI from "./updateFormCI";
+import Items from "./Items";
 
 const Inventory = () => {
   const theme = useTheme();
   const [showForm, setShowForm] = useState(false);
   const [showUpdateFormCI, setShowUpdateFormCI] = useState(false);
-
+  const [selectedItems, setSelectedItems] = useState(null);
   // values to be sent to the backend
-  const [deleteDonor] = useDeleteDonorMutation();
+  const [deleteItems] = useDeleteItemsMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
-  const [sort, setSort] = useState({});
-  const [search, setSearch] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [setSort] = useState({});
+  const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
-
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading, refetch } = useGetItemssQuery();
+  const [rowIndex, setRowIndex] = useState(0); // State for custom index
+  
 
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -35,9 +38,7 @@ const Inventory = () => {
     setActiveTab(newValue);
   };
 
-  const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetReleaseItemsQuery();
-  const [rowIndex, setRowIndex] = useState(0); // State for custom index
+  
 
   useEffect(() => {
     if (data) {
@@ -45,17 +46,23 @@ const Inventory = () => {
     }
   }, [data]);
 
-  const handleDelete = (donorId) => {
-    deleteDonor(donorId)
+  const handleDelete = (itemID) => {
+    deleteItems(itemID)
       .unwrap()
       .then((response) => {
-        console.log("Donor deleted successfully");
+        console.log("item deleted successfully");
         // Optionally, you can trigger a refetch of the donors list
       })
       .catch((error) => {
-        console.error("Error deleting donor:", error);
+        console.error("Error deleting item:", error);
       });
   };
+
+  const handleUpdateClick = (item) => {
+    setSelectedItems(item); // Set the selected donor data
+    setShowUpdateFormCI(true); // Show the update form
+  };
+
 
   const handleCloseForm = () => {
     setShowForm(false);
@@ -66,23 +73,25 @@ const Inventory = () => {
   };
 
   //Add Item...
-  const [addItem, setAddItem] = useState({
-    itemName: "",
-    date: "",
-    itemId: "",
-    donorId: "",
-    itemQuantity: "",
+  // const [addItem, setAddItem] = useState({
+  //   itemName: "",
+  //   date: "",
+  //   itemId: "",
+  //   donorId: "",
+  //   itemQuantity: "",
    
-  });
+  // });
+
 //Release Item...
-  const [releaseItem, setReleaseItem] = useState({
-    itemName: "",
-    date: "",
-    itemId: "",
-    eventId: "",
-    itemQuantity: "",
+
+  // const [releaseItem, setReleaseItem] = useState({
+  //   itemName: "",
+  //   date: "",
+  //   itemId: "",
+  //   eventId: "",
+  //   itemQuantity: "",
    
-  });
+  // });
 
   // const handleTabChange = (event, newValue) => {
   //   setActiveTab(newValue);
@@ -96,57 +105,58 @@ const Inventory = () => {
   //   search,
   // });
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
+  // const handleOpenModal = () => {
+  //   setOpenModal(true);
+  // };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setOpenModal(false);
+  // };
+
 //Add Item
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAddItem((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAddItem((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    setAddItem((prev) => ({
-      ...prev,
-      coverImage: file,
-    }));
-  };
+  // const handleFileInputChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setAddItem((prev) => ({
+  //     ...prev,
+  //     coverImage: file,
+  //   }));
+  // };
 
-  const handleAddItem = () => {
+  // const handleAddItem = () => {
     
-    console.log(addItem);
-    handleCloseModal();
-  };
+  //   console.log(addItem);
+  //   handleCloseModal();
+  // };
 //Release Item
-  const handleInputChange1 = (e) => {
-    const { name, value } = e.target;
-    setReleaseItem((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange1 = (e) => {
+  //   const { name, value } = e.target;
+  //   setReleaseItem((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleFileInputChange1 = (e) => {
-    const file = e.target.files[0];
-    setReleaseItem((prev) => ({
-      ...prev,
-      coverImage: file,
-    }));
-  };
+  // const handleFileInputChange1 = (e) => {
+  //   const file = e.target.files[0];
+  //   setReleaseItem((prev) => ({
+  //     ...prev,
+  //     coverImage: file,
+  //   }));
+  // };
 
-  const handleReleaseItem= () => {
+  // const handleReleaseItem= () => {
     
-    console.log(releaseItem);
-    handleCloseModal();
-  };
+  //   console.log(releaseItem);
+  //   handleCloseModal();
+  // };
 
   const overview = [
     {
@@ -227,6 +237,90 @@ const Inventory = () => {
       ),
     },
   ];
+
+  const items = [
+    {
+      field: "itemID",
+      headerName: "Item ID",
+      flex: 1,
+    },
+    
+    {
+      field: "itemName",
+      headerName: "Item Name",
+      flex: 1,
+    },
+    {
+      field: "quantity",
+      headerName: "Quantity",
+      flex: 0.5,
+      sortable: false,
+      
+    },
+    {
+      field: "donorId",
+      headerName: "Donor ID",
+      flex: 1,
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      flex: 1,
+    },
+    
+    
+    {
+      field: "",
+      headerName: "Actions",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => handleUpdateClick(true)}
+            >
+              Update
+            </Button>
+          </Box>
+        </Box>
+      ),
+    },
+  ];
+
+
+  
 
   const currentItems = [
     {
@@ -391,9 +485,10 @@ const Inventory = () => {
         variant="standard"
         indicatorColor="secondary"
         textColor="Primary"
-        aria-label="Donor management tabs"
+        aria-label="Inventory tabs"
       >
         <Tab label="OverView" />
+        <Tab label="Items" />
         <Tab label="Current Items" />
         <Tab label="Release Items" />
         <Tab label="Events" />
@@ -476,7 +571,7 @@ const Inventory = () => {
         </Box>
       )}
 
-      {activeTab === 1 && (
+{activeTab === 1 && (
         <Box>
           <Box
             display="flex"
@@ -490,21 +585,118 @@ const Inventory = () => {
             }}
           >
              <Button
-          variant="contained"
-          sx={{ marginTop: 2 }}
-          onClick={handleOpenModal}
-        >
-         Add Item
-        </Button>
+              variant="contained"
+              sx={{ marginTop: 2 }}
+              onClick={() => setShowForm(true)}
+            >
+              Add Item 
+            </Button>
           </Box>
 
           <UpdateFormCI
             open={showUpdateFormCI}
             handleClose={handleCloseForm}
             refetch={refetch}
+            itemToUpdate={selectedItems}
           />
 
-          <Modal
+          <Items
+            open={showForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
+
+
+        
+
+          <Box
+            height="80vh"
+            sx={{
+              "& .MuiDataGrid-root": {
+                border: "none",
+              },
+              "& .MuiDataGrid-cell": {
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderBottom: "none",
+              },
+              "& .MuiDataGrid-virtualScroller": {
+                backgroundColor: theme.palette.primary.light,
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[100],
+                borderTop: "none",
+              },
+              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                color: `${theme.palette.secondary[200]} !important`,
+              },
+            }}
+          >
+            <DataGrid
+              loading={isLoading || !data}
+              getRowId={(row) => row._id}
+              rows={data || []}
+              columns={items}
+              rowCount={(data && data.total) || 0}
+              rowsPerPageOptions={[20, 50, 100]}
+              pagination
+              page={page}
+              pageSize={pageSize}
+              paginationMode="server"
+              sortingMode="server"
+              onPageChange={(newPage) => setPage(newPage)}
+              onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
+              components={{ Toolbar: DataGridCustomToolbar }}
+              componentsProps={{
+                toolbar: { searchInput, setSearchInput, setSearch },
+              }}
+            />
+          </Box>
+        </Box>
+      )}
+
+      {activeTab === 2 && (
+        <Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mb={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+             <Button
+              variant="contained"
+              sx={{ marginTop: 2 }}
+              onClick={() => setShowForm(true)}
+            >
+              Add Item 
+            </Button>
+          </Box>
+
+          <UpdateFormCI
+            open={showUpdateFormCI}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+            itemToUpdate={selectedItems}
+          />
+
+          <Items
+            open={showForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
+
+
+          {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -580,7 +772,7 @@ const Inventory = () => {
             close
           </Button>
         </Box>
-      </Modal>
+      </Modal> */}
 
           <Box
             height="80vh"
@@ -633,7 +825,7 @@ const Inventory = () => {
         </Box>
       )}
 
-      {activeTab === 2 && (
+      {activeTab === 3 && (
         <Box>
 
   
@@ -650,13 +842,13 @@ const Inventory = () => {
           },
         }}
       >
-        <Button
+        {/* <Button
           variant="contained"
           sx={{ marginTop: 2 }}
           onClick={handleOpenModal}
         >
          Release Item
-        </Button>
+        </Button> */}
       </Box>
 
       <UpdateFormCI
@@ -665,7 +857,7 @@ const Inventory = () => {
             refetch={refetch}
           />
 
-      <Modal
+      {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -740,7 +932,7 @@ const Inventory = () => {
             close
           </Button>
         </Box>
-      </Modal>
+      </Modal> */}
 
           <Box
             height="80vh"
@@ -793,7 +985,7 @@ const Inventory = () => {
         </Box>
       )}
 
-      {activeTab === 3 && (
+      {activeTab === 4 && (
         <Box>
           <DonorEvents />
         </Box>
