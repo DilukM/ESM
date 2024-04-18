@@ -17,6 +17,7 @@ export const api = createApi({
     "CurrentItems",
     "ReleaseItems",
     "Items",
+    "Items_out"
   ],
   endpoints: (build) => ({
     getUser: build.query({
@@ -83,11 +84,47 @@ export const api = createApi({
     }),
     updateItems: build.mutation({
       query: ({ itemID, itemName, quantity, donorId, date }) => ({
-        url: `items/update/${donorId}`,
+        url: `items/update/${itemID}`,
         method: "PUT",
         body: { itemID, itemName, quantity, donorId, date },
       }),
       providesTags: ["Items"],
+    }),
+
+    //...
+
+    //Items_out...
+
+    getItemss_out: build.query({
+      query: () => `items_out/gets`,
+      providesTags: ["Items_out"],
+    }),
+    getItems_out: build.query({
+      query: (id) => `items_out/items_out/${id}`,
+      providesTags: ["Items_out"],
+    }),
+    deleteItems_out: build.mutation({
+      query: (itemID) => ({
+        url: `items_out/delete/${itemID}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Items_out"], // Invalidate the cache for "Items" after deletion
+    }),
+    addItems_out: build.mutation({
+      query: ({ itemID, quantity, eventId, date }) => ({
+        url: `items_out/add`,
+        method: "POST",
+        body: { itemID, quantity, eventId, date },
+      }),
+      providesTags: ["Items_out"],
+    }),
+    updateItems_out: build.mutation({
+      query: ({ itemID, quantity, eventId, date }) => ({
+        url: `items_out/update/${itemID}`,
+        method: "PUT",
+        body: { itemID, quantity, eventId, date },
+      }),
+      providesTags: ["Items_out"],
     }),
 
     //...
@@ -191,6 +228,12 @@ export const {
   useGetItemsQuery,
   useAddItemsMutation,
   useUpdateItemsMutation,
+
+  useGetItemss_outQuery,
+  useDeleteItems_outMutation,
+  useGetItems_outQuery,
+  useAddItems_outMutation,
+  useUpdateItems_outMutation,
 
   useGetCurrentItemsQuery,
   useGetReleaseItemsQuery,
