@@ -12,6 +12,7 @@ import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
 import donorRoutes from "./routes/donor_routes.js";
+import dEventRoutes from "./routes/d_events_routes.js";
 import itemsRoutes from "./routes/items_routes.js";
 import items_outRoutes from "./routes/items_out_routes.js";
 
@@ -33,8 +34,10 @@ import Items_out from "./models/Items_out.js";
 import {
   dataUser,
   dataDonor,
+
   dataItems,
   dataItems_out,
+
   dataProduct,
   dataProductStat,
   dataTransaction,
@@ -60,6 +63,7 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 app.use("/donors", donorRoutes);
+app.use("/events", dEventRoutes);
 app.use("/items", itemsRoutes);
 app.use("/items_out", items_outRoutes);
 

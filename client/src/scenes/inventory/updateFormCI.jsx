@@ -8,10 +8,8 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { useUpdateItemsMutation } from "state/api";
 
 const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
@@ -20,13 +18,10 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const [quantity, setquantity] = useState("");
   const [date, setdate] = useState("");
 
-  
-
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
   const [quantityError, setquantityError] = useState("");
   const [dateError, setdateError] = useState("");
- 
 
   const [updateItems] = useUpdateItemsMutation();
   // Populate form fields with donorToUpdate data when it's available
@@ -35,7 +30,6 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
       setitemName(itemsToUpdate.itemName);
       setquantity(itemsToUpdate.quantity);
       setdate(itemsToUpdate.date);
-    
     }
   }, [itemsToUpdate]);
 
@@ -56,7 +50,7 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     if (!quantity.trim()) {
       setquantityError("Quantity is required");
       isValid = false;
-    }  else {
+    } else {
       setquantityError("");
     }
 
@@ -67,8 +61,6 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     } else {
       setdateError("");
     }
-
-   
 
     return isValid;
   };
@@ -82,7 +74,7 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           setitemName("");
           setquantity("");
           setdate("");
-          
+
           // Close the dialog
           handleClose();
           // Refetch the donors list
@@ -99,17 +91,14 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     setitemName("");
     setquantity("");
     setdate("");
-    
 
     setitemNameError("");
     setquantityError("");
     setdateError("");
-    
+
     // Close the dialog
     handleClose();
   };
-
-  
 
   return (
     <Dialog open={open} onClose={handleCancel}>
@@ -168,7 +157,6 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
             },
           }}
         />
-        
       </DialogContent>
       <DialogActions>
         <Box

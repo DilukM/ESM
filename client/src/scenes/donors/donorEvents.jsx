@@ -11,6 +11,8 @@ import {
 
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Header";
+import { useAddDEventMutation } from "state/api";
+
 function TabPanel({ value, index, children }) {
   return (
     <div
@@ -30,15 +32,15 @@ export default function DonorEvents() {
   const [tabValue, setTabValue] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [eventDetails, setEventDetails] = useState({
+    id: "",
     eventName: "",
     date: "",
     location: "",
-    comments: "",
+    description: "",
     coverImage: null,
-    province: "",
-    district: "",
-    town: "",
   });
+
+  const [addDEvent] = useAddDEventMutation();
 
   const handleMouseEnterBtn = () => {
     setIsHoveredBtn(true);
@@ -78,9 +80,19 @@ export default function DonorEvents() {
   };
 
   const handleCreateEvent = () => {
-    // Here you can perform actions with eventDetails like sending it to an API
-    console.log(eventDetails);
-    handleCloseModal();
+    addDEvent({ eventDetails })
+      .then((response) => {
+        console.log("Event added successfully from frontend:", response);
+        // Clear form fields
+        setEventDetails("");
+        // Close the dialog
+        handleCloseModal();
+        // Refetch the event list
+        // refetch();
+      })
+      .catch((error) => {
+        console.error("Error adding Event:", error);
+      });
   };
 
   const btnBoxStyle = {
@@ -262,8 +274,8 @@ export default function DonorEvents() {
           <TextField
             label="Event ID"
             variant="outlined"
-            name="eventID"
-            value={eventDetails.eventName}
+            name="id"
+            value={eventDetails.id}
             onChange={handleInputChange}
             fullWidth
             sx={{ mb: 2 }}
@@ -297,26 +309,8 @@ export default function DonorEvents() {
               <TextField
                 label="Province"
                 variant="outlined"
-                name="province"
-                value={eventDetails.province}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box mr={2}>
-              <TextField
-                label="District"
-                variant="outlined"
-                name="district"
-                value={eventDetails.district}
-                onChange={handleInputChange}
-              />
-            </Box>
-            <Box>
-              <TextField
-                label="Town"
-                variant="outlined"
-                name="town"
-                value={eventDetails.town}
+                name="location"
+                value={eventDetails.location}
                 onChange={handleInputChange}
               />
             </Box>
@@ -324,8 +318,8 @@ export default function DonorEvents() {
           <TextField
             label="Comments"
             variant="outlined"
-            name="comments"
-            value={eventDetails.comments}
+            name="description"
+            value={eventDetails.description}
             onChange={handleInputChange}
             fullWidth
             multiline
@@ -346,7 +340,7 @@ export default function DonorEvents() {
           <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>
             Create
           </Button>
-          <Button variant="contained" onClick={handleCreateEvent}>
+          <Button variant="contained" onClick={handleCloseModal}>
             close
           </Button>
         </Box>

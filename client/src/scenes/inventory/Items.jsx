@@ -8,20 +8,17 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAddItemsMutation } from "state/api";
 
 const Items = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
-  const [itemID, setitemID] = useState("");
+  const [itemId, setitemID] = useState("");
   const [itemName, setitemName] = useState("");
   const [quantity, setquantity] = useState("");
   const [donorId, setdonorId] = useState("");
   const [date, setdate] = useState("");
-  //const [showPassword, setShowPassword] = useState(false);
 
   // State variables for validation
   const [itemIDError, setitemIDError] = useState("");
@@ -36,7 +33,7 @@ const Items = ({ open, handleClose, refetch }) => {
     let isValid = true;
 
     // Validate itemID
-    if (!itemID.trim()) {
+    if (!itemId.trim()) {
       setitemIDError("Item ID is required");
       isValid = false;
     } else {
@@ -47,7 +44,6 @@ const Items = ({ open, handleClose, refetch }) => {
     if (!itemName.trim()) {
       setitemNameError("Item Name is required");
       isValid = false;
-    
     } else {
       setitemNameError("");
     }
@@ -56,7 +52,6 @@ const Items = ({ open, handleClose, refetch }) => {
     if (!quantity.trim()) {
       setquantityError("Quantity is required");
       isValid = false;
-    
     } else {
       setquantityError("");
     }
@@ -77,14 +72,12 @@ const Items = ({ open, handleClose, refetch }) => {
       setdateError("");
     }
 
-   
-
     return isValid;
   };
 
   const handleAddItems = () => {
     if (validateInputs()) {
-      addItem({ itemID, itemName, quantity, donorId, date })
+      addItem({ itemId, itemName, quantity, donorId, date })
         .then((response) => {
           console.log("Item added successfully from frontend:", response);
           // Clear form fields
@@ -133,7 +126,7 @@ const Items = ({ open, handleClose, refetch }) => {
       <DialogContent>
         <TextField
           label="Item ID"
-          value={itemID}
+          value={itemId}
           onChange={(e) => setitemID(e.target.value)}
           fullWidth
           variant="outlined"
@@ -183,7 +176,7 @@ const Items = ({ open, handleClose, refetch }) => {
           }}
         />
 
-<TextField
+        <TextField
           label="Donor Id"
           value={donorId}
           onChange={(e) => setdonorId(e.target.value)}
@@ -200,9 +193,8 @@ const Items = ({ open, handleClose, refetch }) => {
             },
           }}
         />
-        
 
-<TextField
+        <TextField
           label="Date"
           value={date}
           onChange={(e) => setdate(e.target.value)}

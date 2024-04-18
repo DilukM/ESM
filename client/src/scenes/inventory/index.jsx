@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
@@ -6,9 +6,15 @@ import Header from "components/Header";
 import { useGetItemssQuery, useDeleteItemsMutation, useDeleteItems_outMutation} from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
-
-import { Avatar, Button, Tab, Tabs, Typography,Modal,
-  TextField} from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Tab,
+  Tabs,
+  Typography,
+  Modal,
+  TextField,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import DonorEvents from "./donorEvents";
 import UpdateFormCI from "./updateFormCI";
@@ -35,7 +41,6 @@ const Inventory = () => {
   const [searchInput, setSearchInput] = useState("");
   const { data, isLoading, refetch } = useGetItemssQuery();
   const [rowIndex, setRowIndex] = useState(0); // State for custom index
-  
 
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -43,8 +48,6 @@ const Inventory = () => {
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-
-  
 
   useEffect(() => {
     if (data) {
@@ -69,6 +72,7 @@ const Inventory = () => {
     setSelectedItems(item); // Set the selected item data
     setShowUpdateFormCI(true); // Show the update form
   };
+
 
   // const handleUpdateClickRI = (item_out) => {
   //   setSelectedItems_out(item_out); // Set the selected donor data
@@ -98,10 +102,10 @@ const Inventory = () => {
   //   itemId: "",
   //   donorId: "",
   //   itemQuantity: "",
-   
+
   // });
 
-//Release Item...
+  //Release Item...
 
   // const [releaseItem, setReleaseItem] = useState({
   //   itemName: "",
@@ -109,7 +113,7 @@ const Inventory = () => {
   //   itemId: "",
   //   eventId: "",
   //   itemQuantity: "",
-   
+
   // });
 
   // const handleTabChange = (event, newValue) => {
@@ -132,7 +136,7 @@ const Inventory = () => {
   //   setOpenModal(false);
   // };
 
-//Add Item
+  //Add Item
   // const handleInputChange = (e) => {
   //   const { name, value } = e.target;
   //   setAddItem((prev) => ({
@@ -150,11 +154,11 @@ const Inventory = () => {
   // };
 
   // const handleAddItem = () => {
-    
+
   //   console.log(addItem);
   //   handleCloseModal();
   // };
-//Release Item
+  //Release Item
   // const handleInputChange1 = (e) => {
   //   const { name, value } = e.target;
   //   setReleaseItem((prev) => ({
@@ -172,7 +176,7 @@ const Inventory = () => {
   // };
 
   // const handleReleaseItem= () => {
-    
+
   //   console.log(releaseItem);
   //   handleCloseModal();
   // };
@@ -183,7 +187,7 @@ const Inventory = () => {
       headerName: "Event ID",
       flex: 1,
     },
-    
+
     {
       field: "itemId",
       headerName: "Item ID",
@@ -199,13 +203,11 @@ const Inventory = () => {
       headerName: "Quantity",
       flex: 0.5,
       sortable: false,
-      
     },
     {
       field: "donorId",
       headerName: "Donor Id",
       flex: 1,
-     
     },
     {
       field: "actions",
@@ -259,11 +261,11 @@ const Inventory = () => {
 
   const items = [
     {
-      field: "itemID",
+      field: "itemId",
       headerName: "Item ID",
       flex: 1,
     },
-    
+
     {
       field: "itemName",
       headerName: "Item Name",
@@ -274,7 +276,6 @@ const Inventory = () => {
       headerName: "Quantity",
       flex: 0.5,
       sortable: false,
-      
     },
     {
       field: "donorId",
@@ -286,8 +287,7 @@ const Inventory = () => {
       headerName: "Date",
       flex: 1,
     },
-    
-    
+
     {
       field: "",
       headerName: "Actions",
@@ -338,16 +338,13 @@ const Inventory = () => {
     },
   ];
 
-
-  
-
   const currentItems = [
     {
       field: "itemId",
       headerName: "Item ID",
       flex: 1,
     },
-    
+
     {
       field: "itemName",
       headerName: "Item Name",
@@ -358,15 +355,13 @@ const Inventory = () => {
       headerName: "Quantity",
       flex: 0.5,
       sortable: false,
-      
     },
     {
       field: "date",
       headerName: "Date",
       flex: 1,
     },
-    
-    
+
     {
       field: "",
       headerName: "Actions",
@@ -423,7 +418,7 @@ const Inventory = () => {
       headerName: "Item ID",
       flex: 1,
     },
-    
+
     {
       field: "quantity",
       headerName: "Quantity",
@@ -439,9 +434,8 @@ const Inventory = () => {
       headerName: "Date",
       flex: 0.5,
       sortable: false,
-      
     },
-    
+
     {
       field: "",
       headerName: "Actions",
@@ -569,7 +563,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={data  || []}
+              rows={data || []}
               columns={overview}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
@@ -590,7 +584,7 @@ const Inventory = () => {
         </Box>
       )}
 
-{activeTab === 1 && (
+      {activeTab === 1 && (
         <Box>
           <Box
             display="flex"
@@ -603,12 +597,12 @@ const Inventory = () => {
               },
             }}
           >
-             <Button
+            <Button
               variant="contained"
               sx={{ marginTop: 2 }}
               onClick={() => setShowForm(true)}
             >
-              Add Item 
+              Add Item
             </Button>
           </Box>
 
@@ -624,9 +618,6 @@ const Inventory = () => {
             handleClose={handleCloseForm}
             refetch={refetch}
           />
-
-
-        
 
           <Box
             height="80vh"
@@ -692,12 +683,12 @@ const Inventory = () => {
               },
             }}
           >
-             <Button
+            <Button
               variant="contained"
               sx={{ marginTop: 2 }}
               onClick={() => setShowForm(true)}
             >
-              Add Item 
+              Add Item
             </Button>
           </Box>
 
@@ -713,7 +704,6 @@ const Inventory = () => {
             handleClose={handleCloseForm}
             refetch={refetch}
           />
-
 
           {/* <Modal
         open={openModal}
@@ -847,6 +837,7 @@ const Inventory = () => {
       {activeTab === 3 && (
         <Box>
 
+
   
 
             <Box
@@ -879,11 +870,36 @@ const Inventory = () => {
 
           <Items_out
             open={showForm}
+
+          <Box
+            display="flex"
+            flex={1}
+            justifyContent="flex-end"
+            mb={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            {/* <Button
+          variant="contained"
+          sx={{ marginTop: 2 }}
+          onClick={handleOpenModal}
+        >
+         Release Item
+        </Button> */}
+          </Box>
+
+          <UpdateFormCI
+            open={showUpdateFormCI}
+
             handleClose={handleCloseForm}
             refetch={refetch}
           />
 
-      {/* <Modal
+          {/* <Modal
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
@@ -990,7 +1006,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={data  || []}
+              rows={data || []}
               columns={releaseItems}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
@@ -1016,7 +1032,6 @@ const Inventory = () => {
           <DonorEvents />
         </Box>
       )}
-
     </Box>
   );
 };

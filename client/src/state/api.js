@@ -57,6 +57,41 @@ export const api = createApi({
       providesTags: ["Donors"],
     }),
 
+    //Donation Events Start
+    getDEvents: build.query({
+      query: () => `events/gets`,
+      providesTags: ["Events"],
+    }),
+    getDEvent: build.query({
+      query: (id) => `events/events/${id}`,
+      providesTags: ["Events"],
+    }),
+    deleteDEvent: build.mutation({
+      query: (donorId) => ({
+        url: `events/delete/${donorId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Events"], // Invalidate the cache for "Donors" after deletion
+    }),
+    addDEvent: build.mutation({
+      query: ({ eventDetails }) => ({
+        url: `events/add`,
+        method: "POST",
+        body: { eventDetails },
+      }),
+      providesTags: ["Events"],
+    }),
+    updateDEvent: build.mutation({
+      query: ({ donorId, name, email, phone, password }) => ({
+        url: `events/update/${donorId}`,
+        method: "PUT",
+        body: { name, email, phone, password },
+      }),
+      providesTags: ["Events"],
+    }),
+
+    //Donation Events End
+
     //Items...
 
     getItemss: build.query({
@@ -222,6 +257,12 @@ export const {
   useGetDonorQuery,
   useAddDonorMutation,
   useUpdateDonorMutation,
+
+  useGetDEventsQuery,
+  useDeleteDEventMutation,
+  useGetDEventQuery,
+  useAddDEventMutation,
+  useUpdateDEventMutation,
 
   useGetItemssQuery,
   useDeleteItemsMutation,
