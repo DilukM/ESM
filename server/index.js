@@ -1,5 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -9,6 +11,10 @@ import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
 import salesRoutes from "./routes/sales.js";
+import donorRoutes from "./routes/donor_routes.js";
+import dEventRoutes from "./routes/d_events_routes.js";
+import itemsRoutes from "./routes/items_routes.js";
+import items_outRoutes from "./routes/items_out_routes.js";
 
 // data imports
 import Donor from "./models/Donor.js";
@@ -21,11 +27,16 @@ import ProductStat from "./models/ProductStat.js";
 import Transaction from "./models/Transaction.js";
 import OverallStat from "./models/OverallStat.js";
 import AffiliateStat from "./models/AffiliateStat.js";
+import Items from "./models/Items.js";
+import Items_In from "./models/Items_In.js";
+import Items_out from "./models/Items_out.js";
+
 import {
   dataUser,
   dataDonor,
-  dataCurrentItems,
-  dataReleaseItems,
+
+  dataItems,
+  dataItems_out,
 
   dataProduct,
   dataProductStat,
@@ -33,6 +44,7 @@ import {
   dataOverallStat,
   dataAffiliateStat,
 } from "./data/index.js";
+import { dataItems_In, dataItems, dataItems_out } from "./data/ESM_Data.js";
 
 /* CONFIGURATION */
 dotenv.config();
@@ -50,6 +62,10 @@ app.use("/client", clientRoutes);
 app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
+app.use("/donors", donorRoutes);
+app.use("/events", dEventRoutes);
+app.use("/items", itemsRoutes);
+app.use("/items_out", items_outRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
@@ -69,7 +85,10 @@ mongoose
     // Transaction.insertMany(dataTransaction);
     // User.insertMany(dataUser);
     // Donor.insertMany(dataDonor);
-     // CurrentItems.insertMany(dataCurrentItems);
-      // ReleaseItems.insertMany(dataReleaseItems);
+    // CurrentItems.insertMany(dataCurrentItems);
+    // ReleaseItems.insertMany(dataReleaseItems);
+    // Items.insertMany(dataItems);
+    // Items_In.insertMany(dataItems_In);
+    // Items_out.insertMany(dataItems_out);
   })
   .catch((error) => console.log(`${error} did not connect`));

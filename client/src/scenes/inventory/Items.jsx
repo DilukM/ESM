@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -9,36 +9,38 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAddItemsMutation } from "state/api";
 
-import { useUpdateItemsMutation } from "state/api";
-
-const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
+const Items = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
+  const [itemId, setitemID] = useState("");
   const [itemName, setitemName] = useState("");
   const [quantity, setquantity] = useState("");
+  const [donorId, setdonorId] = useState("");
   const [date, setdate] = useState("");
 
   // State variables for validation
+  const [itemIDError, setitemIDError] = useState("");
   const [itemNameError, setitemNameError] = useState("");
   const [quantityError, setquantityError] = useState("");
+  const [donorIdError, setdonorIdError] = useState("");
   const [dateError, setdateError] = useState("");
 
-  const [updateItems] = useUpdateItemsMutation();
-  // Populate form fields with donorToUpdate data when it's available
-  useEffect(() => {
-    if (itemsToUpdate) {
-      setitemName(itemsToUpdate.itemName);
-      setquantity(itemsToUpdate.quantity);
-      setdate(itemsToUpdate.date);
-    }
-  }, [itemsToUpdate]);
-
-  //const itemID = itemToUpdate ? itemToUpdate._id : "";
+  const [addItem] = useAddItemsMutation();
 
   const validateInputs = () => {
     let isValid = true;
 
     // Validate itemID
+    if (!itemId.trim()) {
+      setitemIDError("Item ID is required");
+      isValid = false;
+    } else {
+      setitemIDError("");
+    }
+
+    // Validate itemName
     if (!itemName.trim()) {
       setitemNameError("Item Name is required");
       isValid = false;
@@ -54,7 +56,15 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
       setquantityError("");
     }
 
-    // Validate date
+    // Validate donorId
+    if (!donorId.trim()) {
+      setdonorIdError("Donor Id is required");
+      isValid = false;
+    } else {
+      setdonorIdError("");
+    }
+
+    // Validate phone
     if (!date.trim()) {
       setdateError("Date is required");
       isValid = false;
@@ -65,47 +75,72 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     return isValid;
   };
 
-  const handleUpdateItems = () => {
+  const handleAddItems = () => {
     if (validateInputs()) {
-      updateItems({ itemName, quantity, date })
+      addItem({ itemId, itemName, quantity, donorId, date })
         .then((response) => {
-          console.log("Item updated successfully:", response);
+          console.log("Item added successfully from frontend:", response);
           // Clear form fields
+          setitemID("");
           setitemName("");
           setquantity("");
+          setdonorId("");
           setdate("");
-
           // Close the dialog
           handleClose();
           // Refetch the donors list
           refetch();
         })
         .catch((error) => {
-          console.error("Error updating item:", error);
+          console.error("Error adding donor:", error);
         });
     }
   };
 
   const handleCancel = () => {
     // Clear form fields
+    setitemID("");
     setitemName("");
     setquantity("");
+    setdonorId("");
     setdate("");
 
+    setitemIDError("");
     setitemNameError("");
     setquantityError("");
+    setdonorIdError("");
     setdateError("");
-
     // Close the dialog
     handleClose();
   };
 
+  // const togglePasswordVisibility = () => {
+  //   setShowPassword(!showPassword);
+  // };
+
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
-        Update Item
+        Add New Item
       </DialogTitle>
       <DialogContent>
+        <TextField
+          label="Item ID"
+          value={itemId}
+          onChange={(e) => setitemID(e.target.value)}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          error={!!itemIDError}
+          helperText={itemIDError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
+        />
         <TextField
           label="Item Name"
           value={itemName}
@@ -140,6 +175,25 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
             },
           }}
         />
+
+        <TextField
+          label="Donor Id"
+          value={donorId}
+          onChange={(e) => setdonorId(e.target.value)}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          error={!!donorIdError}
+          helperText={donorIdError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
+        />
+
         <TextField
           label="Date"
           value={date}
@@ -170,12 +224,8 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
             },
           }}
         >
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateItems}
-          >
-            Update
+          <Button variant="contained" color="primary" onClick={handleAddItems}>
+            Add
           </Button>
         </Box>
         <Box
@@ -197,4 +247,4 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   );
 };
 
-export default UpdateFormCI;
+export default Items;

@@ -12,6 +12,7 @@ const Donors = () => {
   const theme = useTheme();
   const [showForm, setShowForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [selectedDonor, setSelectedDonor] = useState(null);
 
   // values to be sent to the backend
   const [deleteDonor] = useDeleteDonorMutation();
@@ -20,14 +21,13 @@ const Donors = () => {
   const [setSort] = useState({});
   const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
+  const [searchInput, setSearchInput] = useState("");
+  const { data, isLoading, refetch } = useGetDonorsQuery();
+  const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-
-  const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetDonorsQuery();
-  const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   useEffect(() => {
     if (data) {
@@ -40,11 +40,15 @@ const Donors = () => {
       .unwrap()
       .then((response) => {
         console.log("Donor deleted successfully");
-        // Optionally, you can trigger a refetch of the donors list
       })
       .catch((error) => {
         console.error("Error deleting donor:", error);
       });
+  };
+
+  const handleUpdateClick = (donor) => {
+    setSelectedDonor(donor); // Set the selected donor data
+    setShowUpdateForm(true); // Show the update form
   };
 
   const handleCloseForm = () => {
@@ -126,7 +130,7 @@ const Donors = () => {
             <Button
               variant="contained"
               color="info"
-              onClick={() => setShowUpdateForm(true)}
+              onClick={() => handleUpdateClick(params.row)}
             >
               Update
             </Button>
@@ -219,6 +223,7 @@ const Donors = () => {
             open={showUpdateForm}
             handleClose={handleCloseForm}
             refetch={refetch}
+            donorToUpdate={selectedDonor}
           />
 
           <DonorForm

@@ -11,8 +11,6 @@ import {
 import Header from "components/Header";
 import { DataGrid } from "@mui/x-data-grid";
 
-
-
 function TabPanel({ value, index, children }) {
   return (
     <div
@@ -25,7 +23,6 @@ function TabPanel({ value, index, children }) {
     </div>
   );
 }
-
 
 export default function Events() {
   const theme = useTheme();
@@ -62,7 +59,7 @@ export default function Events() {
     setSelectedEvent(params.row); // Set the selected event details
     setOpenDetailsModal(true); // Open the details modal
   };
-  
+
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -165,50 +162,49 @@ export default function Events() {
       renderCell: (params) => (
         <div>
           <Box display="flex" justifyContent="space-around">
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.primary[700],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="info"
-              // onClick={() => setShowUpdateForm(true)}
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              sx={{
+                "& button": {
+                  backgroundColor: theme.palette.primary[700],
+                  color: "white",
+                },
+              }}
             >
-              Update
-            </Button>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            mr={2}
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.secondary[400],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="error"
-              // onClick={() => handleDelete(params.row._id)}
+              <Button
+                variant="contained"
+                color="info"
+                // onClick={() => setShowUpdateForm(true)}
+              >
+                Update
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              mr={2}
+              sx={{
+                "& button": {
+                  backgroundColor: theme.palette.secondary[400],
+                  color: "white",
+                },
+              }}
             >
-              Delete
-            </Button>
-          </Box>
+              <Button
+                variant="contained"
+                color="error"
+                // onClick={() => handleDelete(params.row._id)}
+              >
+                Delete
+              </Button>
+            </Box>
           </Box>
         </div>
       ),
     },
   ];
 
-  
   const columns2 = [
     {
       field: "id",
@@ -239,45 +235,44 @@ export default function Events() {
       renderCell: (params) => (
         <div>
           <Box display="flex" justifyContent="space-around">
-        <Box
-            display="flex"
-            justifyContent="flex-end"
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.primary[700],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="info"
-              // onClick={() => setShowUpdateForm(true)}
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              sx={{
+                "& button": {
+                  backgroundColor: theme.palette.primary[700],
+                  color: "white",
+                },
+              }}
             >
-              Update
-            </Button>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="flex-end"
-            mr={2}
-            sx={{
-              "& button": {
-                backgroundColor: theme.palette.secondary[400],
-                color: "white",
-              },
-            }}
-          >
-            <Button
-              variant="contained"
-              color="error"
-              // onClick={() => handleDelete(params.row._id)}
+              <Button
+                variant="contained"
+                color="info"
+                // onClick={() => setShowUpdateForm(true)}
+              >
+                Update
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              mr={2}
+              sx={{
+                "& button": {
+                  backgroundColor: theme.palette.secondary[400],
+                  color: "white",
+                },
+              }}
             >
-              Delete
-            </Button>
+              <Button
+                variant="contained"
+                color="error"
+                // onClick={() => handleDelete(params.row._id)}
+              >
+                Delete
+              </Button>
+            </Box>
           </Box>
-          </Box>
-         
         </div>
       ),
     },
@@ -287,7 +282,7 @@ export default function Events() {
     {
       id: 1,
       coverImage:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdWbPff4NcGRaa-jsM84ISSl_np37VsToO-B8bHqgWn0qQR4Z6vDEaZv9J9g&s",
+        "sacdvffbgnhj",
       eventName: "Event 1",
       date: "2024-02-21",
       location: "Location 1",
@@ -295,7 +290,7 @@ export default function Events() {
     {
       id: 2,
       coverImage:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXFRkOsQlMqlHvrYlAa7D62gVATxQbgBgTeYhuRJd46MrcL_3oVAT3Lw1UOQ&s",
+        "fdcsx",
       eventName: "Event 2",
       date: "2024-02-22",
       location: "Location 2",
@@ -303,7 +298,7 @@ export default function Events() {
     {
       id: 3,
       coverImage:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsvpLqVWw7G39MEpDHK4StplqBs2Mot6fxYkU_s2Fi9oiTMlmarVSZ3VzsYA&s",
+        "fvghb",
       eventName: "Event 3",
       date: "2024-02-23",
       location: "Location 3",
@@ -345,9 +340,7 @@ export default function Events() {
         style={btnBoxStyle}
         onMouseEnter={handleMouseEnterBtn}
         onMouseLeave={handleMouseLeaveBtn}
-      >
-       
-      </Box>
+      ></Box>
       <Box mt={2}>
         <Tabs
           value={tabValue}
@@ -427,10 +420,14 @@ export default function Events() {
             p: 4,
           }}
         >
-           <h2 id="modal-modal-title">Event Details</h2>
+          <h2 id="modal-modal-title">Event Details</h2>
           <p>ID: {selectedEvent?.id}</p>
           <div style={{ width: "100%", textAlign: "center" }}>
-            <img src={selectedEvent?.coverImage} alt="Cover" style={{ width: "100%" }} />
+            <img
+              src={selectedEvent?.coverImage}
+              alt="Cover"
+              style={{ width: "100%" }}
+            />
           </div>
           <p>Event Name: {selectedEvent?.eventName}</p>
           <p>Date: {selectedEvent?.date}</p>

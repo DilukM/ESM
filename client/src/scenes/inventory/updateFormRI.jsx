@@ -8,28 +8,34 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useUpdateItems_outMutation } from "state/api";
 
-import { useUpdateItemsMutation } from "state/api";
-
-const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
+const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const theme = useTheme();
-  const [itemName, setitemName] = useState("");
+  const [eventId, seteventId] = useState("");
   const [quantity, setquantity] = useState("");
   const [date, setdate] = useState("");
 
+  
+
   // State variables for validation
-  const [itemNameError, setitemNameError] = useState("");
+  const [eventIdError, seteventIdError] = useState("");
   const [quantityError, setquantityError] = useState("");
   const [dateError, setdateError] = useState("");
+ 
 
-  const [updateItems] = useUpdateItemsMutation();
+  const [updateItems_out] = useUpdateItems_outMutation();
   // Populate form fields with donorToUpdate data when it's available
   useEffect(() => {
     if (itemsToUpdate) {
-      setitemName(itemsToUpdate.itemName);
+      seteventId(itemsToUpdate.eventId);
       setquantity(itemsToUpdate.quantity);
       setdate(itemsToUpdate.date);
+    
     }
   }, [itemsToUpdate]);
 
@@ -39,18 +45,18 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     let isValid = true;
 
     // Validate itemID
-    if (!itemName.trim()) {
-      setitemNameError("Item Name is required");
+    if (!eventId.trim()) {
+      seteventIdError("Event Id is required");
       isValid = false;
     } else {
-      setitemNameError("");
+      seteventIdError("");
     }
 
     // Validate quantity
     if (!quantity.trim()) {
       setquantityError("Quantity is required");
       isValid = false;
-    } else {
+    }  else {
       setquantityError("");
     }
 
@@ -62,19 +68,21 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
       setdateError("");
     }
 
+   
+
     return isValid;
   };
 
-  const handleUpdateItems = () => {
+  const handleUpdateItems_out = () => {
     if (validateInputs()) {
-      updateItems({ itemName, quantity, date })
+      updateItems_out({ eventId, quantity, date })
         .then((response) => {
           console.log("Item updated successfully:", response);
           // Clear form fields
-          setitemName("");
+          seteventId("");
           setquantity("");
           setdate("");
-
+          
           // Close the dialog
           handleClose();
           // Refetch the donors list
@@ -88,17 +96,20 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
 
   const handleCancel = () => {
     // Clear form fields
-    setitemName("");
+    seteventId("");
     setquantity("");
     setdate("");
+    
 
-    setitemNameError("");
+    seteventIdError("");
     setquantityError("");
     setdateError("");
-
+    
     // Close the dialog
     handleClose();
   };
+
+  
 
   return (
     <Dialog open={open} onClose={handleCancel}>
@@ -107,14 +118,14 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
       </DialogTitle>
       <DialogContent>
         <TextField
-          label="Item Name"
-          value={itemName}
-          onChange={(e) => setitemName(e.target.value)}
+          label="Event Id"
+          value={eventId}
+          onChange={(e) => seteventId(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!itemNameError}
-          helperText={itemNameError}
+          error={!!eventIdError}
+          helperText={eventIdError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -157,6 +168,7 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
             },
           }}
         />
+        
       </DialogContent>
       <DialogActions>
         <Box
@@ -173,7 +185,7 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateItems}
+            onClick={handleUpdateItems_out}
           >
             Update
           </Button>
@@ -197,4 +209,4 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   );
 };
 
-export default UpdateFormCI;
+export default UpdateFormRI;
