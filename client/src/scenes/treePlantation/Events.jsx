@@ -287,7 +287,7 @@ export default function Events() {
     {
       id: 1,
       coverImage:
-        "sacdvffbgnhj",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdWbPff4NcGRaa-jsM84ISSl_np37VsToO-B8bHqgWn0qQR4Z6vDEaZv9J9g&s",
       eventName: "Event 1",
       date: "2024-02-21",
       location: "Location 1",
@@ -295,7 +295,7 @@ export default function Events() {
     {
       id: 2,
       coverImage:
-        "fdcsx",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXFRkOsQlMqlHvrYlAa7D62gVATxQbgBgTeYhuRJd46MrcL_3oVAT3Lw1UOQ&s",
       eventName: "Event 2",
       date: "2024-02-22",
       location: "Location 2",
@@ -303,7 +303,7 @@ export default function Events() {
     {
       id: 3,
       coverImage:
-        "fvghb",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsvpLqVWw7G39MEpDHK4StplqBs2Mot6fxYkU_s2Fi9oiTMlmarVSZ3VzsYA&s",
       eventName: "Event 3",
       date: "2024-02-23",
       location: "Location 3",
