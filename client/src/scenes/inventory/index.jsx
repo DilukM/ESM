@@ -3,7 +3,11 @@ import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
-import { useGetItemssQuery, useDeleteItemsMutation, useDeleteItems_outMutation} from "state/api";
+import {
+  useGetItemssQuery,
+  useDeleteItemsMutation,
+  useDeleteItems_outMutation,
+} from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 
 import {
@@ -32,7 +36,7 @@ const Inventory = () => {
 
   // values to be sent to the backend
   const [deleteItems] = useDeleteItemsMutation();
- // const [deleteItems_out] = useDeleteItems_outMutation();
+  // const [deleteItems_out] = useDeleteItems_outMutation();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [setSort] = useState({});
@@ -66,19 +70,16 @@ const Inventory = () => {
         console.error("Error deleting item:", error);
       });
   };
-  
 
   const handleUpdateClick = (item) => {
     setSelectedItems(item); // Set the selected item data
     setShowUpdateFormCI(true); // Show the update form
   };
 
-
   // const handleUpdateClickRI = (item_out) => {
   //   setSelectedItems_out(item_out); // Set the selected donor data
   //   setShowUpdateFormRI(true); // Show the update form
   // };
-
 
   const handleCloseForm = () => {
     setShowForm(false);
@@ -89,7 +90,6 @@ const Inventory = () => {
     setShowForm(false);
     setShowUpdateFormRI(false);
   };
-
 
   const generateRowsWithIndex = (rows) => {
     return rows.map((row, index) => ({ ...row, index: rowIndex + index + 1 }));
@@ -836,40 +836,35 @@ const Inventory = () => {
 
       {activeTab === 3 && (
         <Box>
-
-
-  
-
-            <Box
-        display="flex"
-        flex={1}
-        justifyContent="flex-end"
-        mb={2}
-        sx={{
-          "& button": {
-            backgroundColor: theme.palette.secondary[400],
-            color: "white",
-          },
-        }}
-      >
-        <Button
+          <Box
+            display="flex"
+            flex={1}
+            justifyContent="flex-end"
+            mb={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
               variant="contained"
               sx={{ marginTop: 2 }}
               onClick={() => setShowForm(true)}
             >
-              Release Item 
+              Release Item
             </Button>
-      </Box>
+          </Box>
 
-      <UpdateFormRI
+          <UpdateFormRI
             open={showUpdateFormRI}
             handleClose={handleCloseForm}
             refetch={refetch}
             itemToUpdate={selectedItems}
           />
 
-          <Items_out
-            open={showForm}
+          <Items_out open={showForm} />
 
           <Box
             display="flex"
@@ -894,7 +889,6 @@ const Inventory = () => {
 
           <UpdateFormCI
             open={showUpdateFormCI}
-
             handleClose={handleCloseForm}
             refetch={refetch}
           />
