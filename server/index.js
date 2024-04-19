@@ -34,10 +34,6 @@ import Items_out from "./models/Items_out.js";
 import {
   dataUser,
   dataDonor,
-
-  dataItems,
-  dataItems_out,
-
   dataProduct,
   dataProductStat,
   dataTransaction,

@@ -1,5 +1,5 @@
 import Items_out from "../models/Items_out.js";
-import Items_out from "../models/Items_out.js";
+
 //import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -19,11 +19,11 @@ export const addItem_out = async (req, res) => {
 
     // Create a new donor instance with hashed password
     const newItem_out = new Items_out({
-        itemID,
-        
-        quantity,
-        eventId,
-        date,
+      itemID,
+
+      quantity,
+      eventId,
+      date,
     });
 
     // Save the donor to the database
@@ -111,8 +111,8 @@ export const updateItems_out = async (req, res) => {
 
     // Find the item by ID in the database and update its information
     const updatedItem_out = await Items_out.findByIdAndUpdate(
-        itemID,
-        updatedItemData_out,
+      itemID,
+      updatedItemData_out,
       { new: true }
     );
 
