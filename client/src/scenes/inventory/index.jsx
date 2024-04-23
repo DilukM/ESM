@@ -864,7 +864,11 @@ const Inventory = () => {
             itemToUpdate={selectedItems}
           />
 
-          <Items_out open={showForm} />
+          <Items_out
+            open={showForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
 
           <Box
             display="flex"
