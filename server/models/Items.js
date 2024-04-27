@@ -27,7 +27,7 @@ const ItemsSchema = new mongoose.Schema(
     },
 
     date: {
-      type: String,
+      type: Date,
       required: false,
       min: 2,
       default: null,
