@@ -92,7 +92,7 @@ const Items = ({ open, handleClose, refetch }) => {
           refetch();
         })
         .catch((error) => {
-          console.error("Error adding donor:", error);
+          console.error("Error adding item:", error);
         });
     }
   };

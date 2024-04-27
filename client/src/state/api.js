@@ -14,8 +14,8 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
-    "CurrentItems",
-    "ReleaseItems",
+    //"CurrentItems",
+    //"ReleaseItems",
     "Items",
     "Items_out",
   ],
@@ -164,23 +164,23 @@ export const api = createApi({
 
     //...
 
-    getCurrentItems: build.query({
-      query: () => `general/currentItems`,
-      providesTags: ["CurrentItems"],
-    }),
-    getCurrentItem: build.query({
-      query: (id) => `general/currentItems/${id}`,
-      providesTags: ["CurrentItems"],
-    }),
+    // getCurrentItems: build.query({
+    //   query: () => `general/currentItems`,
+    //   providesTags: ["CurrentItems"],
+    // }),
+    // getCurrentItem: build.query({
+    //   query: (id) => `general/currentItems/${id}`,
+    //   providesTags: ["CurrentItems"],
+    // }),
 
-    getReleaseItems: build.query({
-      query: () => `general/releaseItems`,
-      providesTags: ["ReleaseItems"],
-    }),
-    getReleaseItem: build.query({
-      query: (id) => `general/releaseItems/${id}`,
-      providesTags: ["ReleaseItems"],
-    }),
+    // getReleaseItems: build.query({
+    //   query: () => `general/releaseItems`,
+    //   providesTags: ["ReleaseItems"],
+    // }),
+    // getReleaseItem: build.query({
+    //   query: (id) => `general/releaseItems/${id}`,
+    //   providesTags: ["ReleaseItems"],
+    // }),
 
     getProducts: build.query({
       query: () => "client/products",
@@ -219,35 +219,35 @@ export const api = createApi({
       providesTags: ["Dashboard"],
     }),
 
-    deleteCurrentItems: build.mutation({
-      query: (itemId) => ({
-        url: `general/currentItems/${itemId}`,
-        method: "Delete",
-      }),
-      invalidatesTags: ["CurrentItems"], // Invalidate the cache for "Items" after deletion
-    }),
-    addCurrentItem: build.mutation({
-      query: () => ({
-        url: `general/currentItems`,
-        method: "post",
-      }),
-      providesTags: ["CurrentItems"],
-    }),
+    // deleteCurrentItems: build.mutation({
+    //   query: (itemId) => ({
+    //     url: `general/currentItems/${itemId}`,
+    //     method: "Delete",
+    //   }),
+    //   invalidatesTags: ["CurrentItems"], // Invalidate the cache for "Items" after deletion
+    // }),
+    // addCurrentItem: build.mutation({
+    //   query: () => ({
+    //     url: `general/currentItems`,
+    //     method: "post",
+    //   }),
+    //   providesTags: ["CurrentItems"],
+    // }),
 
-    deleteReleaseItems: build.mutation({
-      query: (itemId) => ({
-        url: `general/releaseItems/${itemId}`,
-        method: "Delete",
-      }),
-      invalidatesTags: ["ReleaseItems"], // Invalidate the cache for "Items" after deletion
-    }),
-    addReleaseItem: build.mutation({
-      query: () => ({
-        url: `general/releaseItems`,
-        method: "post",
-      }),
-      providesTags: ["ReleaseItems"],
-    }),
+    // deleteReleaseItems: build.mutation({
+    //   query: (itemId) => ({
+    //     url: `general/releaseItems/${itemId}`,
+    //     method: "Delete",
+    //   }),
+    //   invalidatesTags: ["ReleaseItems"], // Invalidate the cache for "Items" after deletion
+    // }),
+    // addReleaseItem: build.mutation({
+    //   query: () => ({
+    //     url: `general/releaseItems`,
+    //     method: "post",
+    //   }),
+    //   providesTags: ["ReleaseItems"],
+    // }),
   }),
 });
 
@@ -276,8 +276,8 @@ export const {
   useAddItems_outMutation,
   useUpdateItems_outMutation,
 
-  useGetCurrentItemsQuery,
-  useGetReleaseItemsQuery,
+  // useGetCurrentItemsQuery,
+  // useGetReleaseItemsQuery,
 
   useGetUserQuery,
   useGetProductsQuery,
@@ -289,12 +289,12 @@ export const {
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
 
-  useDeleteCurrentItemsMutation,
-  useDeleteReleaseItemsMutation,
+  // useDeleteCurrentItemsMutation,
+  // useDeleteReleaseItemsMutation,
 
-  useGetCurrentItemQuery,
-  useGetReleaseItemQuery,
+  // useGetCurrentItemQuery,
+  // useGetReleaseItemQuery,
 
-  useAddCurrentItemMutation,
-  useAddReleaseItemMutation,
+  // useAddCurrentItemMutation,
+  // useAddReleaseItemMutation,
 } = api;

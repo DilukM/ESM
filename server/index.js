@@ -34,13 +34,15 @@ import Items_out from "./models/Items_out.js";
 import {
   dataUser,
   dataDonor,
+  dataItems,
+  dataItems_out,
   dataProduct,
   dataProductStat,
   dataTransaction,
   dataOverallStat,
   dataAffiliateStat,
 } from "./data/index.js";
-import { dataItems_In, dataItems, dataItems_out } from "./data/ESM_Data.js";
+//import { dataItems_In, dataItems, dataItems_out } from "./data/ESM_Data.js";
 
 /* CONFIGURATION */
 dotenv.config();
