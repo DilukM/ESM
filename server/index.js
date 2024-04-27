@@ -59,7 +59,7 @@ app.use("/general", generalRoutes);
 app.use("/management", managementRoutes);
 app.use("/sales", salesRoutes);
 app.use("/donors", donorRoutes);
-app.use("/events", dEventRoutes);
+app.use("/donorevents", dEventRoutes);
 app.use("/items", itemsRoutes);
 app.use("/items_out", items_outRoutes);
 

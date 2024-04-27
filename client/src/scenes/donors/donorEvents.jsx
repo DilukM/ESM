@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   useTheme,
@@ -11,7 +11,7 @@ import {
 
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Header";
-import { useAddDEventMutation } from "state/api";
+import { useAddDEventMutation, useGetDEventsQuery } from "state/api";
 
 function TabPanel({ value, index, children }) {
   return (
@@ -31,6 +31,7 @@ export default function DonorEvents() {
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+
   const [eventDetails, setEventDetails] = useState({
     id: "",
     eventName: "",
@@ -41,6 +42,8 @@ export default function DonorEvents() {
   });
 
   const [addDEvent] = useAddDEventMutation();
+  const { data, isLoading, refetch } = useGetDEventsQuery();
+  const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   const handleMouseEnterBtn = () => {
     setIsHoveredBtn(true);
@@ -88,7 +91,7 @@ export default function DonorEvents() {
         // Close the dialog
         handleCloseModal();
         // Refetch the event list
-        // refetch();
+        refetch();
       })
       .catch((error) => {
         console.error("Error adding Event:", error);
@@ -121,7 +124,7 @@ export default function DonorEvents() {
 
   const columns1 = [
     {
-      field: "coverImage",
+      field: "cover",
       headerName: "Cover Image",
       width: 200,
       renderCell: (params) => (
@@ -242,9 +245,12 @@ export default function DonorEvents() {
       <Box mt={2}>
         <Box height="80vh" position={"relative"}>
           <DataGrid
-            rows={rows1}
+            loading={isLoading || !data}
+            getRowId={(row) => row.id}
+            rows={data || []}
             columns={columns1}
             pageSize={5}
+            rowCount={(data && data.total) || 0}
             checkboxSelection
             disableSelectionOnClick
             getRowHeight={() => 150}
@@ -307,7 +313,7 @@ export default function DonorEvents() {
           >
             <Box mr={2}>
               <TextField
-                label="Province"
+                label="Location"
                 variant="outlined"
                 name="location"
                 value={eventDetails.location}

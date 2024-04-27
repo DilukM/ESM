@@ -1,13 +1,16 @@
+import e from "express";
 import dEvent from "../models/DonationEvents.js";
 import jwt from "jsonwebtoken";
 
 export const addDEvent = async (req, res) => {
   const { eventDetails } = req.body;
+  console.log(eventDetails);
   const id = eventDetails.id;
-  const name = eventDetails.eventName;
-  // const cover = eventDetails.coverImage;
+  const eventName = eventDetails.eventName;
+  // cover;
   const date = eventDetails.date;
   const location = eventDetails.location;
+
   try {
     // Check if the donor already exists
     const existingEventId = await dEvent.findOne({ id });
@@ -20,7 +23,7 @@ export const addDEvent = async (req, res) => {
     // Create a new donor instance with hashed password
     const newDEvent = new dEvent({
       id,
-      name,
+      eventName,
       // cover,
       date,
       location,

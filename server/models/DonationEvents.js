@@ -9,7 +9,7 @@ const dEventSchema = new mongoose.Schema(
       min: 2,
       max: 100,
     },
-    name: {
+    eventName: {
       type: String,
       required: true,
     },
