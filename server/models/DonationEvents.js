@@ -15,7 +15,9 @@ const dEventSchema = new mongoose.Schema(
     },
     cover: {
       type: String,
-      default: "NULL",
+      required: true,
+      // data: Buffer, // Store file as Buffer
+      // contentType: String, // Store file content type
     },
     date: {
       type: String,
@@ -24,7 +26,11 @@ const dEventSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      default: 0,
+      default: "NULL",
+    },
+    description: {
+      type: String,
+      default: "NULL",
     },
   },
   { timestamps: true }

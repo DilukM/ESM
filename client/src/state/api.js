@@ -29,6 +29,10 @@ export const api = createApi({
       query: () => `donors/gets`,
       providesTags: ["Donors"],
     }),
+    getLeaderboard: build.query({
+      query: () => `donors/leaderboard`,
+      providesTags: ["Donors"],
+    }),
     getDonor: build.query({
       query: (id) => `donors/donors/${id}`,
       providesTags: ["Donors"],
@@ -257,6 +261,7 @@ export const {
   useGetDonorQuery,
   useAddDonorMutation,
   useUpdateDonorMutation,
+  useGetLeaderboardQuery,
 
   useGetDEventsQuery,
   useDeleteDEventMutation,
