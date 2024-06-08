@@ -39,7 +39,10 @@ export const addItem = async (req, res) => {
     console.error("Error registering item:", error);
     res
       .status(500)
-      .json({ error: "Registration failed. Please try again later." });
+      .json({
+        error: "Item registration failed. Please try again later.",
+        error,
+      });
   }
 };
 

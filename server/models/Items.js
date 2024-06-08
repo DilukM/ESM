@@ -7,7 +7,7 @@ const ItemsSchema = new mongoose.Schema(
       required: true,
       min: 2,
       max: 100,
-      unique: false,
+      unique: true,
     },
     itemName: {
       type: String,

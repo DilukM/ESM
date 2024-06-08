@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
-import {
-  useGetDonorsQuery,
-  useDeleteDonorMutation,
-  useGetLeaderboardQuery,
-} from "state/api";
+import { useDeleteDonorMutation, useGetLeaderboardQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
