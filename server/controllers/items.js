@@ -5,7 +5,7 @@ export const addItem = async (req, res) => {
   const { itemId, itemName, quantity, donorId, date } = req.body;
   try {
     // Check if the item already exists
-    const existingItem = await Items.findOne({ itemCode });
+    const existingItem = await Items.findOne({ itemId });
 
     // If item exists, send error response
     if (existingItem) {
@@ -21,7 +21,7 @@ export const addItem = async (req, res) => {
       date,
     });
 
-    // Save the donor to the database
+    // Save the item to the database
     await newItem.save();
 
     // Generate JWT token
@@ -39,7 +39,10 @@ export const addItem = async (req, res) => {
     console.error("Error registering item:", error);
     res
       .status(500)
-      .json({ error: "Registration failed. Please try again later." });
+      .json({
+        error: "Item registration failed. Please try again later.",
+        error,
+      });
   }
 };
 
