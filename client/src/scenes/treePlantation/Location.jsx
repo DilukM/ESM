@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Box, useTheme, Modal, TextField } from '@mui/material';
+import { Box, useTheme, Modal, TextField, colors } from '@mui/material';
 import Header from 'components/Header';
 import GoogleMap from 'components/GoogleMap';
 import Button from 'components/Button';
+import { Link } from 'react-router-dom';
 
 const Location = () => {
   const theme = useTheme();
@@ -49,8 +50,17 @@ const Location = () => {
   return (
     <Box m="1.5rem 2.5rem">
       <Header title="Tree Plantation" subtitle="Manage tree plantations" />
+      <Box>
+      <p sx={{ color: colors.blue[500], textDecoration: 'none' }}>
+   
+    <Link to="./Event" sx={{ color: colors.blue[500], textDecoration: 'none' }}>Index</Link>
+    /
+    <Link to="./Location" sx={{ color: colors.blue[500], textDecoration: 'none' }}>Location</Link>
+  </p>
+</Box>
       <Box mt="40px" height="75vh">
         <Box><h1>Locations</h1></Box>
+       
         <Box position="absolute" top="220px" right="20px">
           <Button label="Create Event" onClick={handleOpenModal} />
         </Box>

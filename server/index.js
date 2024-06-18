@@ -15,6 +15,8 @@ import donorRoutes from "./routes/donor_routes.js";
 import dEventRoutes from "./routes/d_events_routes.js";
 import itemsRoutes from "./routes/items_routes.js";
 import items_outRoutes from "./routes/items_out_routes.js";
+import treeplantation from "./routes/treeplantation.js"
+import sponsors from "./routes/sponsors.js"
 
 // data imports
 import Donor from "./models/Donor.js";
@@ -42,6 +44,7 @@ import {
 } from "./data/index.js";
 //import { dataItems_In, dataItems, dataItems_out } from "./data/ESM_Data.js";
 
+// mongoose.set('strictQuery', true);
 /* CONFIGURATION */
 dotenv.config();
 const app = express();
@@ -62,6 +65,8 @@ app.use("/donors", donorRoutes);
 app.use("/donorevents", dEventRoutes);
 app.use("/items", itemsRoutes);
 app.use("/items_out", items_outRoutes);
+app.use("/treePlantationEvent",treeplantation)
+app.use("/sponsors",sponsors)
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;

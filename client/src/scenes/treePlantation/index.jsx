@@ -1,15 +1,34 @@
 import React, { useState } from "react";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, Tabs, Tab } from "@mui/material";
 import Header from "components/Header";
 import { useNavigate } from "react-router-dom"; 
-import GoogleMap from "components/GoogleMap"; 
+import EventsTab from "./EventsTab";
+import EventCreateModal from "./EventCreateModal";
+import SponsorTab from "./SponsorTab";
+import AddSponsorModal from "./AddSponsorModal";
+import LocationTab from "./LocationTab";
+import GoogleMap from "components/GoogleMap";
 
 const TreePlantation = () => {
   const theme = useTheme();
-  const navigate = useNavigate(); 
+  // const navigate = useNavigate(); 
   const [isHoveredEvent, setIsHoveredEvent] = useState(false);
   const [isHoveredLocation, setIsHoveredLocation] = useState(false);
   const [isHoveredReport, setIsHoveredReport] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  }
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleMouseEnterEvent = () => {
     setIsHoveredEvent(true);
@@ -34,10 +53,6 @@ const TreePlantation = () => {
   const handleMouseLeaveReport = () => {
     setIsHoveredReport(false);
   };
-
-  // const handleEventButtonClick = () => {
-  //   navigate.push('./Events');
-  // };
 
   const buttonStyleEvent = {
     margin: "10px",
@@ -86,7 +101,7 @@ const TreePlantation = () => {
             borderBottom: "none",
           },
           "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: theme.palette.secondary[400],
           },
           "& .MuiDataGrid-footerContainer": {
             backgroundColor: theme.palette.background.alt,
@@ -96,37 +111,53 @@ const TreePlantation = () => {
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
             color: `${theme.palette.secondary[200]} !important`,
           },
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.secondary[400],
+            borderRadius: "8px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: theme.palette.secondary[400],
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: theme.palette.secondary[400],
+          },
         }}
       >
-        <Box display="flex">
-          <button
-            style={buttonStyleEvent}
-            onMouseEnter={handleMouseEnterEvent}
-            onMouseLeave={handleMouseLeaveEvent}
-            onClick={() => navigate('/Events')} 
-          >
-            Events
-          </button>
-          <button
-            style={buttonStyleLocation}
-            onMouseEnter={handleMouseEnterLocation}
-            onMouseLeave={handleMouseLeaveLocation}
-            onClick={() => navigate('/Location')}
-          >
-            Locations
-          </button>
-          <button
-            style={buttonStyleReport}
-            onMouseEnter={handleMouseEnterReport}
-            onMouseLeave={handleMouseLeaveReport}
-            onClick={() => navigate('/Reports')} 
-          >
-            Reports
-          </button>
-        </Box>
-        <Box mt={3}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="standard"
+          indicatorColor="secondary"
+          textColor="secondary"
+          aria-label="Create Program Tab"
+        >
+          <Tab label="Map" />
+          <Tab label="Location" />
+          <Tab label="Events" />
+          <Tab label="Sponsors Details" />
+        </Tabs>
+
+        {/* Render tab content based on active tab */}
+        {activeTab === 0 && <Box >
           <GoogleMap />
-        </Box>
+        </Box>}
+        {activeTab === 1 && <LocationTab />}
+        {activeTab === 2 && <EventsTab handleOpenModal={handleOpenModal} />}
+        {activeTab === 3 && <SponsorTab handleOpenModal={handleOpenModal}/>}
+        
+        
+        {/* {activeTab === 2 && <VolunteerDonorRegistrationTab handleOpenModal={handleOpenModal}/>} */}
+        
+
+        {/* Modal */}
+        <EventCreateModal openModal={openModal} closeModal={handleCloseModal} />
+        <AddSponsorModal openModal={openModal} closeModal={handleCloseModal} />
+        
+
+        {/* <VolunteerDonorRegistrationModal open={openModal} handleClose={handleCloseModal}/> */}
       </Box>
     </Box>
   );

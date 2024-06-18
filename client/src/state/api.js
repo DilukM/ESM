@@ -6,6 +6,7 @@ export const api = createApi({
   tagTypes: [
     "Donors",
     "User",
+    "Events",
     "Products",
     "Customers",
     "Transactions",
@@ -18,6 +19,10 @@ export const api = createApi({
     //"ReleaseItems",
     "Items",
     "Items_out",
+
+    "TreeEvents",
+    "Sponsors"
+
   ],
   endpoints: (build) => ({
     getUser: build.query({
@@ -95,6 +100,130 @@ export const api = createApi({
     }),
 
     //Donation Events End
+
+    //treeplantationEvent Start
+
+    getTreeEvents: build.query({
+      query: () => `treePlantationEvent/gets`,
+      providesTags: ["TreeEvents"],
+    }),
+    getTreeEvent: build.query({
+      query: (id) => `treePlantationEvent/events/${id}`,
+      providesTags: ["TreeEvents"],
+    }),
+    deleteTreeEvent: build.mutation({
+      query: (eventId) => ({
+        url: `treePlantationEvent/delete/${eventId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["TreeEvents"], // Invalidate the cache for "Events" after deletion
+    }),
+    addTreeEvent: build.mutation({
+      query: ({
+        coverImage,
+        eventID,
+        eventName,
+        eventDate,
+        province,
+        district,
+        city,
+        comments,
+        
+      }) => ({
+        url: `treePlantationEvent/add`,
+        method: "POST",
+        body: {
+          coverImage,
+          eventID,
+          eventName,
+          eventDate,
+          province,
+          district,
+          city,
+          comments,
+          
+        }, // Prepare form data for file upload
+      }),
+      providesTags: ["TreeEvents"],
+    }),
+    updateTreeEvent: build.mutation({
+      query: (eventDetails) => ({
+        url: `treePlantationEvent/update/${eventDetails.eventId}`,
+        method: "PUT",
+        body: { eventDetails }, // Prepare form data for file upload
+      }),
+      providesTags: ["TreeEvents"],
+    }),
+
+    //treeplantationEvent End
+
+  // Sponsor endpoints
+    getSponsors: build.query({
+      query: () => `sponsors/gets`,
+      providesTags: ["Sponsors"],
+    }),
+    getSponsor: build.query({
+      query: (id) => `sponsors/events/${id}`,
+      providesTags: ["Sponsors"],
+    }),
+    deleteSponsor: build.mutation({
+      query: (eventId) => ({
+        url: `sponsors/delete/${eventId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Sponsors"], // Invalidate the cache for "Sponsors" after deletion
+    }),
+    addSponsor: build.mutation({
+      query: ({
+        eventID,
+        eventName,
+        eventDate,
+        province,
+        district,
+        city,
+        donations
+      }) => ({
+        url: `sponsors/add`,
+        method: "POST",
+        body: {
+          eventID,
+          eventName,
+          eventDate,
+          province,
+          district,
+          city,
+          donations
+        },
+      }),
+      providesTags: ["Sponsors"],
+    }),
+    updateSponsor: build.mutation({
+      query: ({
+        eventId,
+        eventID,
+        eventName,
+        eventDate,
+        province,
+        district,
+        city,
+        donations
+      }) => ({
+        url: `sponsors/update/${eventId}`,
+        method: "PUT",
+        body: {
+          eventID,
+          eventName,
+          eventDate,
+          province,
+          district,
+          city,
+          donations
+        },
+      }),
+      providesTags: ["Sponsors"],
+    }),
+  
+      //sponsor End
 
     //Items...
 
@@ -268,6 +397,22 @@ export const {
   useGetDEventQuery,
   useAddDEventMutation,
   useUpdateDEventMutation,
+
+
+  useGetTreeEventsQuery,
+  useDeleteTreeEventMutation,
+  useGetTreeEventQuery,
+  useAddTreeEventMutation,
+  useUpdateTreeEventMutation,
+
+  useGetSponsorsQuery,
+  useDeleteSponsorMutation,
+  useGetSponsorQuery,
+  useAddSponsorMutation,
+  useUpdateSponsorMutation,
+
+  useGetItemssQuery,
+  useDeleteItemsMutation,
 
   useGetItemsQuery,
   useDeleteItemsMutation,
