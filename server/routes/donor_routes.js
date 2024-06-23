@@ -6,11 +6,13 @@ import {
   deleteDonors,
   updateDonors,
   donorLogin,
+  getLeaderboard,
 } from "../controllers/donor_controller.js";
 
 const router = express.Router();
 
 router.get("/gets", getDonors);
+router.get("/leaderboard", getLeaderboard);
 router.get("/get/:id", getDonor);
 router.post("/add", addDonor);
 router.delete("/delete/:id", deleteDonors);

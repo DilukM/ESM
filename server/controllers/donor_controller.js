@@ -68,10 +68,18 @@ export const donorLogin = async (req, res) => {
     res.status(500).json({ message: "Login failed. Please try again later." });
   }
 };
-
 export const getDonors = async (req, res) => {
   try {
     const donors = await Donors.find();
+    res.status(200).json(donors);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+export const getLeaderboard = async (req, res) => {
+  try {
+    const donors = await Donors.find().sort({ score: -1 });
     res.status(200).json(donors);
   } catch (error) {
     res.status(404).json({ message: error.message });

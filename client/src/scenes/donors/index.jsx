@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Avatar, Box, Button, Tab, Tabs, useTheme } from "@mui/material";
-import { useGetDonorsQuery, useDeleteDonorMutation } from "state/api";
+import { useDeleteDonorMutation, useGetLeaderboardQuery } from "state/api";
 import Header from "components/Header";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
 import { DataGrid } from "@mui/x-data-grid";
@@ -22,7 +22,7 @@ const Donors = () => {
   const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetDonorsQuery();
+  const { data, isLoading, refetch } = useGetLeaderboardQuery();
   const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   const handleTabChange = (event, newValue) => {
@@ -271,10 +271,9 @@ const Donors = () => {
               page={page}
               pageSize={pageSize}
               paginationMode="server"
-              sortingMode="server"
+              sortingMode="client"
               onPageChange={(newPage) => setPage(newPage)}
               onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-              onSortModelChange={(newSortModel) => setSort(...newSortModel)}
               components={{ Toolbar: DataGridCustomToolbar }}
               componentsProps={{
                 toolbar: { searchInput, setSearchInput, setSearch },
@@ -321,11 +320,10 @@ const Donors = () => {
             pagination
             page={page}
             pageSize={pageSize}
-            paginationMode="server"
-            sortingMode="server"
+            paginationMode="client"
+            sortingMode="client"
             onPageChange={(newPage) => setPage(newPage)}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            onSortModelChange={(newSortModel) => setSort(newSortModel[0])}
             components={{ Toolbar: DataGridCustomToolbar }}
             componentsProps={{
               toolbar: { searchInput, setSearchInput, setSearch },

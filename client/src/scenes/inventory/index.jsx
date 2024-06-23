@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useGetTransactionsQuery } from "state/api";
 import Header from "components/Header";
 import {
-  useGetItemssQuery,
+  useGetItemsQuery,
   useDeleteItemsMutation,
   useDeleteItems_outMutation,
 } from "state/api";
@@ -43,7 +43,7 @@ const Inventory = () => {
   const [setSearch] = useState("");
   const [activeTab, setActiveTab] = useState(0); // State to manage active tab
   const [searchInput, setSearchInput] = useState("");
-  const { data, isLoading, refetch } = useGetItemssQuery();
+  const { data, isLoading, refetch } = useGetItemsQuery();
   const [rowIndex, setRowIndex] = useState(0); // State for custom index
 
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
@@ -94,92 +94,6 @@ const Inventory = () => {
   const generateRowsWithIndex = (rows) => {
     return rows.map((row, index) => ({ ...row, index: rowIndex + index + 1 }));
   };
-
-  //Add Item...
-  // const [addItem, setAddItem] = useState({
-  //   itemName: "",
-  //   date: "",
-  //   itemId: "",
-  //   donorId: "",
-  //   itemQuantity: "",
-
-  // });
-
-  //Release Item...
-
-  // const [releaseItem, setReleaseItem] = useState({
-  //   itemName: "",
-  //   date: "",
-  //   itemId: "",
-  //   eventId: "",
-  //   itemQuantity: "",
-
-  // });
-
-  // const handleTabChange = (event, newValue) => {
-  //   setActiveTab(newValue);
-  // };
-
-  // const [searchInput, setSearchInput] = useState("");
-  // const { data, isLoading } = useGetTransactionsQuery({
-  //   page,
-  //   pageSize,
-  //   sort: JSON.stringify(sort),
-  //   search,
-  // });
-
-  // const handleOpenModal = () => {
-  //   setOpenModal(true);
-  // };
-
-  // const handleCloseModal = () => {
-  //   setOpenModal(false);
-  // };
-
-  //Add Item
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setAddItem((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const handleFileInputChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setAddItem((prev) => ({
-  //     ...prev,
-  //     coverImage: file,
-  //   }));
-  // };
-
-  // const handleAddItem = () => {
-
-  //   console.log(addItem);
-  //   handleCloseModal();
-  // };
-  //Release Item
-  // const handleInputChange1 = (e) => {
-  //   const { name, value } = e.target;
-  //   setReleaseItem((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const handleFileInputChange1 = (e) => {
-  //   const file = e.target.files[0];
-  //   setReleaseItem((prev) => ({
-  //     ...prev,
-  //     coverImage: file,
-  //   }));
-  // };
-
-  // const handleReleaseItem= () => {
-
-  //   console.log(releaseItem);
-  //   handleCloseModal();
-  // };
 
   const overview = [
     {
@@ -813,7 +727,7 @@ const Inventory = () => {
             <DataGrid
               loading={isLoading || !data}
               getRowId={(row) => row._id}
-              rows={(data && data.transactions) || []}
+              rows={generateRowsWithIndex(data || [])}
               columns={currentItems}
               rowCount={(data && data.total) || 0}
               rowsPerPageOptions={[20, 50, 100]}
@@ -864,7 +778,11 @@ const Inventory = () => {
             itemToUpdate={selectedItems}
           />
 
-          <Items_out open={showForm} />
+          <Items_out
+            open={showForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+          />
 
           <Box
             display="flex"

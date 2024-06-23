@@ -1,13 +1,19 @@
+import e from "express";
 import dEvent from "../models/DonationEvents.js";
 import jwt from "jsonwebtoken";
+// import multer from "multer";
 
 export const addDEvent = async (req, res) => {
   const { eventDetails } = req.body;
+  // const { buffer, mimetype } = req.file;
+  console.log(eventDetails);
   const id = eventDetails.id;
-  const name = eventDetails.eventName;
-  // const cover = eventDetails.coverImage;
+  const eventName = eventDetails.eventName;
   const date = eventDetails.date;
   const location = eventDetails.location;
+  const description = eventDetails.description;
+  const cover = eventDetails.cover;
+
   try {
     // Check if the donor already exists
     const existingEventId = await dEvent.findOne({ id });
@@ -20,10 +26,11 @@ export const addDEvent = async (req, res) => {
     // Create a new donor instance with hashed password
     const newDEvent = new dEvent({
       id,
-      name,
-      // cover,
+      eventName,
       date,
       location,
+      description,
+      cover,
     });
 
     // Save the donor to the database
@@ -46,8 +53,8 @@ export const addDEvent = async (req, res) => {
 
 export const getdEvents = async (req, res) => {
   try {
-    const dEvent = await dEvent.find();
-    res.status(200).json(dEvent);
+    const dEvents = await dEvent.find();
+    res.status(200).json(dEvents);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
