@@ -4,8 +4,12 @@ import CustomTextField from "./CustomTextField";
 import DropDownTextField from "./DropDownTextField";
 import Button from "components/Button";
 import { useAddTreeEventMutation } from "state/api";
+import { useTheme } from '@mui/material/styles';
 
-const EventCreateModal = ({ openModal, closeModal }) => {
+
+const EventCreateModal = ({ openModal, closeModal, refetch }) => {
+  const theme = useTheme();
+
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -88,6 +92,7 @@ const EventCreateModal = ({ openModal, closeModal }) => {
       }).then((response) => {
         console.log("Donor added successfully from frontend:", response);
         closeModal();
+        refetch();
       });
       // await addTreeEvent({ eventDetails: formData }).unwrap();
       // console.log(formData);
@@ -112,6 +117,30 @@ const EventCreateModal = ({ openModal, closeModal }) => {
   };
 
   return (
+    // <Box  sx={{
+    //   "& .MuiDataGrid-root": {
+    //     border: "none",
+    //   },
+    //   "& .MuiDataGrid-cell": {
+    //     borderBottom: "none",
+    //   },
+    //   "& .MuiDataGrid-columnHeaders": {
+    //     backgroundColor: theme.palette.background.alt,
+    //     color: theme.palette.secondary[100],
+    //     borderBottom: "none",
+    //   },
+    //   "& .MuiDataGrid-virtualScroller": {
+    //     backgroundColor: theme.palette.primary.light,
+    //   },
+    //   "& .MuiDataGrid-footerContainer": {
+    //     backgroundColor: theme.palette.background.alt,
+    //     color: theme.palette.secondary[100],
+    //     borderTop: "none",
+    //   },
+    //   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+    //     color: `${theme.palette.secondary[200]} !important`,
+    //   },
+    // }}>
     <Modal
       open={openModal}
       onClose={closeModal}
@@ -131,10 +160,15 @@ const EventCreateModal = ({ openModal, closeModal }) => {
           boxShadow: 24,
           p: 4,
           overflowY: "auto",
+        
+            "&.Mui-focused": { color: "#d67e75" },
+            "&.MuiInputLabel-shrink": { color: "#d67e75" },
+          
+          
         }}
       >
         <h2 id="modal-modal-title">Create Event</h2>
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 6 }} >
           <CustomTextField
             label="Event ID"
             variant="outlined"
@@ -144,12 +178,11 @@ const EventCreateModal = ({ openModal, closeModal }) => {
             helperText={eventIDError}
             onChange={(e) => validateEventID(e.target.value)}
             sx={{
-              mb: 2,
-              "& .MuiFormLabel-root": {
+              mb: 2,"& .MuiFormLabel-root": {
                 color: "#a3a3a3",
               },
               "& .Mui-focused .MuiFormLabel-root": {
-                color: "#d67e75",
+                color: "#0101",
               },
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused": {
@@ -158,6 +191,28 @@ const EventCreateModal = ({ openModal, closeModal }) => {
                   },
                 },
               },
+              "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderTop: "none",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${theme.palette.secondary[200]} !important`,
+          },
             }}
           />
         </Box>
@@ -176,7 +231,7 @@ const EventCreateModal = ({ openModal, closeModal }) => {
                 color: "#a3a3a3",
               },
               "& .Mui-focused .MuiFormLabel-root": {
-                color: "#d67e75",
+                color: "#0101",
               },
               "& .MuiOutlinedInput-root": {
                 "&.Mui-focused": {
@@ -185,6 +240,28 @@ const EventCreateModal = ({ openModal, closeModal }) => {
                   },
                 },
               },
+              "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: theme.palette.primary.light,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: theme.palette.background.alt,
+            color: theme.palette.secondary[100],
+            borderTop: "none",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${theme.palette.secondary[200]} !important`,
+          },
             }}
           />
         </Box>
@@ -219,10 +296,11 @@ const EventCreateModal = ({ openModal, closeModal }) => {
                   },
                 },
               },
+              
             }}
           />
         </Box>
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 6}}>
           <h3>Location</h3>
           <DropDownTextField
             province={province}
@@ -310,6 +388,7 @@ const EventCreateModal = ({ openModal, closeModal }) => {
         </Box>
       </Box>
     </Modal>
+    // </Box>
   );
 };
 

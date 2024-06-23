@@ -2,21 +2,20 @@ import mongoose from "mongoose";
 
 const treeEventSchema = new mongoose.Schema(
   {
-    avatar: {
-      type: String,
-      default: null,
+    coverImage: {
+      type: String, // Store the path or filename of the image
     },
     eventID: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
-      min: 3,
+      minlength: 3,
     },
     eventName: {
       type: String,
-      require: true,
-      min: 2,
-      max: 100,
+      required: true,
+      minlength: 2,
+      maxlength: 100,
     },
     eventDate: {
       type: Date,
@@ -30,11 +29,9 @@ const treeEventSchema = new mongoose.Schema(
     city: {
       type: String,
     },
-    comment: {
+    comments: {
       type: String,
-      min: 5,
     },
-    
   },
   { timestamps: true }
 );

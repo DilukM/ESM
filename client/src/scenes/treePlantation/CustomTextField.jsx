@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
-// import { useTheme } from "@mui/material";
+import { Box } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 
 const CustomTextField = ({
@@ -10,7 +11,10 @@ const CustomTextField = ({
   // const theme = useTheme();
 
   return (
-    
+    // <Box sx={{
+    //   "&.Mui-focused": { color: "#d67e75" },
+    //   "&.MuiInputLabel-shrink": { color: "#d67e75" },
+    // }}>
     <TextField
     label={label}
     variant={variant}
@@ -24,6 +28,7 @@ const CustomTextField = ({
     >
       {/* {children} */}
     </TextField>
+    // </Box>
   );
 };
 
