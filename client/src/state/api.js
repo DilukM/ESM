@@ -15,8 +15,8 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
-    //"CurrentItems",
-    //"ReleaseItems",
+    "CurrentItems",
+    "ReleaseItems",
     "Items",
     "Items_out",
 
@@ -412,7 +412,7 @@ export const {
   useUpdateSponsorMutation,
 
   useGetItemssQuery,
-  useDeleteItemsMutation,
+  // useDeleteItemsMutation,
 
   useGetItemsQuery,
   useDeleteItemsMutation,
