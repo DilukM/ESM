@@ -1,9 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 
-const Signup = () => {
+const Signup = ({ setOpen, handleSuccess }) => {
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -11,7 +10,6 @@ const Signup = () => {
     password: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -22,7 +20,8 @@ const Signup = () => {
     try {
       const url = "http://localhost:5001/api/users";
       const { data: res } = await axios.post(url, data);
-      navigate("/login");
+      handleSuccess();
+      setOpen(false);
       console.log(res.message);
     } catch (error) {
       if (
@@ -38,14 +37,6 @@ const Signup = () => {
   return (
     <div className={styles.signup_container}>
       <div className={styles.signup_form_container}>
-        <div className={styles.left}>
-          <h1>Welcome Back</h1>
-          <Link to="/login">
-            <button type="button" className={styles.white_btn}>
-              Sing in
-            </button>
-          </Link>
-        </div>
         <div className={styles.right}>
           <form className={styles.form_container} onSubmit={handleSubmit}>
             <h1>Create Account</h1>

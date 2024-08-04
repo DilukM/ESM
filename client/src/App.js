@@ -40,7 +40,7 @@ function App() {
               </Route>
             )}
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            {/* <Route path="/signup" element={<Signup />} /> */}
             <Route path="/" element={<Navigate replace to="/login" />} />
             {user && (
               <Route element={<Layout />}>
@@ -56,6 +56,7 @@ function App() {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/Events" element={<Events />} />
                 <Route path="/Reports" element={<Reports />} />
+                <Route path="/signup" element={<Signup />} />
                 <Route path="/Location" element={<Location />} />
               </Route>
             )}

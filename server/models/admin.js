@@ -29,4 +29,11 @@ const validate = (data) => {
   return schema.validate(data);
 };
 
-export { AdminUser, validate };
+const validatePass = (data) => {
+  const schema = Joi.object({
+    password: passwordComplexity().required().label("Password"),
+  });
+  return schema.validate(data);
+};
+
+export { AdminUser, validate, validatePass };
