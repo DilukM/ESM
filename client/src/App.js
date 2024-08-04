@@ -29,22 +29,36 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            {user && <Route path="/" exact element={<Layout />} />}
+            <Route path="*" element={<Navigate to="/login" />} />
+            {user && (
+              <Route path="/" exact element={<Layout />}>
+                {" "}
+                <Route
+                  path="/"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+              </Route>
+            )}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route element={<Layout />}>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/Tree_Plantation" element={<TreePlantation />} />
-              <Route path="/Inventory" element={<Inventory />} />
-              <Route path="/Donors" element={<Donors />} />
-              <Route path="/RO_Plants" element={<RoPlants />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/Events" element={<Events />} />
-              <Route path="/Reports" element={<Reports />} />
-              <Route path="/Location" element={<Location />} />
-            </Route>
+            {user && (
+              <Route element={<Layout />}>
+                <Route
+                  path="/"
+                  element={<Navigate to="/dashboard" replace />}
+                />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/Tree_Plantation" element={<TreePlantation />} />
+                <Route path="/Inventory" element={<Inventory />} />
+                <Route path="/Donors" element={<Donors />} />
+                <Route path="/RO_Plants" element={<RoPlants />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/Events" element={<Events />} />
+                <Route path="/Reports" element={<Reports />} />
+                <Route path="/Location" element={<Location />} />
+              </Route>
+            )}
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
