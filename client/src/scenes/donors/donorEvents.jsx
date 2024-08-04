@@ -80,10 +80,14 @@ export default function DonorEvents() {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    setEventDetails((prev) => ({
-      ...prev,
-      cover: file,
-    }));
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setEventDetails((prev) => ({
+        ...prev,
+        cover: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDelete = (donorId) => {
@@ -125,7 +129,7 @@ export default function DonorEvents() {
       width: 200,
       renderCell: (params) => (
         <div>
-          <div>{params.row.id}</div> {/* Display Event ID */}
+          {/* cd client */}
           <img
             src={params.value}
             alt="Cover"
@@ -303,7 +307,7 @@ export default function DonorEvents() {
             type="file"
             variant="outlined"
             name="coverImage"
-            onChange={handleInputChange}
+            onChange={handleFileInputChange}
             fullWidth
             sx={{ mb: 2 }}
             rows={4}
