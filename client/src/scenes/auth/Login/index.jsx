@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+
 import styles from "./styles.module.css";
+import { useAdminSignInMutation } from "state/api";
 
 const Login = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [signIn] = useAdminSignInMutation();
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -14,17 +15,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5001/api/auth";
-      const { data: res } = await axios.post(url, data);
-      localStorage.setItem("token", res.data);
+      const res = await signIn(data).unwrap();
+      localStorage.setItem("token", res.data.token);
       window.location = "/dashboard";
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
+      if (error && error.status >= 400 && error.status <= 500) {
+        setError(error.data.message);
       }
     }
   };

@@ -12,7 +12,6 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import FlexBetween from "components/FlexBetween";
@@ -21,10 +20,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Header";
 import CustomColumnMenu from "components/DataGridCustomColumnMenu";
 import Signup from "scenes/auth/Singup/index";
+import { useResetPasswordMutation } from "state/api";
 
 const Admin = () => {
   const theme = useTheme();
-  const { data, isLoading } = useGetAdminsQuery();
+  const { data, isLoading, refetch } = useGetAdminsQuery();
   const [open, setOpen] = useState(false);
   const [alertState, setAlertState] = useState({
     open: false,
@@ -40,6 +40,7 @@ const Admin = () => {
 
   const handleClose = () => {
     setOpen(false);
+    refetch();
   };
 
   const handleSuccess = () => {
@@ -48,6 +49,7 @@ const Admin = () => {
       message: "User registered successfully!",
       severity: "success",
     });
+    refetch();
     setTimeout(() => {
       setAlertState({ ...alertState, open: false });
     }, 3000);
@@ -206,6 +208,7 @@ const ResetPasswordDialog = ({
   const [error, setError] = useState("");
   const theme = useTheme();
   const [showPassword, setShowPassword] = useState(false);
+  const [resetPassword] = useResetPasswordMutation();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -217,8 +220,7 @@ const ResetPasswordDialog = ({
 
   const handlePasswordReset = async () => {
     try {
-      const url = `http://localhost:5001/api/users/${user._id}/resetPassword`;
-      await axios.post(url, { password });
+      await resetPassword({ userId: user._id, password }).unwrap();
       setPassword("");
       setError("");
       setAlertState({
@@ -227,16 +229,12 @@ const ResetPasswordDialog = ({
         severity: "success",
       });
       setTimeout(() => {
-        setAlertState({ ...alertState, open: false });
+        setAlertState({ open: false, message: "", severity: "success" });
       }, 3000);
       onClose();
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        setError(error.response.data.message);
+      if (error.data && error.data.message) {
+        setError(error.data.message);
       } else {
         setError("An unexpected error occurred.");
       }

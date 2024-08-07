@@ -21,13 +21,37 @@ export const api = createApi({
     "Items_out",
 
     "TreeEvents",
-    "Sponsors"
-
+    "Sponsors",
   ],
   endpoints: (build) => ({
     getUser: build.query({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
+    }),
+
+    adminSignIn: build.mutation({
+      query: ({ email, password }) => ({
+        url: "auth/signin",
+        method: "POST",
+        body: { email, password },
+      }),
+    }),
+
+    // Signup endpoint
+    adminSignUp: build.mutation({
+      query: ({ firstName, email, lastName, password }) => ({
+        url: "users/signup",
+        method: "POST",
+        body: { firstName, email, lastName, password },
+      }),
+    }),
+
+    resetPassword: build.mutation({
+      query: ({ userId, password }) => ({
+        url: `/users/${userId}/resetPassword`,
+        method: "POST",
+        body: { password },
+      }),
     }),
 
     getDonors: build.query({
@@ -128,7 +152,6 @@ export const api = createApi({
         district,
         city,
         comments,
-        
       }) => ({
         url: `treePlantationEvent/add`,
         method: "POST",
@@ -141,7 +164,6 @@ export const api = createApi({
           district,
           city,
           comments,
-          
         }, // Prepare form data for file upload
       }),
       providesTags: ["TreeEvents"],
@@ -157,7 +179,7 @@ export const api = createApi({
 
     //treeplantationEvent End
 
-  // Sponsor endpoints
+    // Sponsor endpoints
     getSponsors: build.query({
       query: () => `sponsors/gets`,
       providesTags: ["Sponsors"],
@@ -181,7 +203,7 @@ export const api = createApi({
         province,
         district,
         city,
-        donations
+        donations,
       }) => ({
         url: `sponsors/add`,
         method: "POST",
@@ -192,7 +214,7 @@ export const api = createApi({
           province,
           district,
           city,
-          donations
+          donations,
         },
       }),
       providesTags: ["Sponsors"],
@@ -206,7 +228,7 @@ export const api = createApi({
         province,
         district,
         city,
-        donations
+        donations,
       }) => ({
         url: `sponsors/update/${eventId}`,
         method: "PUT",
@@ -217,13 +239,13 @@ export const api = createApi({
           province,
           district,
           city,
-          donations
+          donations,
         },
       }),
       providesTags: ["Sponsors"],
     }),
-  
-      //sponsor End
+
+    //sponsor End
 
     //Items...
 
@@ -398,7 +420,6 @@ export const {
   useAddDEventMutation,
   useUpdateDEventMutation,
 
-
   useGetTreeEventsQuery,
   useDeleteTreeEventMutation,
   useGetTreeEventQuery,
@@ -438,6 +459,10 @@ export const {
   useGetAdminsQuery,
   useGetUserPerformanceQuery,
   useGetDashboardQuery,
+
+  useAdminSignInMutation,
+  useAdminSignUpMutation,
+  useResetPasswordMutation,
 
   // useDeleteCurrentItemsMutation,
   // useDeleteReleaseItemsMutation,

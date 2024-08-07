@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import styles from "./styles.module.css";
+import { useAdminSignUpMutation } from "state/api";
 
 const Signup = ({ setOpen, handleSuccess }) => {
   const [data, setData] = useState({
@@ -10,6 +10,7 @@ const Signup = ({ setOpen, handleSuccess }) => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [signUpM] = useAdminSignUpMutation();
 
   const handleChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
@@ -18,8 +19,7 @@ const Signup = ({ setOpen, handleSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5001/api/users";
-      const { data: res } = await axios.post(url, data);
+      const res = await signUpM(data).unwrap();
       handleSuccess();
       setOpen(false);
       console.log(res.message);

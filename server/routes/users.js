@@ -4,7 +4,7 @@ import { AdminUser, validate, validatePass } from "../models/admin.js";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { error } = validate(req.body);
     if (error)

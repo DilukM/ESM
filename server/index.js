@@ -7,8 +7,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import path from "path"; // Add this line
-import { fileURLToPath } from 'url'; // Add this line
+import path from "path";
+import { fileURLToPath } from "url";
 import clientRoutes from "./routes/client.js";
 import generalRoutes from "./routes/general.js";
 import managementRoutes from "./routes/management.js";
@@ -52,8 +52,8 @@ import {
 /* CONFIGURATION */
 dotenv.config();
 const app = express();
-const __filename = fileURLToPath(import.meta.url); // Add this line
-const __dirname = path.dirname(__filename); // Add this line
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 app.use(helmet());
@@ -62,7 +62,6 @@ app.use(morgan("common"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-
 
 /* ROUTES */
 app.use("/client", clientRoutes);
@@ -77,10 +76,10 @@ app.use("/treePlantationEvent", treeplantation);
 app.use("/sponsors", sponsors);
 
 // Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/auth", authRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 9000;
