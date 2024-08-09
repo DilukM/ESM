@@ -4,15 +4,8 @@ import jwt from "jsonwebtoken";
 // import multer from "multer";
 
 export const addDEvent = async (req, res) => {
-  const { eventDetails } = req.body;
-  // const { buffer, mimetype } = req.file;
-  console.log(eventDetails);
-  const id = eventDetails.id;
-  const eventName = eventDetails.eventName;
-  const date = eventDetails.date;
-  const location = eventDetails.location;
-  const description = eventDetails.description;
-  const cover = eventDetails.cover;
+  console.log("Add event running");
+  const { eventName, location, date, description, cover } = req.body;
 
   try {
     // Check if the donor already exists
@@ -23,12 +16,11 @@ export const addDEvent = async (req, res) => {
       return res.status(400).json({ error: "Event ID already exists" });
     }
 
-    // Create a new donor instance with hashed password
+    // Create a new event instance with hashed password
     const newDEvent = new dEvent({
-      id,
       eventName,
-      date,
       location,
+      date,
       description,
       cover,
     });
@@ -86,19 +78,19 @@ export const deletedEvent = async (req, res) => {
 
 export const updatedEvent = async (req, res) => {
   try {
-    const donorId = req.params.id;
+    const eventId = req.params.id;
     const updatedDonorData = req.body; // Updated donor data from the request body
 
     // Find the donor by ID in the database and update its information
     const updatedDonor = await dEvent.findByIdAndUpdate(
-      donorId,
+      eventId,
       updatedDonorData,
       { new: true }
     );
 
     res.json(updatedDonor); // Send back the updated donor object
   } catch (error) {
-    console.error("Error updating donor:", error);
+    console.error("Error updating event:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

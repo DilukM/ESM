@@ -2,35 +2,21 @@ import mongoose from "mongoose";
 
 const ItemsSchema = new mongoose.Schema(
   {
-    itemId: {
-      type: String,
-      required: true,
-      min: 2,
-      max: 100,
-      unique: true,
-    },
     itemName: {
       type: String,
       required: true,
       max: 50,
     },
-    quantity: {
+    unit: {
       type: String,
       required: true,
       max: 50,
     },
 
-    donorId: {
-      type: String,
+    unitScore: {
+      type: Number,
       required: true,
       unique: false,
-    },
-
-    date: {
-      type: Date,
-      required: false,
-      min: 2,
-      default: null,
     },
   },
   { timestamps: true }

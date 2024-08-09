@@ -17,6 +17,7 @@ import donorRoutes from "./routes/donor_routes.js";
 import dEventRoutes from "./routes/d_events_routes.js";
 import itemsRoutes from "./routes/items_routes.js";
 import items_outRoutes from "./routes/items_out_routes.js";
+import items_inRoutes from "./routes/items_in_routes.js";
 import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
 import treeplantation from "./routes/treeplantation.js";
@@ -72,6 +73,7 @@ app.use("/donors", donorRoutes);
 app.use("/donorevents", dEventRoutes);
 app.use("/items", itemsRoutes);
 app.use("/items_out", items_outRoutes);
+app.use("/items_in", items_inRoutes);
 app.use("/treePlantationEvent", treeplantation);
 app.use("/sponsors", sponsors);
 

@@ -8,25 +8,26 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 import { useUpdateDonorMutation } from "state/api";
 
-const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
+const UpdateForm = ({
+  open,
+  handleClose,
+  refetch,
+  donorToUpdate,
+  handleSuccess,
+}) => {
   const theme = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
   // State variables for validation
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
   const [updateDonor] = useUpdateDonorMutation();
   // Populate form fields with donorToUpdate data when it's available
@@ -35,7 +36,6 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
       setName(donorToUpdate.name);
       setEmail(donorToUpdate.email);
       setPhone(donorToUpdate.phone);
-      setPassword(donorToUpdate.password);
     }
   }, [donorToUpdate]);
 
@@ -71,34 +71,24 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
       setPhoneError("");
     }
 
-    // Validate password
-    if (!password.trim()) {
-      setPasswordError("Password is required");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters long");
-      isValid = false;
-    } else {
-      setPasswordError("");
-    }
-
     return isValid;
   };
 
   const handleUpdateDonor = () => {
     if (validateInputs()) {
-      updateDonor({ donorId, name, email, phone, password })
+      updateDonor({ donorId, name, email, phone })
         .then((response) => {
           console.log("Donor updated successfully:", response);
           // Clear form fields
           setName("");
           setEmail("");
           setPhone("");
-          setPassword("");
+
           // Close the dialog
           handleClose();
           // Refetch the donors list
           refetch();
+          handleSuccess();
         })
         .catch((error) => {
           console.error("Error updating donor:", error);
@@ -111,17 +101,13 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
     setName("");
     setEmail("");
     setPhone("");
-    setPassword("");
+
     setNameError("");
     setEmailError("");
     setPhoneError("");
-    setPasswordError("");
+
     // Close the dialog
     handleClose();
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
   };
 
   return (
@@ -179,33 +165,6 @@ const UpdateForm = ({ open, handleClose, refetch, donorToUpdate }) => {
                 color: theme.palette.secondary[100],
               },
             },
-          }}
-        />
-        <TextField
-          label="Password"
-          type={showPassword ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          error={!!passwordError}
-          helperText={passwordError}
-          InputLabelProps={{
-            sx: {
-              "&.Mui-focused": {
-                color: theme.palette.secondary[100],
-              },
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={togglePasswordVisibility}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
           }}
         />
       </DialogContent>

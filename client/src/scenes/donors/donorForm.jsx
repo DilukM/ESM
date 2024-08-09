@@ -14,7 +14,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useAddDonorMutation } from "state/api";
 
-const DonorForm = ({ open, handleClose, refetch }) => {
+const DonorForm = ({ open, handleClose, refetch, handleSuccess }) => {
   const theme = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -88,6 +88,7 @@ const DonorForm = ({ open, handleClose, refetch }) => {
           handleClose();
           // Refetch the donors list
           refetch();
+          handleSuccess();
         })
         .catch((error) => {
           console.error("Error adding donor:", error);

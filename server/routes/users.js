@@ -29,6 +29,7 @@ router.post("/signup", async (req, res) => {
 // Password reset route
 router.post("/:id/resetPassword", async (req, res) => {
   try {
+    console.log(req.body);
     const { error } = validatePass(req.body);
     if (error)
       return res.status(400).send({ message: error.details[0].message });

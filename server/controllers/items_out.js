@@ -4,23 +4,19 @@ import Items_out from "../models/Items_out.js";
 import jwt from "jsonwebtoken";
 
 export const addItem_out = async (req, res) => {
-  const { itemID, quantity, eventId, date } = req.body;
+  const { itemName, quantity, eventId, date } = req.body;
   try {
     // Check if the item already exists
-    const existingItem_out = await Items_out.findOne({ itemID });
+    const existingItem_out = await Items_out.findOne({ itemName });
 
     // If item exists, send error response
     if (existingItem_out) {
       return res.status(400).json({ error: "Item already exists" });
     }
 
-    // Hash the password
-    //const hashedPassword = await bcrypt.hash(password, 10);
-
     // Create a new donor instance with hashed password
     const newItem_out = new Items_out({
-      itemID,
-
+      itemName,
       quantity,
       eventId,
       date,
@@ -28,15 +24,6 @@ export const addItem_out = async (req, res) => {
 
     // Save the donor to the database
     await newItem_out.save();
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { itemID: newItem_out._id },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: "1h",
-      }
-    );
 
     // Send success response with token
     res.status(200).json({ token });
@@ -47,29 +34,6 @@ export const addItem_out = async (req, res) => {
       .json({ error: "Registration failed. Please try again later." });
   }
 };
-
-// export const donorLogin = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     // Find donor by email
-//     const donor = await Donors.findOne({ email });
-
-//     // If donor not found or password doesn't match, send error response
-//     if (!donor || !bcrypt.compareSync(password, donor.password)) {
-//       return res.status(401).json({ message: "Invalid email or password" });
-//     }
-
-//     // Generate JWT token
-//     const token = jwt.sign({ donorId: donor._id }, process.env.JWT_SECRET_KEY, {
-//       expiresIn: "1h", // Token expiration time
-//     });
-
-//     res.json({ token });
-//   } catch (error) {
-//     console.error("Login failed:", error);
-//     res.status(500).json({ message: "Login failed. Please try again later." });
-//   }
-// };
 
 export const getItems_out = async (req, res) => {
   try {

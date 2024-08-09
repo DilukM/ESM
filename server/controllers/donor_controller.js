@@ -128,3 +128,22 @@ export const updateDonors = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    const user = await Donors.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).send({ message: "Donor not found" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    await user.save();
+    res.status(200).send({ message: "Password reset successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Server error" });
+  }
+};

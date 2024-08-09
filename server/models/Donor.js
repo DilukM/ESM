@@ -35,6 +35,12 @@ const DonorSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+const validatePass = (data) => {
+  const schema = Joi.object({
+    password: passwordComplexity().required().label("Password"),
+  });
+  return schema.validate(data);
+};
 
 const Donors = mongoose.model("Donors", DonorSchema);
 export default Donors;

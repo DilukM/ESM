@@ -2,22 +2,13 @@ import mongoose from "mongoose";
 
 const dEventSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-      min: 2,
-      max: 100,
-    },
     eventName: {
       type: String,
       required: true,
     },
     cover: {
       type: String,
-      required: true,
-      // data: Buffer, // Store file as Buffer
-      // contentType: String, // Store file content type
+      default: "NULL",
     },
     date: {
       type: String,

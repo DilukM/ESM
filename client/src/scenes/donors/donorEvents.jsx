@@ -16,6 +16,8 @@ import {
   useGetDEventsQuery,
   useDeleteDEventMutation,
 } from "state/api";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../../firebase.js";
 
 function TabPanel({ value, index, children }) {
   return (
@@ -34,17 +36,14 @@ export default function DonorEvents() {
   const theme = useTheme();
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   const [tabValue, setTabValue] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-  // const [cover, setCover] = useState();
 
-  const [eventDetails, setEventDetails] = useState({
-    id: "",
-    eventName: "",
-    date: "",
-    location: "",
-    description: "",
-    cover: "NULL",
-  });
+  const [eventName, setEventName] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [cover, setCover] = useState("NULL");
 
   const [addDEvent] = useAddDEventMutation();
   const { data, isLoading, refetch } = useGetDEventsQuery();
@@ -67,27 +66,13 @@ export default function DonorEvents() {
   };
 
   const handleCloseModal = () => {
+    setCover("");
+
+    setEventName("");
+    setDate("");
+    setLocation("");
+    setDescription("");
     setOpenModal(false);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEventDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleFileInputChange = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setEventDetails((prev) => ({
-        ...prev,
-        cover: reader.result,
-      }));
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleDelete = (donorId) => {
@@ -106,12 +91,59 @@ export default function DonorEvents() {
     setShowUpdateForm(true); // Show the update form
   };
 
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setEventDetails((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const storageRef = ref(storage, `donorEvents/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setProgress(progress);
+      },
+      (error) => {
+        console.error("Error uploading file:", error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setCover(downloadURL);
+        });
+      }
+    );
+  };
+
   const handleCreateEvent = () => {
-    addDEvent({ eventDetails })
+    addDEvent({ eventName, location, date, description, cover })
       .then((response) => {
-        console.log("Event added successfully from frontend:", response);
+        console.log(
+          "Event added successfully from frontend:",
+
+          eventName,
+          location,
+          date,
+          description,
+          cover,
+          response
+        );
         // Clear form fields
-        setEventDetails("");
+        setCover("");
+
+        setEventName("");
+        setDate("");
+        setLocation("");
+        setDescription("");
         // Close the dialog
         handleCloseModal();
         // Refetch the event list
@@ -223,7 +255,8 @@ export default function DonorEvents() {
             columns={columns1}
             pageSize={5}
             rowCount={(data && data.total) || 0}
-            checkboxSelection
+            // checkboxSelection
+
             disableSelectionOnClick
             getRowHeight={() => 150}
           />
@@ -249,21 +282,13 @@ export default function DonorEvents() {
           }}
         >
           <h2 id="modal-modal-title">Create New Event</h2>
-          <TextField
-            label="Event ID"
-            variant="outlined"
-            name="id"
-            value={eventDetails.id}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{ mb: 2 }}
-          />
+
           <TextField
             label="Event Name"
             variant="outlined"
             name="eventName"
-            value={eventDetails.eventName}
-            onChange={handleInputChange}
+            value={eventName}
+            onChange={(e) => setEventName(e.target.value)}
             fullWidth
             sx={{ mb: 2 }}
           />
@@ -271,33 +296,28 @@ export default function DonorEvents() {
             type="date"
             variant="outlined"
             name="date"
-            value={eventDetails.date}
-            onChange={handleInputChange}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             fullWidth
             sx={{ mb: 2 }}
           />
-          <Box
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
+
+          <TextField
+            label="Location"
+            variant="outlined"
+            name="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            fullWidth
             sx={{ mb: 2 }}
-          >
-            <Box mr={2}>
-              <TextField
-                label="Location"
-                variant="outlined"
-                name="location"
-                value={eventDetails.location}
-                onChange={handleInputChange}
-              />
-            </Box>
-          </Box>
+          />
+
           <TextField
             label="Description"
             variant="outlined"
             name="description"
-            value={eventDetails.description}
-            onChange={handleInputChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             fullWidth
             multiline
             rows={4}
@@ -313,11 +333,12 @@ export default function DonorEvents() {
             rows={4}
           />
 
+          <progress value={progress} max="100" style={{ width: "100%" }} />
           <Button variant="contained" onClick={handleCreateEvent} sx={{ m: 2 }}>
             Create
           </Button>
           <Button variant="contained" onClick={handleCloseModal}>
-            close
+            Close
           </Button>
         </Box>
       </Modal>

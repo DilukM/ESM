@@ -15,25 +15,25 @@ import { useUpdateItemsMutation } from "state/api";
 const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const theme = useTheme();
   const [itemName, setitemName] = useState("");
-  const [quantity, setquantity] = useState("");
-  const [date, setdate] = useState("");
+  const [unit, setunit] = useState("");
+  const [unitScore, setunitScore] = useState("");
 
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
-  const [quantityError, setquantityError] = useState("");
-  const [dateError, setdateError] = useState("");
+  const [unitError, setunitError] = useState("");
+  const [unitScoreError, setunitScoreError] = useState("");
 
   const [updateItems] = useUpdateItemsMutation();
   // Populate form fields with donorToUpdate data when it's available
   useEffect(() => {
     if (itemsToUpdate) {
       setitemName(itemsToUpdate.itemName);
-      setquantity(itemsToUpdate.quantity);
-      setdate(itemsToUpdate.date);
+      setunit(itemsToUpdate.unit);
+      setunitScore(itemsToUpdate.unitScore);
     }
   }, [itemsToUpdate]);
 
-  //const itemID = itemToUpdate ? itemToUpdate._id : "";
+  const itemID = itemsToUpdate ? itemsToUpdate._id : "";
 
   const validateInputs = () => {
     let isValid = true;
@@ -47,19 +47,19 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
     }
 
     // Validate quantity
-    if (!quantity.trim()) {
-      setquantityError("Quantity is required");
+    if (!unit.trim()) {
+      setunitError("Unit is required");
       isValid = false;
     } else {
-      setquantityError("");
+      setunitError("");
     }
 
     // Validate date
-    if (!date.trim()) {
-      setdateError("Date is required");
+    if (!unitScore.trim()) {
+      setunitScoreError("Unit score is required");
       isValid = false;
     } else {
-      setdateError("");
+      setunitScoreError("");
     }
 
     return isValid;
@@ -67,13 +67,13 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
 
   const handleUpdateItems = () => {
     if (validateInputs()) {
-      updateItems({ itemName, quantity, date })
+      updateItems({ itemID, itemName, unit, unitScore })
         .then((response) => {
           console.log("Item updated successfully:", response);
           // Clear form fields
           setitemName("");
-          setquantity("");
-          setdate("");
+          setunit("");
+          setunitScore("");
 
           // Close the dialog
           handleClose();
@@ -89,12 +89,12 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const handleCancel = () => {
     // Clear form fields
     setitemName("");
-    setquantity("");
-    setdate("");
+    setunit("");
+    setunitScore("");
 
     setitemNameError("");
-    setquantityError("");
-    setdateError("");
+    setunitError("");
+    setunitScoreError("");
 
     // Close the dialog
     handleClose();
@@ -124,14 +124,14 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           }}
         />
         <TextField
-          label="Quantity"
-          value={quantity}
-          onChange={(e) => setquantity(e.target.value)}
+          label="Unit"
+          value={unit}
+          onChange={(e) => setunit(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!quantityError}
-          helperText={quantityError}
+          error={!!unitError}
+          helperText={unitError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -141,14 +141,14 @@ const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           }}
         />
         <TextField
-          label="Date"
-          value={date}
-          onChange={(e) => setdate(e.target.value)}
+          label="Unit Score"
+          value={unitScore}
+          onChange={(e) => setunitScore(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!dateError}
-          helperText={dateError}
+          error={!!unitScoreError}
+          helperText={unitScoreError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {

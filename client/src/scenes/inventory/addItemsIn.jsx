@@ -9,22 +9,23 @@ import {
   DialogTitle,
   useTheme,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useAddItemsMutation } from "state/itemsApi";
+import { useAddItems_inMutation } from "state/itemsApi";
 
-const Items = ({ open, handleClose, refetch }) => {
+const AddItems_in = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
 
   const [itemName, setitemName] = useState("");
-  const [unit, setunit] = useState("");
-  const [unitScore, setunitScore] = useState("");
+  const [quantity, setquantity] = useState("");
+  const [donorId, setdonorId] = useState("");
+  const [date, setdate] = useState("");
 
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
-  const [unitError, setunitError] = useState("");
-  const [unitScoreError, setunitScoreError] = useState("");
+  const [quantityError, setquantityError] = useState("");
+  const [donorIdError, setdonorIdError] = useState("");
+  const [dateError, setdateError] = useState("");
 
-  const [addItem] = useAddItemsMutation();
+  const [addItem] = useAddItems_inMutation();
 
   const validateInputs = () => {
     let isValid = true;
@@ -38,19 +39,26 @@ const Items = ({ open, handleClose, refetch }) => {
     }
 
     // Validate quantity
-    if (!unit.trim()) {
-      setunitError("Unit is required");
+    if (!quantity.trim()) {
+      setquantityError("Quantity is required");
       isValid = false;
     } else {
-      setunitError("");
+      setquantityError("");
     }
 
     // Validate donorId
-    if (!unitScore.trim()) {
-      setunitScoreError("Unit Score is required");
+    if (!donorId.trim()) {
+      setdonorIdError("Donor is required");
       isValid = false;
     } else {
-      setunitScoreError("");
+      setdonorIdError("");
+    }
+
+    if (!date.trim()) {
+      setdateError("Date is required");
+      isValid = false;
+    } else {
+      setdateError("");
     }
 
     return isValid;
@@ -58,14 +66,15 @@ const Items = ({ open, handleClose, refetch }) => {
 
   const handleAddItems = () => {
     if (validateInputs()) {
-      addItem({ itemName, unit, unitScore })
+      addItem({ itemName, quantity, donorId, date })
         .then((response) => {
           console.log("Item added successfully from frontend:", response);
           // Clear form fields
 
           setitemName("");
-          setunit("");
-          setunitScore("");
+          setquantity("");
+          setdonorId("");
+          setdate("");
 
           // Close the dialog
           handleClose();
@@ -82,12 +91,14 @@ const Items = ({ open, handleClose, refetch }) => {
     // Clear form fields
 
     setitemName("");
-    setunit("");
-    setunitScore("");
+    setquantity("");
+    setdonorId("");
+    setdate("");
 
     setitemNameError("");
-    setunitError("");
-    setunitScoreError("");
+    setquantityError("");
+    setdonorIdError("");
+    setdateError("");
 
     // Close the dialog
     handleClose();
@@ -100,7 +111,7 @@ const Items = ({ open, handleClose, refetch }) => {
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
-        Add New Item
+        Add New Donation
       </DialogTitle>
       <DialogContent>
         <TextField
@@ -121,14 +132,14 @@ const Items = ({ open, handleClose, refetch }) => {
           }}
         />
         <TextField
-          label="Unit"
-          value={unit}
-          onChange={(e) => setunit(e.target.value)}
+          label="Quantity"
+          value={quantity}
+          onChange={(e) => setquantity(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!unitError}
-          helperText={unitError}
+          error={!!quantityError}
+          helperText={quantityError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -139,14 +150,33 @@ const Items = ({ open, handleClose, refetch }) => {
         />
 
         <TextField
-          label="Unit Score"
-          value={unitScore}
-          onChange={(e) => setunitScore(e.target.value)}
+          label="Donor"
+          value={donorId}
+          onChange={(e) => setdonorId(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!unitScoreError}
-          helperText={unitScoreError}
+          error={!!donorIdError}
+          helperText={donorIdError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
+        />
+
+        <TextField
+          type="date"
+          variant="outlined"
+          name="date"
+          margin="normal"
+          value={date}
+          onChange={(e) => setdate(e.target.value)}
+          fullWidth
+          error={!!dateError}
+          helperText={dateError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -191,4 +221,4 @@ const Items = ({ open, handleClose, refetch }) => {
   );
 };
 
-export default Items;
+export default AddItems_in;
