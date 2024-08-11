@@ -12,15 +12,16 @@ import {
   CircularProgress,
 } from "@mui/material";
 import {
-  useAddItems_inMutation,
+  useAddItems_outMutation,
   useGetItemsQuery,
-  useGetDonorsQuery,
+  useGetDEventsQuery,
 } from "state/api";
 
-const AddItems_in = ({ open, handleClose, refetch }) => {
+const Items_out = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
+
   const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedDonor, setSelectedDonor] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const [quantity, setquantity] = useState("");
   const [date, setdate] = useState("");
@@ -28,12 +29,12 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
   const [quantityError, setquantityError] = useState("");
-  const [donorIdError, setdonorIdError] = useState("");
+  const [eventIdError, seteventIdError] = useState("");
   const [dateError, setdateError] = useState("");
 
-  const [addItem] = useAddItems_inMutation();
+  const [addItem] = useAddItems_outMutation();
   const { data: items, isLoading } = useGetItemsQuery();
-  const { data: donors, isLoadingDonor } = useGetDonorsQuery();
+  const { data: events, isLoadingEvent } = useGetDEventsQuery();
 
   const validateInputs = () => {
     let isValid = true;
@@ -54,12 +55,12 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
       setquantityError("");
     }
 
-    // Validate donorId
-    if (selectedDonor == null) {
-      setdonorIdError("Donor is required");
+    // Validate eventId
+    if (selectedEvent == null) {
+      seteventIdError("Event is required");
       isValid = false;
     } else {
-      setdonorIdError("");
+      seteventIdError("");
     }
 
     if (!date.trim()) {
@@ -72,48 +73,49 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
     return isValid;
   };
 
-  const handleAddItems = () => {
+  const handleAddItems = async () => {
     if (validateInputs()) {
-      addItem({
-        itemId: selectedItem._id,
-        itemName: selectedItem.itemName,
-        quantity,
-        donorId: selectedDonor._id,
-        donorName: selectedDonor.name + " (" + selectedDonor.email + ")",
-        date,
-      })
-        .then((response) => {
-          console.log("Item added successfully from frontend:", response);
-          // Clear form fields
+      console.log("eventId", selectedEvent.eventId);
+      try {
+        const response = await addItem({
+          itemId: selectedItem._id, // Ensure you're using the correct key for ID
+          itemName: selectedItem.itemName, // Ensure consistency in naming
+          quantity,
+          eventId: selectedEvent._id,
+          eventName: selectedEvent.eventName,
+          date,
+        }).unwrap(); // Unwrap the response to handle it directly
 
-          setSelectedItem(null);
-          setSelectedDonor(null);
-          setquantity("");
+        console.log("Item added successfully from backend:", response);
 
-          setdate("");
+        // Clear form fields
+        setSelectedItem(null);
+        setSelectedEvent(null);
+        setquantity("");
+        setdate("");
 
-          // Close the dialog
-          handleClose();
-          // Refetch the donors list
-          refetch();
-        })
-        .catch((error) => {
-          console.error("Error adding item:", error);
-        });
+        // Close the dialog only after successful addition
+        handleClose();
+
+        // Refetch the donors list
+        refetch();
+      } catch (error) {
+        console.error("Error adding item:", error);
+        setitemNameError(error);
+      }
     }
   };
 
   const handleCancel = () => {
     // Clear form fields
     setSelectedItem(null);
-    setSelectedDonor(null);
+    setSelectedEvent(null);
     setquantity("");
-
     setdate("");
 
     setitemNameError("");
     setquantityError("");
-    setdonorIdError("");
+    seteventIdError("");
     setdateError("");
 
     // Close the dialog
@@ -163,6 +165,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             />
           )}
         />
+
         <TextField
           label="Quantity"
           value={quantity}
@@ -182,25 +185,23 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
         />
 
         <Autocomplete
-          options={donors || []} // Provide the entire objects as options
-          getOptionLabel={(option) =>
-            option.name + " (" + option.email + ")" || ""
-          } // Show the ItemName as the label
+          options={events || []} // Provide the entire objects as options
+          getOptionLabel={(option) => option.eventName || ""} // Show the Event Name as the label
           isOptionEqualToValue={(option, value) => option.Id === value.Id} // Define equality based on Id
-          loading={isLoading}
-          value={selectedDonor} // Set value to the selected item object
+          loading={isLoadingEvent}
+          value={selectedEvent} // Set value to the selected item object
           onChange={(event, newValue) => {
-            setSelectedDonor(newValue); // newValue contains the selected object
+            setSelectedEvent(newValue); // newValue contains the selected object
           }}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Donor"
+              label="Donation Event"
               fullWidth
               variant="outlined"
               margin="normal"
-              error={!!donorIdError}
-              helperText={donorIdError}
+              error={!!eventIdError}
+              helperText={eventIdError}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -275,4 +276,4 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   );
 };
 
-export default AddItems_in;
+export default Items_out;

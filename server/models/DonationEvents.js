@@ -8,7 +8,8 @@ const dEventSchema = new mongoose.Schema(
     },
     cover: {
       type: String,
-      default: "NULL",
+      default:
+        "https://firebasestorage.googleapis.com/v0/b/donor-82405.appspot.com/o/donorEvents%2Flogo.png?alt=media&token=56329902-eced-42ff-8a25-6fafa8d468a7",
     },
     date: {
       type: String,

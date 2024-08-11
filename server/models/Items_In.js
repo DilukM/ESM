@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const Items_InSchema = new mongoose.Schema(
   {
+    itemId: {
+      type: String,
+      required: true,
+      max: 50,
+    },
     itemName: {
       type: String,
       required: true,
@@ -15,7 +20,10 @@ const Items_InSchema = new mongoose.Schema(
     donorId: {
       type: String,
       required: true,
-      unique: true,
+    },
+    donorName: {
+      type: String,
+      required: true,
     },
 
     date: {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -12,12 +12,13 @@ import {
   CircularProgress,
 } from "@mui/material";
 import {
-  useAddItems_inMutation,
+  useUpdateItems_inMutation,
   useGetItemsQuery,
   useGetDonorsQuery,
 } from "state/api";
 
-const AddItems_in = ({ open, handleClose, refetch }) => {
+const UpdateFormIn = ({ open, handleClose, refetch, itemsToUpdate }) => {
+  console.log(itemsToUpdate);
   const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedDonor, setSelectedDonor] = useState(null);
@@ -27,20 +28,35 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
 
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
-  const [quantityError, setquantityError] = useState("");
   const [donorIdError, setdonorIdError] = useState("");
+  const [quantityError, setquantityError] = useState("");
   const [dateError, setdateError] = useState("");
 
-  const [addItem] = useAddItems_inMutation();
+  const [updateItems_in] = useUpdateItems_inMutation();
   const { data: items, isLoading } = useGetItemsQuery();
   const { data: donors, isLoadingDonor } = useGetDonorsQuery();
+
+  // Populate form fields with donorToUpdate data when it's available
+  useEffect(() => {
+    if (itemsToUpdate && items && donors) {
+      setSelectedItem(items.find((item) => item._id === itemsToUpdate.itemId));
+      setSelectedDonor(
+        donors.find((donor) => donor._id === itemsToUpdate.donorId)
+      );
+
+      setquantity(itemsToUpdate.quantity);
+      setdate(itemsToUpdate.date);
+    }
+  }, [itemsToUpdate]);
+
+  const itemID = itemsToUpdate ? itemsToUpdate._id : "";
 
   const validateInputs = () => {
     let isValid = true;
 
     // Validate itemName
     if (selectedItem == null) {
-      setitemNameError("Item Name is required");
+      setitemNameError("Item is required");
       isValid = false;
     } else {
       setitemNameError("");
@@ -72,9 +88,10 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
     return isValid;
   };
 
-  const handleAddItems = () => {
+  const handleupdateItems_in = () => {
     if (validateInputs()) {
-      addItem({
+      updateItems_in({
+        itemID,
         itemId: selectedItem._id,
         itemName: selectedItem.itemName,
         quantity,
@@ -83,13 +100,12 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
         date,
       })
         .then((response) => {
-          console.log("Item added successfully from frontend:", response);
+          console.log("Item updated successfully:", response);
           // Clear form fields
-
           setSelectedItem(null);
           setSelectedDonor(null);
-          setquantity("");
 
+          setquantity("");
           setdate("");
 
           // Close the dialog
@@ -98,7 +114,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
           refetch();
         })
         .catch((error) => {
-          console.error("Error adding item:", error);
+          console.error("Error updating item:", error);
         });
     }
   };
@@ -107,13 +123,13 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
     // Clear form fields
     setSelectedItem(null);
     setSelectedDonor(null);
-    setquantity("");
 
+    setquantity("");
     setdate("");
 
     setitemNameError("");
-    setquantityError("");
     setdonorIdError("");
+    setquantityError("");
     setdateError("");
 
     // Close the dialog
@@ -123,7 +139,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
-        Add New Donation
+        Update Item
       </DialogTitle>
       <DialogContent>
         <Autocomplete
@@ -138,7 +154,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Item"
+              label="Item Name"
               fullWidth
               variant="outlined"
               margin="normal"
@@ -163,24 +179,6 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             />
           )}
         />
-        <TextField
-          label="Quantity"
-          value={quantity}
-          onChange={(e) => setquantity(e.target.value)}
-          fullWidth
-          variant="outlined"
-          margin="normal"
-          error={!!quantityError}
-          helperText={quantityError}
-          InputLabelProps={{
-            sx: {
-              "&.Mui-focused": {
-                color: theme.palette.secondary[100],
-              },
-            },
-          }}
-        />
-
         <Autocomplete
           options={donors || []} // Provide the entire objects as options
           getOptionLabel={(option) =>
@@ -220,15 +218,31 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             />
           )}
         />
-
+        <TextField
+          label="Quantity"
+          value={quantity}
+          onChange={(e) => setquantity(e.target.value)}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          error={!!quantityError}
+          helperText={quantityError}
+          InputLabelProps={{
+            sx: {
+              "&.Mui-focused": {
+                color: theme.palette.secondary[100],
+              },
+            },
+          }}
+        />
         <TextField
           type="date"
-          variant="outlined"
-          name="date"
-          margin="normal"
+          label="Date"
           value={date}
           onChange={(e) => setdate(e.target.value)}
           fullWidth
+          variant="outlined"
+          margin="normal"
           error={!!dateError}
           helperText={dateError}
           InputLabelProps={{
@@ -252,8 +266,12 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             },
           }}
         >
-          <Button variant="contained" color="primary" onClick={handleAddItems}>
-            Add
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleupdateItems_in}
+          >
+            Update
           </Button>
         </Box>
         <Box
@@ -275,4 +293,4 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   );
 };
 
-export default AddItems_in;
+export default UpdateFormIn;

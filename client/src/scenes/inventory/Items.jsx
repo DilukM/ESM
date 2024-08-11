@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useAddItemsMutation } from "state/itemsApi";
+import { useAddItemsMutation } from "state/api";
 
 const Items = ({ open, handleClose, refetch }) => {
   const theme = useTheme();
@@ -56,25 +56,34 @@ const Items = ({ open, handleClose, refetch }) => {
     return isValid;
   };
 
-  const handleAddItems = () => {
+  const handleAddItems = async () => {
     if (validateInputs()) {
-      addItem({ itemName, unit, unitScore })
-        .then((response) => {
-          console.log("Item added successfully from frontend:", response);
-          // Clear form fields
+      try {
+        const response = await addItem({
+          itemName,
+          unit,
+          unitScore,
+        }).unwrap(); // Unwrap the response to handle it directly
 
-          setitemName("");
-          setunit("");
-          setunitScore("");
+        console.log("Item added successfully from backend:", response);
 
-          // Close the dialog
-          handleClose();
-          // Refetch the donors list
-          refetch();
-        })
-        .catch((error) => {
-          console.error("Error adding item:", error);
-        });
+        // Clear form fields
+        setitemName("");
+        setunit("");
+        setunitScore("");
+
+        // Close the dialog
+        handleClose();
+        // Refetch the  list
+        refetch();
+      } catch (error) {
+        if (error?.data?.error) {
+          console.error("Error adding item:", error.data.error);
+          setitemNameError(error.data.error);
+        } else {
+          console.error("An unknown error occurred:", error);
+        }
+      }
     }
   };
 

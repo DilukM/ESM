@@ -8,81 +8,73 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useUpdateItems_outMutation } from "state/api";
 
-const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
+import { useUpdateItemsMutation } from "state/api";
+
+const UpdateFormCI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const theme = useTheme();
-  const [eventId, seteventId] = useState("");
-  const [quantity, setquantity] = useState("");
-  const [date, setdate] = useState("");
-
-  
+  const [itemName, setitemName] = useState("");
+  const [unit, setunit] = useState("");
+  const [unitScore, setunitScore] = useState("");
 
   // State variables for validation
-  const [eventIdError, seteventIdError] = useState("");
-  const [quantityError, setquantityError] = useState("");
-  const [dateError, setdateError] = useState("");
- 
+  const [itemNameError, setitemNameError] = useState("");
+  const [unitError, setunitError] = useState("");
+  const [unitScoreError, setunitScoreError] = useState("");
 
-  const [updateItems_out] = useUpdateItems_outMutation();
+  const [updateItems] = useUpdateItemsMutation();
   // Populate form fields with donorToUpdate data when it's available
   useEffect(() => {
     if (itemsToUpdate) {
-      seteventId(itemsToUpdate.eventId);
-      setquantity(itemsToUpdate.quantity);
-      setdate(itemsToUpdate.date);
-    
+      setitemName(itemsToUpdate.itemName);
+      setunit(itemsToUpdate.unit);
+      setunitScore(itemsToUpdate.unitScore);
     }
   }, [itemsToUpdate]);
 
-  //const itemID = itemToUpdate ? itemToUpdate._id : "";
+  const itemID = itemsToUpdate ? itemsToUpdate._id : "";
 
   const validateInputs = () => {
     let isValid = true;
 
     // Validate itemID
-    if (!eventId.trim()) {
-      seteventIdError("Event Id is required");
+    if (!itemName.trim()) {
+      setitemNameError("Item Name is required");
       isValid = false;
     } else {
-      seteventIdError("");
+      setitemNameError("");
     }
 
     // Validate quantity
-    if (!quantity.trim()) {
-      setquantityError("Quantity is required");
+    if (!unit.trim()) {
+      setunitError("Unit is required");
       isValid = false;
-    }  else {
-      setquantityError("");
+    } else {
+      setunitError("");
     }
 
     // Validate date
-    if (!date.trim()) {
-      setdateError("Date is required");
+    if (unitScore == null || unitScore == "") {
+      setunitScoreError("Unit score is required");
       isValid = false;
     } else {
-      setdateError("");
+      setunitScoreError("");
     }
-
-   
 
     return isValid;
   };
 
-  const handleUpdateItems_out = () => {
+  const handleUpdateItems = () => {
     if (validateInputs()) {
-      updateItems_out({ eventId, quantity, date })
+      updateItems({ itemID, itemName, unit, unitScore })
         .then((response) => {
           console.log("Item updated successfully:", response);
           // Clear form fields
-          seteventId("");
-          setquantity("");
-          setdate("");
-          
+          setitemName("");
+          setunit("");
+          setunitScore("");
+
           // Close the dialog
           handleClose();
           // Refetch the donors list
@@ -96,20 +88,17 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
 
   const handleCancel = () => {
     // Clear form fields
-    seteventId("");
-    setquantity("");
-    setdate("");
-    
+    setitemName("");
+    setunit("");
+    setunitScore("");
 
-    seteventIdError("");
-    setquantityError("");
-    setdateError("");
-    
+    setitemNameError("");
+    setunitError("");
+    setunitScoreError("");
+
     // Close the dialog
     handleClose();
   };
-
-  
 
   return (
     <Dialog open={open} onClose={handleCancel}>
@@ -118,14 +107,14 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
       </DialogTitle>
       <DialogContent>
         <TextField
-          label="Event Id"
-          value={eventId}
-          onChange={(e) => seteventId(e.target.value)}
+          label="Item Name"
+          value={itemName}
+          onChange={(e) => setitemName(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!eventIdError}
-          helperText={eventIdError}
+          error={!!itemNameError}
+          helperText={itemNameError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -135,14 +124,14 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           }}
         />
         <TextField
-          label="Quantity"
-          value={quantity}
-          onChange={(e) => setquantity(e.target.value)}
+          label="Unit"
+          value={unit}
+          onChange={(e) => setunit(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!quantityError}
-          helperText={quantityError}
+          error={!!unitError}
+          helperText={unitError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -152,14 +141,14 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           }}
         />
         <TextField
-          label="Date"
-          value={date}
-          onChange={(e) => setdate(e.target.value)}
+          label="Unit Score"
+          value={unitScore}
+          onChange={(e) => setunitScore(e.target.value)}
           fullWidth
           variant="outlined"
           margin="normal"
-          error={!!dateError}
-          helperText={dateError}
+          error={!!unitScoreError}
+          helperText={unitScoreError}
           InputLabelProps={{
             sx: {
               "&.Mui-focused": {
@@ -168,7 +157,6 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
             },
           }}
         />
-        
       </DialogContent>
       <DialogActions>
         <Box
@@ -185,7 +173,7 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleUpdateItems_out}
+            onClick={handleUpdateItems}
           >
             Update
           </Button>
@@ -209,4 +197,4 @@ const UpdateFormRI = ({ open, handleClose, refetch, itemsToUpdate }) => {
   );
 };
 
-export default UpdateFormRI;
+export default UpdateFormCI;

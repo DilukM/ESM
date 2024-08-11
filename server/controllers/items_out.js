@@ -4,7 +4,7 @@ import Items_out from "../models/Items_out.js";
 import jwt from "jsonwebtoken";
 
 export const addItem_out = async (req, res) => {
-  const { itemName, quantity, eventId, date } = req.body;
+  const { itemName, itemId, quantity, eventId, eventName, date } = req.body;
   try {
     // Check if the item already exists
     const existingItem_out = await Items_out.findOne({ itemName });
@@ -16,9 +16,11 @@ export const addItem_out = async (req, res) => {
 
     // Create a new donor instance with hashed password
     const newItem_out = new Items_out({
+      itemId,
       itemName,
       quantity,
       eventId,
+      eventName,
       date,
     });
 
@@ -26,7 +28,7 @@ export const addItem_out = async (req, res) => {
     await newItem_out.save();
 
     // Send success response with token
-    res.status(200).json({ token });
+    res.status(200).json({});
   } catch (error) {
     console.error("Error registering item:", error);
     res
@@ -37,8 +39,8 @@ export const addItem_out = async (req, res) => {
 
 export const getItems_out = async (req, res) => {
   try {
-    const Items_out = await Items_out.find();
-    res.status(200).json(Items_out);
+    const items_out = await Items_out.find();
+    res.status(200).json(items_out);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

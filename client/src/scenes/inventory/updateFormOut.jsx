@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -12,38 +12,60 @@ import {
   CircularProgress,
 } from "@mui/material";
 import {
-  useAddItems_inMutation,
+  useUpdateItems_outMutation,
   useGetItemsQuery,
-  useGetDonorsQuery,
+  useGetDEventsQuery,
 } from "state/api";
 
-const AddItems_in = ({ open, handleClose, refetch }) => {
+const UpdateFormOut = ({ open, handleClose, refetch, itemsToUpdate }) => {
   const theme = useTheme();
+
   const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedDonor, setSelectedDonor] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const [quantity, setquantity] = useState("");
   const [date, setdate] = useState("");
 
   // State variables for validation
   const [itemNameError, setitemNameError] = useState("");
+  const [eventIdError, seteventIdError] = useState("");
   const [quantityError, setquantityError] = useState("");
-  const [donorIdError, setdonorIdError] = useState("");
   const [dateError, setdateError] = useState("");
 
-  const [addItem] = useAddItems_inMutation();
+  const [updateItems_out] = useUpdateItems_outMutation();
   const { data: items, isLoading } = useGetItemsQuery();
-  const { data: donors, isLoadingDonor } = useGetDonorsQuery();
+  const { data: events, isLoadingEvent } = useGetDEventsQuery();
+
+  // Populate form fields with donorToUpdate data when it's available
+  useEffect(() => {
+    if (itemsToUpdate && items && events) {
+      setSelectedItem(items.find((item) => item._id === itemsToUpdate.itemId));
+      setSelectedEvent(
+        events.find((event) => event._id === itemsToUpdate.eventId)
+      );
+      setquantity(itemsToUpdate.quantity);
+      setdate(itemsToUpdate.date);
+    }
+  }, [itemsToUpdate]);
+
+  const itemID = itemsToUpdate ? itemsToUpdate._id : "";
 
   const validateInputs = () => {
     let isValid = true;
 
     // Validate itemName
     if (selectedItem == null) {
-      setitemNameError("Item Name is required");
+      setitemNameError("Item is required");
       isValid = false;
     } else {
       setitemNameError("");
+    }
+
+    if (selectedEvent == null) {
+      seteventIdError("Event is required");
+      isValid = false;
+    } else {
+      seteventIdError("");
     }
 
     // Validate quantity
@@ -54,14 +76,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
       setquantityError("");
     }
 
-    // Validate donorId
-    if (selectedDonor == null) {
-      setdonorIdError("Donor is required");
-      isValid = false;
-    } else {
-      setdonorIdError("");
-    }
-
+    // Validate date
     if (!date.trim()) {
       setdateError("Date is required");
       isValid = false;
@@ -72,24 +87,23 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
     return isValid;
   };
 
-  const handleAddItems = () => {
+  const handleUpdateItems_out = () => {
     if (validateInputs()) {
-      addItem({
+      updateItems_out({
+        itemID,
         itemId: selectedItem._id,
         itemName: selectedItem.itemName,
         quantity,
-        donorId: selectedDonor._id,
-        donorName: selectedDonor.name + " (" + selectedDonor.email + ")",
+        eventId: selectedEvent._id,
+        eventName: selectedEvent.eventName,
         date,
       })
         .then((response) => {
-          console.log("Item added successfully from frontend:", response);
+          console.log("Item updated successfully:", response);
           // Clear form fields
-
           setSelectedItem(null);
-          setSelectedDonor(null);
+          setSelectedEvent(null);
           setquantity("");
-
           setdate("");
 
           // Close the dialog
@@ -98,7 +112,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
           refetch();
         })
         .catch((error) => {
-          console.error("Error adding item:", error);
+          console.error("Error updating item:", error);
         });
     }
   };
@@ -106,14 +120,13 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   const handleCancel = () => {
     // Clear form fields
     setSelectedItem(null);
-    setSelectedDonor(null);
+    setSelectedEvent(null);
     setquantity("");
-
     setdate("");
 
     setitemNameError("");
+    seteventIdError("");
     setquantityError("");
-    setdonorIdError("");
     setdateError("");
 
     // Close the dialog
@@ -123,7 +136,7 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   return (
     <Dialog open={open} onClose={handleCancel}>
       <DialogTitle align="center" sx={{ fontWeight: 700 }}>
-        Add New Donation
+        Update Item
       </DialogTitle>
       <DialogContent>
         <Autocomplete
@@ -138,12 +151,49 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Item"
+              label="Item Name"
               fullWidth
               variant="outlined"
               margin="normal"
               error={!!itemNameError}
               helperText={itemNameError}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {isLoading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+                sx: {
+                  "&.Mui-focused": {
+                    color: theme.palette.secondary[100],
+                  },
+                },
+              }}
+            />
+          )}
+        />
+        <Autocomplete
+          options={events || []} // Provide the entire objects as options
+          getOptionLabel={(option) => option.eventName || ""} // Show the ItemName as the label
+          isOptionEqualToValue={(option, value) => option.Id === value.Id} // Define equality based on Id
+          loading={isLoadingEvent}
+          value={selectedEvent} // Set value to the selected item object
+          onChange={(event, newValue) => {
+            setSelectedEvent(newValue); // newValue contains the selected object
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Donation Event"
+              fullWidth
+              variant="outlined"
+              margin="normal"
+              error={!!eventIdError}
+              helperText={eventIdError}
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -180,55 +230,14 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             },
           }}
         />
-
-        <Autocomplete
-          options={donors || []} // Provide the entire objects as options
-          getOptionLabel={(option) =>
-            option.name + " (" + option.email + ")" || ""
-          } // Show the ItemName as the label
-          isOptionEqualToValue={(option, value) => option.Id === value.Id} // Define equality based on Id
-          loading={isLoading}
-          value={selectedDonor} // Set value to the selected item object
-          onChange={(event, newValue) => {
-            setSelectedDonor(newValue); // newValue contains the selected object
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Donor"
-              fullWidth
-              variant="outlined"
-              margin="normal"
-              error={!!donorIdError}
-              helperText={donorIdError}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <>
-                    {isLoading ? (
-                      <CircularProgress color="inherit" size={20} />
-                    ) : null}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-                sx: {
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[100],
-                  },
-                },
-              }}
-            />
-          )}
-        />
-
         <TextField
           type="date"
-          variant="outlined"
-          name="date"
-          margin="normal"
+          label="Date"
           value={date}
           onChange={(e) => setdate(e.target.value)}
           fullWidth
+          variant="outlined"
+          margin="normal"
           error={!!dateError}
           helperText={dateError}
           InputLabelProps={{
@@ -252,8 +261,12 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
             },
           }}
         >
-          <Button variant="contained" color="primary" onClick={handleAddItems}>
-            Add
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateItems_out}
+          >
+            Update
           </Button>
         </Box>
         <Box
@@ -275,4 +288,4 @@ const AddItems_in = ({ open, handleClose, refetch }) => {
   );
 };
 
-export default AddItems_in;
+export default UpdateFormOut;

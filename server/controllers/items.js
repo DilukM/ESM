@@ -22,7 +22,7 @@ export const addItem = async (req, res) => {
     await newItem.save();
 
     // Send success response with token
-    res.status(200).json({ token });
+    res.status(200).json({});
   } catch (error) {
     console.error("Error listing item:", error);
     res.status(500).json({

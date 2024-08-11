@@ -1,21 +1,15 @@
 import Items from "../models/Items_In.js";
 
 export const addItem_in = async (req, res) => {
-  const { itemName, quantity, donorId, date } = req.body;
+  const { itemName, itemId, quantity, donorId, donorName, date } = req.body;
   try {
-    // Check if the item already exists
-    const existingItem = await Items.findOne({ itemName });
-
-    // If item exists, send error response
-    if (existingItem) {
-      return res.status(400).json({ error: "Item already exists" });
-    }
-
     // Create a new donor instance with hashed password
     const newItem = new Items({
+      itemId,
       itemName,
       quantity,
       donorId,
+      donorName,
       date,
     });
 

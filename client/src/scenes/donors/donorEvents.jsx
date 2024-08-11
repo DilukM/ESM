@@ -170,13 +170,13 @@ export default function DonorEvents() {
         </div>
       ),
     },
-    { field: "eventName", headerName: "Event", width: 200 },
-    { field: "date", headerName: "Date", width: 150 },
-    { field: "location", headerName: "Location", width: 200 },
-    { field: "description", headerName: "Description", width: 200 },
+    { field: "eventName", headerName: "Event", flex: 1 },
+    { field: "date", headerName: "Date", flex: 1 },
+    { field: "location", headerName: "Location", flex: 1 },
+    { field: "description", headerName: "Description", flex: 1 },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: " ",
       flex: 1,
       sortable: false,
       filterable: false,
@@ -247,17 +247,16 @@ export default function DonorEvents() {
         </Button>
       </Box>
       <Box mt={2}>
-        <Box height="80vh" position={"relative"}>
+        <Box height="80vh">
           <DataGrid
             loading={isLoading || !data}
-            getRowId={(row) => row.id}
+            getRowId={(row) => row._id}
             rows={data || []}
             columns={columns1}
             pageSize={5}
             rowCount={(data && data.total) || 0}
             // checkboxSelection
 
-            disableSelectionOnClick
             getRowHeight={() => 150}
           />
         </Box>

@@ -8,14 +8,6 @@ export const addDEvent = async (req, res) => {
   const { eventName, location, date, description, cover } = req.body;
 
   try {
-    // Check if the donor already exists
-    const existingEventId = await dEvent.findOne({ id });
-
-    // If donor exists, send error response
-    if (existingEventId) {
-      return res.status(400).json({ error: "Event ID already exists" });
-    }
-
     // Create a new event instance with hashed password
     const newDEvent = new dEvent({
       eventName,
@@ -28,13 +20,8 @@ export const addDEvent = async (req, res) => {
     // Save the donor to the database
     await newDEvent.save();
 
-    // Generate JWT token
-    const token = jwt.sign({ id: newDEvent._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1h",
-    });
-
     // Send success response with token
-    res.status(200).json({ token });
+    res.status(200).json({});
   } catch (error) {
     console.error("Error registering donation Event:", error);
     res

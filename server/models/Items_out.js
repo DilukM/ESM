@@ -7,20 +7,29 @@ const Items_outSchema = new mongoose.Schema(
       required: true,
       max: 50,
     },
+    itemId: {
+      type: String,
+      required: true,
+      max: 50,
+    },
     quantity: {
       type: String,
       required: true,
       max: 50,
+    },
+    eventName: {
+      type: String,
+      required: true,
+      min: 8,
     },
 
     eventId: {
       type: String,
       required: true,
       min: 8,
-      unique: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
       min: 8,
     },

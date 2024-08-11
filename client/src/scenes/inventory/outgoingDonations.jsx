@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetItemsInQuery, useDeleteItems_inMutation } from "state/api";
+import {
+  useGetItemsOutQuery,
+  useDeleteItems_outMutation,
+} from "../../state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
-import Items_in from "./addItemsIn";
-import UpdateFormIn from "./updateFormIn";
+import Items_out from "./addItems_out";
+import UpdateFormRI from "./updateFormOut";
 
-const IncomingDonations = () => {
+const OutgoingDonations = () => {
   const theme = useTheme();
   const [showForm, setShowForm] = useState(false);
-  const [showupdateForm_in, setShowupdateForm_in] = useState(false);
+  const [showUpdateFormOut, setshowUpdateFormOut] = useState(false);
   const [selectedItems, setSelectedItems] = useState(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [setSort] = useState({});
   const [setSearch] = useState("");
-  const { data, isLoading, refetch } = useGetItemsInQuery();
+  const { data, error, isLoading, refetch } = useGetItemsOutQuery(undefined, {
+    refetchOnMountOrArgChange: true, // Forces refetch on mount
+  });
+  const [deleteItemsOut] = useDeleteItems_outMutation();
   const [rowIndex, setRowIndex] = useState(0);
   const [searchInput, setSearchInput] = useState("");
-  const [deleteItemsIn] = useDeleteItems_inMutation();
 
   useEffect(() => {
     if (data) {
@@ -27,7 +32,7 @@ const IncomingDonations = () => {
   }, [data]);
 
   const handleDelete = (itemID) => {
-    deleteItemsIn(itemID)
+    deleteItemsOut(itemID)
       .unwrap()
       .then((response) => {
         console.log("item deleted successfully");
@@ -40,45 +45,47 @@ const IncomingDonations = () => {
 
   const handleUpdateClick = (item) => {
     setSelectedItems(item); // Set the selected item data
-    setShowupdateForm_in(true); // Show the update form
+    console.log(selectedItems);
+    setshowUpdateFormOut(true); // Show the update form
   };
 
   const handleCloseForm = () => {
     setShowForm(false);
-    setShowupdateForm_in(false);
+    setshowUpdateFormOut(false);
   };
 
   const generateRowsWithIndex = (rows) => {
     return rows.map((row, index) => ({ ...row, index: rowIndex + index + 1 }));
   };
 
-  const incommingDonations = [
+  const outgoingDonations = [
     {
       field: "itemName",
       headerName: "Item Name",
       flex: 1,
     },
+
     {
       field: "quantity",
       headerName: "Quantity",
-      flex: 0.5,
-      sortable: false,
+      flex: 1,
     },
     {
-      field: "donorName",
-      headerName: "Donor",
+      field: "eventName",
+      headerName: "Event Name",
       flex: 1,
-      sortable: false,
     },
     {
       field: "date",
       headerName: "Date",
       flex: 0.5,
+      sortable: false,
     },
+
     {
-      field: "actions",
+      field: " ",
       headerName: "Actions",
-      flex: 0.7,
+      flex: 1,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -143,18 +150,18 @@ const IncomingDonations = () => {
           sx={{ marginTop: 2 }}
           onClick={() => setShowForm(true)}
         >
-          Add Item
+          Release Item
         </Button>
       </Box>
 
-      <UpdateFormIn
-        open={showupdateForm_in}
+      <UpdateFormRI
+        open={showUpdateFormOut}
         handleClose={handleCloseForm}
         refetch={refetch}
         itemsToUpdate={selectedItems}
       />
 
-      <Items_in
+      <Items_out
         open={showForm}
         handleClose={handleCloseForm}
         refetch={refetch}
@@ -191,7 +198,7 @@ const IncomingDonations = () => {
           loading={isLoading || !data}
           getRowId={(row) => row._id}
           rows={generateRowsWithIndex(data || [])}
-          columns={incommingDonations}
+          columns={outgoingDonations}
           rowCount={(data && data.total) || 0}
           rowsPerPageOptions={[20, 50, 100]}
           pagination
@@ -212,4 +219,4 @@ const IncomingDonations = () => {
   );
 };
 
-export default IncomingDonations;
+export default OutgoingDonations;
