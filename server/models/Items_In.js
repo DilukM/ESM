@@ -20,6 +20,7 @@ const Items_InSchema = new mongoose.Schema(
     donorId: {
       type: String,
       required: true,
+      unique: false,
     },
     donorName: {
       type: String,

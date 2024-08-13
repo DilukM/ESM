@@ -15,18 +15,13 @@ export const api = createApi({
     "Admins",
     "Performance",
     "Dashboard",
-
+    " ItemsOverview",
     "Items",
 
     "TreeEvents",
     "Sponsors",
   ],
   endpoints: (build) => ({
-    getItemsIn: build.query({
-      query: () => `items_in/gets`,
-      providesTags: ["Items_in"],
-    }),
-
     getUser: build.query({
       query: (id) => `general/user/${id}`,
       providesTags: ["User"],
