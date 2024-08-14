@@ -32,6 +32,10 @@ const DonorSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    rank: {
+      type: Number,
+      default: 0, // Default rank is 0
+    },
   },
   { timestamps: true }
 );

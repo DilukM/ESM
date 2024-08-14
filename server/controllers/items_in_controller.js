@@ -1,8 +1,18 @@
 import Items from "../models/Items_In.js";
+import Donors from "../models/Donor.js"; // Import the Donor model
+import ItemsData from "../models/Items.js"; // Import the Item model
 
 export const addItem_in = async (req, res) => {
   const { itemName, itemId, quantity, donorId, donorName, date } = req.body;
   try {
+    const item = await ItemsData.findOne({ _id: itemId });
+
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    // Calculate the score
+    const score = item.unitScore * quantity;
     // Create a new donor instance with hashed password
     const newItem = new Items({
       itemId,
@@ -16,14 +26,30 @@ export const addItem_in = async (req, res) => {
     // Save the item to the database
     await newItem.save();
 
+    await updateDonorRanks();
+
     // Send success response with token
-    res.status(200).json({});
+    res.status(200).json({ message: "Item added and donor score updated" });
   } catch (error) {
     console.error("Error listing item:", error);
     res.status(500).json({
       error: "Item registration failed. Please try again later.",
       error,
     });
+  }
+};
+
+const updateDonorRanks = async () => {
+  try {
+    // Get all donors sorted by score in descending order
+    const donors = await Donors.find().sort({ score: -1 });
+
+    // Update rank based on position in the sorted list
+    for (let i = 0; i < donors.length; i++) {
+      await Donors.findByIdAndUpdate(donors[i]._id, { rank: i + 1 });
+    }
+  } catch (error) {
+    console.error("Error updating donor ranks:", error);
   }
 };
 
@@ -69,6 +95,8 @@ export const updateItems_in = async (req, res) => {
     const updatedItem = await Items.findByIdAndUpdate(itemID, updatedItemData, {
       new: true,
     });
+
+    await updateDonorRanks();
 
     res.json(updatedItem); // Send back the updated item object
   } catch (error) {
