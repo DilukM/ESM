@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  useTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetItemsInQuery, useDeleteItems_inMutation } from "state/api";
 import DataGridCustomToolbar from "components/DataGridCustomToolbar";
@@ -19,6 +28,8 @@ const IncomingDonations = () => {
   const [rowIndex, setRowIndex] = useState(0);
   const [searchInput, setSearchInput] = useState("");
   const [deleteItemsIn] = useDeleteItems_inMutation();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
     if (data) {
@@ -27,15 +38,36 @@ const IncomingDonations = () => {
   }, [data]);
 
   const handleDelete = (itemID) => {
-    deleteItemsIn(itemID)
-      .unwrap()
-      .then((response) => {
-        console.log("item deleted successfully");
-        refetch();
-      })
-      .catch((error) => {
-        console.error("Error deleting item:", error);
-      });
+    setItemToDelete(itemID);
+    setOpenConfirmDialog(true);
+  };
+
+  // const handleDelete = (itemID) => {
+  //   deleteItemsIn(itemID)
+  //     .unwrap()
+  //     .then((response) => {
+  //       console.log("item deleted successfully");
+  //       refetch();
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error deleting item:", error);
+  //     });
+  // };
+
+  const handleConfirmDelete = () => {
+    if (itemToDelete) {
+      deleteItemsIn(itemToDelete)
+        .unwrap()
+        .then((response) => {
+          console.log("Item deleted successfully");
+          refetch();
+        })
+        .catch((error) => {
+          console.error("Error deleting item:", error);
+        });
+    }
+    setOpenConfirmDialog(false);
+    setItemToDelete(null);
   };
 
   const handleUpdateClick = (item) => {
@@ -120,6 +152,33 @@ const IncomingDonations = () => {
               Update
             </Button>
           </Box>
+          <Dialog
+            open={openConfirmDialog}
+            onClose={() => setOpenConfirmDialog(false)}
+            aria-labelledby="confirm-delete-dialog-title"
+            aria-describedby="confirm-delete-dialog-description"
+          >
+            <DialogTitle id="confirm-delete-dialog-title">
+              Confirm Deletion
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="confirm-delete-dialog-description">
+                Are you sure you want to delete this item? This action cannot be
+                undone.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setOpenConfirmDialog(false)}
+                color="primary"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmDelete} color="error" autoFocus>
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       ),
     },

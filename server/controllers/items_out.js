@@ -6,14 +6,6 @@ import jwt from "jsonwebtoken";
 export const addItem_out = async (req, res) => {
   const { itemName, itemId, quantity, eventId, eventName, date } = req.body;
   try {
-    // Check if the item already exists
-    const existingItem_out = await Items_out.findOne({ itemName });
-
-    // If item exists, send error response
-    if (existingItem_out) {
-      return res.status(400).json({ error: "Item already exists" });
-    }
-
     // Create a new donor instance with hashed password
     const newItem_out = new Items_out({
       itemId,

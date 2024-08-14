@@ -10,27 +10,16 @@ import {
 } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
-import Header from "components/Header";
+import EventUpdateForm from "./dEventUpdate";
 import {
   useAddDEventMutation,
   useGetDEventsQuery,
-  useDeleteDEventMutation,
+  useDeleteDEventMutation,useUpdateDEventMutation
 } from "state/api";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase.js";
 
-function TabPanel({ value, index, children }) {
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-    >
-      {value === index && <Box p={3}>{children}</Box>}
-    </div>
-  );
-}
+
 
 export default function DonorEvents() {
   const theme = useTheme();
@@ -44,6 +33,7 @@ export default function DonorEvents() {
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [cover, setCover] = useState("NULL");
+  
 
   const [addDEvent] = useAddDEventMutation();
   const { data, isLoading, refetch } = useGetDEventsQuery();
@@ -52,14 +42,31 @@ export default function DonorEvents() {
   const [selectedDEvent, setSelectedDEvent] = useState(null);
 
   const [deleteDEvent] = useDeleteDEventMutation();
-  const handleMouseEnterBtn = () => {
-    setIsHoveredBtn(true);
-    setTabValue(0);
-  };
+  const [alertState, setAlertState] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
-  const handleMouseLeaveBtn = () => {
-    setIsHoveredBtn(false);
+  const handleSuccessUpdate = () => {
+    setAlertState({
+      open: true,
+      message: "Donor Updated successfully!",
+      severity: "success",
+    });
+    refetch();
+    setTimeout(() => {
+      setAlertState({ ...alertState, open: false });
+    }, 3000);
   };
+  
+
+
+  useEffect(() => {
+    if (data) {
+      setRowIndex(0); // Reset the index when data changes
+    }
+  }, [data]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -73,6 +80,13 @@ export default function DonorEvents() {
     setLocation("");
     setDescription("");
     setOpenModal(false);
+ 
+    
+  };
+
+  const handleCloseForm = () => {
+
+    setShowUpdateForm(false);
   };
 
   const handleDelete = (donorId) => {
@@ -86,10 +100,10 @@ export default function DonorEvents() {
       });
   };
 
-  const handleUpdateClick = (donor) => {
-    setSelectedDEvent(donor); // Set the selected donor data
-    setShowUpdateForm(true); // Show the update form
-  };
+ const handleUpdateClick = (donor) => {
+  setSelectedDEvent(donor); // Set the selected donor data
+    setShowUpdateForm(true);
+};
 
   // const handleInputChange = (e) => {
   //   const { name, value } = e.target;
@@ -261,6 +275,7 @@ export default function DonorEvents() {
           />
         </Box>
       </Box>
+      
       <Modal
         open={openModal}
         onClose={handleCloseModal}
@@ -341,6 +356,14 @@ export default function DonorEvents() {
           </Button>
         </Box>
       </Modal>
+      <EventUpdateForm
+            open={showUpdateForm}
+            handleClose={handleCloseForm}
+            refetch={refetch}
+            eventToUpdate={selectedDEvent}
+            handleSuccess={handleSuccessUpdate}
+            setAlertState={setAlertState}
+          />
     </Box>
   );
 }
