@@ -103,3 +103,17 @@ export const updateTreeEvent = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+export const getLastEvent = async (req, res) => {
+  try {
+    const lastEvent = await treeEvent.findOne().sort({ createdAt: -1 });
+    if (!lastEvent) {
+      return res.status(404).json({ message: "No patients found" });
+    }
+    res.status(200).json(lastEvent);
+  } catch (error) {
+    console.error("Error fetching last patient:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
