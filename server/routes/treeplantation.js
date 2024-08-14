@@ -6,6 +6,7 @@ import {
   addTreeEvent,
   deleteTreeEvent,
   updateTreeEvent,
+  getLastEvent,
 } from "../controllers/tree_plantation_event.js";
 
 const router = express.Router();
@@ -26,5 +27,6 @@ router.get("/get/:id", getTreeEvent);
 router.post("/add", upload.single('coverImage'), addTreeEvent); // Handle image upload
 router.delete("/delete/:id", deleteTreeEvent);
 router.put("/update/:id", upload.single('coverImage'), updateTreeEvent); // Handle image update
+router.get("/last",getLastEvent);
 
 export default router;

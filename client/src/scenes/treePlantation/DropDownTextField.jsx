@@ -24,7 +24,9 @@ const DropDownTextField = ({ province, district, city, onProvinceChange, onDistr
       ],
     },
   ];
-
+  const[provinceError,setProvinceError]=useState("");
+  const[districtError,setDistrictError] = useState("");
+  const[cityError,setCityError] = useState("");
   const [districts, setDistricts] = useState([]);
   const [cities, setCities] = useState([]);
 
@@ -54,6 +56,8 @@ const DropDownTextField = ({ province, district, city, onProvinceChange, onDistr
           value={province}
           onChange={(e) => onProvinceChange(e.target.value)}
           label="Province"
+          // error={!!eventNameError}
+          // helperText={eventNameError}
           sx={{ padding: "12px" }}
         >
           <MenuItem value="">

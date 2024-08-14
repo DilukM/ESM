@@ -187,6 +187,11 @@ export const api = createApi({
       providesTags: ["TreeEvents"],
     }),
 
+    getLastEvent: build.query({
+      query: () => "treePlantationEvent/last",
+      providesTags: ["TreeEvents"],
+    }),
+
     //treeplantationEvent End
 
     // Sponsor endpoints
@@ -426,6 +431,7 @@ export const {
   useGetDEventQuery,
   useAddDEventMutation,
   useUpdateDEventMutation,
+  useGetLastEventQuery,
 
   useGetTreeEventsQuery,
   useDeleteTreeEventMutation,
