@@ -154,7 +154,7 @@ export const api = createApi({
       providesTags: ["TreeEvents"],
     }),
     getTreeEvent: build.query({
-      query: (id) => `treePlantationEvent/events/${id}`,
+      query: (id) => `treePlantationEvent/event/${id}`,
       providesTags: ["TreeEvents"],
     }),
     deleteTreeEvent: build.mutation({
@@ -166,7 +166,7 @@ export const api = createApi({
     }),
     addTreeEvent: build.mutation({
       query: ({
-        coverImage,
+      
         eventID,
         eventName,
         eventDate,
@@ -178,7 +178,6 @@ export const api = createApi({
         url: `treePlantationEvent/add`,
         method: "POST",
         body: {
-          coverImage,
           eventID,
           eventName,
           eventDate,
@@ -192,7 +191,7 @@ export const api = createApi({
     }),
     updateTreeEvent: build.mutation({
       query: (eventDetails) => ({
-        url: `treePlantationEvent/update/${eventDetails.eventId}`,
+        url: `treePlantationEvent/update/${eventDetails.eventID}`,
         method: "PUT",
         body: { eventDetails }, // Prepare form data for file upload
       }),
@@ -450,6 +449,7 @@ export const {
   useGetTreeEventQuery,
   useAddTreeEventMutation,
   useUpdateTreeEventMutation,
+  useGetLastTreeEventQuery ,
 
   useGetSponsorsQuery,
   useDeleteSponsorMutation,

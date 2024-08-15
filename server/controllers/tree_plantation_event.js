@@ -1,9 +1,10 @@
 // server side controller file (tree_plantation_event.js)
 import jwt from "jsonwebtoken";
-import treeEvent from "../models/TreePlantationEvent.js";
+import tree from "../models/TreePlantationEvent.js";
 
 export const addTreeEvent = async (req, res) => {
   const {
+    
     eventID,
     eventName,
     eventDate,
@@ -11,19 +12,20 @@ export const addTreeEvent = async (req, res) => {
     district,
     city,
     comments,
+    
   } = req.body;
 
-  // Check if req.file exists and construct coverImage path
-  const coverImage = req.file ? `/uploads/${req.file.filename}` : null;
+  
+
+  
 
   try {
-    const existingEvent = await treeEvent.findOne({ eventID });
+    const existingEvent = await tree.findOne({ eventID });
     if (existingEvent) {
       return res.status(400).json({ error: "Event ID already exists" });
     }
 
-    const newTreeEvent = new treeEvent({
-      coverImage,
+    const newTreeEvent = new tree({
       eventID,
       eventName,
       eventDate,
@@ -32,6 +34,8 @@ export const addTreeEvent = async (req, res) => {
       city,
       comments,
     });
+
+    console.log(newTreeEvent);
 
     await newTreeEvent.save();
 
@@ -51,7 +55,7 @@ export const addTreeEvent = async (req, res) => {
 
 export const getTreeEvents = async (req, res) => {
   try {
-    const treeEvents = await treeEvent.find();
+    const treeEvents = await tree.find();
     res.status(200).json(treeEvents);
     console.log("success");
   } catch (error) {
@@ -62,17 +66,22 @@ export const getTreeEvents = async (req, res) => {
 export const getTreeEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const treeEvent = await treeEvent.findById(id); // Correctly use the id param
-    res.status(200).json(treeEvent);
+    console.log(id);
+    console.log("sucess");
+
+    const treeEvents = await tree.findById(id); // Correctly use the id param
+    res.status(200).json(treeEvents);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
+
+
 };
 
 export const deleteTreeEvent = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedEvent = await treeEvent.findByIdAndDelete(id); // Correct variable name
+    const deletedEvent = await tree.findByIdAndDelete(id); // Correct variable name
     if (!deletedEvent) {
       return res.status(404).json({ error: "Event not found" });
     }
@@ -87,15 +96,16 @@ export const updateTreeEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
     const updatedEventData = req.body;
-    if (req.file) {
-      updatedEventData.coverImage = `/uploads/${req.file.filename}`;
-    }
+    // if (req.file) {
+    //   updatedEventData.coverImage = `/uploads/${req.file.filename}`;
+    // }
 
-    const updatedEvent = await treeEvent.findByIdAndUpdate(
+    const updatedEvent = await tree.findByIdAndUpdate(
       eventId,
       updatedEventData,
       { new: true }
     );
+    console.log("success");
 
     res.json(updatedEvent);
   } catch (error) {
@@ -107,7 +117,7 @@ export const updateTreeEvent = async (req, res) => {
 
 export const getLastEvent = async (req, res) => {
   try {
-    const lastEvent = await treeEvent.findOne().sort({ createdAt: -1 });
+    const lastEvent = await tree.findOne().sort({ createdAt: -1 });
     if (!lastEvent) {
       return res.status(404).json({ message: "No patients found" });
     }

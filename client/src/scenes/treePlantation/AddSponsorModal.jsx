@@ -1,12 +1,11 @@
-import { Box, Modal, TextField, Typography, MenuItem, IconButton, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Modal, Typography, MenuItem, IconButton, Select, InputLabel, FormControl } from '@mui/material';
 import React, { useState } from 'react';
 import CustomTextField from './CustomTextField';
 import DropDownTextField from './DropDownTextField';
 import Button from 'components/Button';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { useAddSponsorMutation } from 'state/api';
-
+import { useAddSponsorMutation, useGetTreeEventQuery } from 'state/api'; // Import the fetch event IDs query
 
 const AddSponsorModal = ({ openModal, closeModal }) => {
   const getCurrentDate = () => {
@@ -33,16 +32,16 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
   const [province, setProvince] = useState("");
   const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
-  
 
   const [donations, setDonations] = useState([{ organizationName: '', contactDetails: '', donationDate: getCurrentDate() }]);
 
   const [addSponsor] = useAddSponsorMutation();
 
+  const { data: eventIDs = [], isLoading: isFetchingEventIDs } = useGetTreeEventQuery(); // Fetch event IDs
+
   const validateEventID = (value) => {
-    const regex = /^[a-zA-Z0-9]*$/;
-    if (!regex.test(value)) {
-      setEventIDError("Event ID can only contain letters and numbers.");
+    if (!value) {
+      setEventIDError("Event ID is required.");
     } else {
       setEventIDError("");
     }
@@ -60,11 +59,13 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
   };
 
   const handleSave = async () => {
+    validateEventID(eventID); // Ensure validation runs on save
+
     if (eventIDError || eventNameError) {
       console.error('Validation error:');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('eventID', eventID);
     formData.append('eventName', eventName);
@@ -72,13 +73,13 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
     formData.append('province', province);
     formData.append('district', district);
     formData.append('city', city);
-  
+
     donations.forEach((donation, index) => {
       formData.append(`donations[${index}][organizationName]`, donation.organizationName);
       formData.append(`donations[${index}][contactDetails]`, donation.contactDetails);
       formData.append(`donations[${index}][donationDate]`, donation.donationDate);
     });
-  
+
     try {
       await addSponsor(formData).unwrap();
       closeModal();
@@ -86,9 +87,6 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
       console.error('Error saving event:', error);
     }
   };
-  
-
-  
 
   const handleDonationChange = (index, field, value) => {
     const updatedDonations = donations.map((donation, i) =>
@@ -132,11 +130,12 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
               onChange={(e) => validateEventID(e.target.value)}
               label="Event ID"
               error={!!eventIDError}
+              disabled={isFetchingEventIDs} // Disable while fetching
             >
               <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="event1">Event 1</MenuItem>
-              <MenuItem value="event2">Event 2</MenuItem>
-              <MenuItem value="event3">Event 3</MenuItem>
+              {eventIDs.map((id) => (
+                <MenuItem key={id} value={id}>{id}</MenuItem>
+              ))}
             </Select>
             {eventIDError && <Typography color="error">{eventIDError}</Typography>}
           </FormControl>
@@ -213,7 +212,7 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
             onCityChange={setCity}
           />
         </Box>
-        
+
         <Box sx={{ mt: 6 }}>
           <h3>Donation Details</h3>
           {donations.map((donation, index) => (
@@ -267,6 +266,3 @@ const AddSponsorModal = ({ openModal, closeModal }) => {
 };
 
 export default AddSponsorModal;
-
-
-
