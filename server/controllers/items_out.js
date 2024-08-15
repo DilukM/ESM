@@ -1,4 +1,5 @@
 import Items_out from "../models/Items_out.js";
+import ItemsData from "../models/Items.js";
 
 //import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -6,11 +7,17 @@ import jwt from "jsonwebtoken";
 export const addItem_out = async (req, res) => {
   const { itemName, itemId, quantity, eventId, eventName, date } = req.body;
   try {
+    const item = await ItemsData.findOne({ _id: itemId });
+
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
     // Create a new donor instance with hashed password
     const newItem_out = new Items_out({
       itemId,
       itemName,
       quantity,
+      unit: item.unit,
       eventId,
       eventName,
       date,

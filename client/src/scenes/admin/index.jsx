@@ -21,7 +21,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "components/Header";
 import CustomColumnMenu from "components/DataGridCustomColumnMenu";
 import Signup from "scenes/auth/Singup/index";
-import { useResetPasswordMutation } from "state/api";
+import { useResetPasswordMutation, useDeleteAdminMutation } from "state/api";
 
 const Admin = () => {
   const theme = useTheme();
@@ -35,33 +35,32 @@ const Admin = () => {
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [deleteItemsIn] = useDeleteAdminMutation();
 
   const handleClickOpen = () => {
     setOpen(true);
   };
- 
 
   const handleDelete = (itemID) => {
-    // setItemToDelete(itemID);
-    // setOpenConfirmDialog(true);
+    setItemToDelete(itemID);
+    setOpenConfirmDialog(true);
   };
 
-
-
   const handleConfirmDelete = () => {
-    // if (itemToDelete) {
-    //   deleteItemsIn(itemToDelete)
-    //     .unwrap()
-    //     .then((response) => {
-    //       console.log("Item deleted successfully");
-    //       refetch();
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error deleting item:", error);
-    //     });
-    // }
+    if (itemToDelete) {
+      deleteItemsIn(itemToDelete)
+        .unwrap()
+        .then((response) => {
+          console.log("Admin deleted successfully");
+          refetch();
+        })
+        .catch((error) => {
+          console.error("Error deleting admin:", error);
+        });
+    }
     setOpenConfirmDialog(false);
-    // setItemToDelete(null);
+    setItemToDelete(null);
   };
 
   const handleUpdateClick = (item) => {
@@ -129,7 +128,8 @@ const Admin = () => {
           Reset Password
         </Button>
       ),
-    }, {
+    },
+    {
       field: "actions",
       headerName: "Actions",
       flex: 0.7,

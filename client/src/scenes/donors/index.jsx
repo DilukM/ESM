@@ -224,7 +224,7 @@ const Donors = () => {
   const leaderboardColumns = [
     {
       field: "index",
-      headerName: "#",
+      headerName: "Rank",
       flex: 0.2,
       valueGetter: (params) => params.row.index,
     },

@@ -17,6 +17,10 @@ const Items_outSchema = new mongoose.Schema(
       required: true,
       max: 50,
     },
+    unit: {
+      type: String,
+      required: true,
+    },
     eventName: {
       type: String,
       required: true,

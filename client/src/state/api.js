@@ -44,6 +44,23 @@ export const api = createApi({
       }),
     }),
 
+    deleteAdmin: build.mutation({
+      query: (userId) => ({
+        url: `users/delete/${userId}`,
+        method: "Delete",
+      }),
+      invalidatesTags: ["Donors"], // Invalidate the cache for "Donors" after deletion
+    }),
+
+    updateAdmin: build.mutation({
+      query: ({ userId, name, email, phone }) => ({
+        url: `users/update/${userId}`,
+        method: "PUT",
+        body: { name, email, phone },
+      }),
+      providesTags: ["Donors"],
+    }),
+
     resetPassword: build.mutation({
       query: ({ userId, password }) => ({
         url: `users/${userId}/resetPassword`,
@@ -459,6 +476,8 @@ export const {
   useAdminSignInMutation,
   useAdminSignUpMutation,
   useResetPasswordMutation,
+  useDeleteAdminMutation,
+  useUpdateAdminMutation,
 
   useGetItemsOutQuery,
   useDeleteItems_outMutation,

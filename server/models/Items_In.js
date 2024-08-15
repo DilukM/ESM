@@ -5,17 +5,18 @@ const Items_InSchema = new mongoose.Schema(
     itemId: {
       type: String,
       required: true,
-      max: 50,
     },
     itemName: {
       type: String,
       required: true,
-      max: 50,
     },
     quantity: {
       type: String,
       required: true,
-      max: 50,
+    },
+    unit: {
+      type: String,
+      required: true,
     },
     donorId: {
       type: String,

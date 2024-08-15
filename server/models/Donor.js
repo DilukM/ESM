@@ -4,7 +4,8 @@ const DonorSchema = new mongoose.Schema(
   {
     avatar: {
       type: String,
-      default: "NULL",
+      default:
+        "https://firebasestorage.googleapis.com/v0/b/donor-82405.appspot.com/o/donorEvents%2Fdefault-profile-pic-e1513291410505.jpg?alt=media&token=801ac0da-bcc7-47d8-a901-b5df9b50c74d",
     },
     name: {
       type: String,
@@ -35,6 +36,12 @@ const DonorSchema = new mongoose.Schema(
     rank: {
       type: Number,
       default: 0, // Default rank is 0
+    },
+    gender: {
+      type: String,
+    },
+    birthday: {
+      type: Date,
     },
   },
   { timestamps: true }

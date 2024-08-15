@@ -91,6 +91,12 @@ const OutgoingDonations = () => {
       flex: 1,
     },
     {
+      field: "unit",
+      headerName: "Unit",
+      flex: 0.5,
+      sortable: false,
+    },
+    {
       field: "eventName",
       headerName: "Event Name",
       flex: 1,

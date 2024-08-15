@@ -11,13 +11,12 @@ export const addItem_in = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    // Calculate the score
-    const score = item.unitScore * quantity;
     // Create a new donor instance with hashed password
     const newItem = new Items({
       itemId,
       itemName,
       quantity,
+      unit: item.unit,
       donorId,
       donorName,
       date,
@@ -25,7 +24,7 @@ export const addItem_in = async (req, res) => {
 
     // Save the item to the database
     await newItem.save();
-
+    await updateDonorScores();
     await updateDonorRanks();
 
     // Send success response with token
@@ -52,6 +51,32 @@ const updateDonorRanks = async () => {
     console.error("Error updating donor ranks:", error);
   }
 };
+
+async function updateDonorScores() {
+  try {
+    // Get all donors
+    const donors = await Donors.find();
+
+    // Iterate over each donor to calculate their score
+    for (const donor of donors) {
+      // Get all ItemsIn records for this donor
+      const itemsIn = await Items.find({ donorId: donor._id });
+
+      let totalScore = 0;
+
+      // Calculate total score for this donor
+      for (const itemIn of itemsIn) {
+        const item = await ItemsData.findById(itemIn.itemId);
+        totalScore += itemIn.quantity * item.unitScore;
+      }
+
+      // Update donor's score
+      await Donors.findByIdAndUpdate(donor._id, { score: totalScore });
+    }
+  } catch (error) {
+    console.error("Error updating donor scores:", error);
+  }
+}
 
 export const getItems_in = async (req, res) => {
   try {
@@ -80,6 +105,8 @@ export const deleteItems_in = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
     res.json({ message: "Item deleted successfully" });
+    await updateDonorScores();
+    await updateDonorRanks();
   } catch (error) {
     console.error("Error deleting item:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -96,6 +123,7 @@ export const updateItems_in = async (req, res) => {
       new: true,
     });
 
+    await updateDonorScores();
     await updateDonorRanks();
 
     res.json(updatedItem); // Send back the updated item object

@@ -97,6 +97,12 @@ const IncomingDonations = () => {
       sortable: false,
     },
     {
+      field: "unit",
+      headerName: "Unit",
+      flex: 0.5,
+      sortable: false,
+    },
+    {
       field: "donorName",
       headerName: "Donor",
       flex: 1,

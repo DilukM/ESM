@@ -51,4 +51,19 @@ router.post("/:id/resetPassword", async (req, res) => {
   }
 });
 
+router.post("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log("id from back", id);
+  try {
+    const deletedDonor = await AdminUser.findByIdAndDelete(id);
+    if (!deletedDonor) {
+      return res.status(404).json({ error: "Admin not found" });
+    }
+    res.json({ message: "Admin deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting admin:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 export default router;
