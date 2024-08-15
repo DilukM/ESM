@@ -8,7 +8,7 @@ import SponsorTab from "./SponsorTab";
 import AddSponsorModal from "./AddSponsorModal";
 import LocationTab from "./LocationTab";
 import GoogleMap from "components/GoogleMap";
-
+import ManageRegistationTab from "./ManageRegistationTab";
 const TreePlantation = () => {
   const theme = useTheme();
   // const navigate = useNavigate(); 
@@ -146,6 +146,7 @@ const TreePlantation = () => {
         </Box>}
         {activeTab === 1 && <LocationTab />}
         {activeTab === 2 && <EventsTab handleOpenModal={handleOpenModal} />}
+        {/* {activeTab === 3 && <ManageRegistationTab />} */}
         {activeTab === 3 && <SponsorTab handleOpenModal={handleOpenModal}/>}
         
         

@@ -81,16 +81,16 @@ const EventsTab = () => {
   };
 
   const eventColumns = [
-    {
-      field: "coverImage",
-      headerName: "Cover Image",
-      flex: 0.2,
-      renderCell: (params) => (
-        <Avatar src={params.row.coverImage ? `${params.row.coverImage}` : ''} />
-      ),
-      sortable: false,
-      filterable: false,
-    },
+    // {
+    //   field: "coverImage",
+    //   headerName: "Cover Image",
+    //   flex: 0.2,
+    //   renderCell: (params) => (
+    //     <Avatar src={params.row.coverImage ? `${params.row.coverImage}` : ''} />
+    //   ),
+    //   sortable: false,
+    //   filterable: false,
+    // },
     {
       field: "eventID",
       headerName: "Event ID",

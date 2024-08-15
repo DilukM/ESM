@@ -2,23 +2,21 @@ import mongoose from "mongoose";
 
 const treeEventSchema = new mongoose.Schema(
   {
-    coverImage: {
-      type: String, // Store the path or filename of the image
-    },
+ 
     eventID: {
       type: String,
-      required: true,
+      // required: true,
       unique: true,
       minlength: 3,
     },
     eventName: {
       type: String,
-      required: true,
+      // required: true,
       minlength: 2,
       maxlength: 100,
     },
     eventDate: {
-      type: Date,
+      type: String,
     },
     province: {
       type: String,

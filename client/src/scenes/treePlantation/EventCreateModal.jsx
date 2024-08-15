@@ -1,10 +1,15 @@
-import { Box, Modal, TextField, Typography } from "@mui/material";
-import React, { useState,useEffect } from "react";
+import { Box, Modal, TextField, Typography, Grid, MenuItem } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import CustomTextField from "./CustomTextField";
-import DropDownTextField from "./DropDownTextField";
 import Button from "components/Button";
-import { useAddTreeEventMutation,useGetLastEventQuery } from "state/api";
-import { useTheme } from '@mui/material/styles';
+import { useAddTreeEventMutation, useGetLastEventQuery } from "state/api";
+import { useTheme } from "@mui/material/styles";
+
+const generateNextId = (lastId) => {
+  const idNumber = parseInt(lastId.split("-")[2], 10);
+  const nextIdNumber = (idNumber + 1).toString().padStart(6, "0");
+  return `MD-TE-${nextIdNumber}`;
+};
 
 const sriLankanData = {
   "Western": {
@@ -51,6 +56,8 @@ const sriLankanData = {
     "Kegalle": ["Kegalle", "Mawanella", "Warakapola", "Rambukkana", "Galigamuwa"]
   }
 };
+
+
 const EventCreateModal = ({ openModal, closeModal, refetch }) => {
   const theme = useTheme();
 
@@ -70,31 +77,25 @@ const EventCreateModal = ({ openModal, closeModal, refetch }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const generateNextId = (lastId) => {
-    const idNumber = parseInt(lastId.split('-')[2], 10);
-    const nextIdNumber = (idNumber + 1).toString().padStart(6, '0');
-    return `MD-TE-${nextIdNumber}`;
-  };
-
-
   const [eventID, setEventID] = useState("");
   const [eventName, setEventName] = useState("");
   const [eventDate, setEventDate] = useState(getCurrentDate());
+  const [province, setProvince] = useState("");
+  const [district, setDistrict] = useState("");
   const [comments, setComments] = useState("");
   const [coverImage, setCoverImage] = useState(null);
   const [eventIDError, setEventIDError] = useState("");
   const [eventNameError, setEventNameError] = useState("");
-  const [eventDateError,setEventDateError] = useState("");
-  const[provinceError,setProvinceError]=useState("");
-  const[districtError,setDistrictError] = useState("");
-  const[cityError,setCityError] = useState("");
+  const [provinceError, setProvinceError] = useState("");
+  const [districtError, setDistrictError] = useState("");
+  const [cityError, setCityError] = useState("");
   const [coverImageError, setCoverImageError] = useState("");
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
   const [city, setCity] = useState("");
-
-  const [addTreeEvent] = useAddTreeEventMutation();
   const { data: lastEvent, isSuccess } = useGetLastEventQuery();
+
+  const [districts, setDistricts] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [addTreeEvent] = useAddTreeEventMutation();
 
   useEffect(() => {
     if (isSuccess && lastEvent) {
@@ -104,93 +105,102 @@ const EventCreateModal = ({ openModal, closeModal, refetch }) => {
     }
   }, [lastEvent, isSuccess]);
 
+  useEffect(() => {
+    if (province) {
+      setDistricts(Object.keys(sriLankanData[province]));
+    } else {
+      setDistricts([]);
+    }
+    setDistrict("");
+    setCity("");
+  }, [province]);
+
+  useEffect(() => {
+    if (district) {
+      setCities(sriLankanData[province][district]);
+    } else {
+      setCities([]);
+    }
+    setCity("");
+  }, [district]);
 
   const validateEventID = (value) => {
-    const regex = /^[a-zA-Z0-9]*$/;
-    if (!regex.test(value)) {
-      setEventIDError("Event ID can only contain letters and numbers.");
+    if (!value) {
+      setEventIDError("Event ID is required.");
     } else {
       setEventIDError("");
     }
     setEventID(value);
   };
 
-  const validateEventName = (eventName) => {
+  const validateEventName = (value) => {
     const regex = /^[a-zA-Z\s]*$/;
-    if (!regex.test(eventName)) {
+    if (!value) {
+      setEventNameError("Event Name is required.");
+    } else if (!regex.test(value)) {
       setEventNameError("Event Name can only contain letters and spaces.");
     } else {
       setEventNameError("");
     }
-    setEventName(eventName);
+    setEventName(value);
   };
 
-  const handleSave = async () => {
-    let isValid = true;
-  
-    if (!eventID) {
-      setEventIDError("Event ID is required.");
-      isValid = false;
-    } else {
-      setEventIDError("");
-    }
-  
-    if (!eventName) {
-      setEventNameError("Event Name is required.");
-      isValid = false;
-    } else {
-      setEventNameError("");
-    }
-  
-    if (!eventDate) {
-      setEventDateError("Event Date is required.");
-      isValid = false;
-    } else {
-      setEventDateError("");
-    }
-  
-    if (!province) {
+  const validateProvince = (value) => {
+    if (!value) {
       setProvinceError("Province is required.");
-      isValid = false;
     } else {
       setProvinceError("");
     }
-  
-    if (!district) {
+    setProvince(value);
+  };
+
+  const validateDistrict = (value) => {
+    if (!value) {
       setDistrictError("District is required.");
-      isValid = false;
     } else {
       setDistrictError("");
     }
-  
-    if (!city) {
+    setDistrict(value);
+  };
+
+  const validateCity = (value) => {
+    if (!value) {
       setCityError("City is required.");
-      isValid = false;
     } else {
       setCityError("");
     }
+    setCity(value);
+  };
+
+  // const handleImageChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setCoverImage(file);
+  //     setCoverImageError("");
+  //   } else {
+  //     setCoverImage(null);
+  //     setCoverImageError("Please select an image.");
+  //   }
+  // };
+
+  const handleSave = async () => {
+    validateEventID(eventID);
+    validateEventName(eventName);
+    validateProvince(province);
+    validateDistrict(district);
+    validateCity(city);
   
-    if (!coverImage) {
-      setCoverImageError("Cover Image is required.");
-      isValid = false;
-    } else {
-      setCoverImageError("");
-    }
-  
-    if (isValid) {
-      const formData = new FormData();
-      formData.append("eventID", eventID);
-      formData.append("eventName", eventName);
-      formData.append("eventDate", eventDate);
-      formData.append("province", province);
-      formData.append("district", district);
-      formData.append("city", city);
-      formData.append("comments", comments);
-      formData.append("coverImage", coverImage);
-  
+    if (
+      !eventIDError &&
+      !eventNameError &&
+      !provinceError &&
+      !districtError &&
+      !cityError 
+     
+    ) {
       try {
-        await addTreeEvent({
-          coverImage,
+        const formData = {
+        
           eventID,
           eventName,
           eventDate,
@@ -198,300 +208,172 @@ const EventCreateModal = ({ openModal, closeModal, refetch }) => {
           district,
           city,
           comments,
-        }).then((response) => {
-          console.log("Event added successfully:", response);
-          closeModal();
+        };
+  
+        const response = await addTreeEvent(formData).unwrap();
+  
+        if (response) {
+          console.log("Event successfully saved:", response);
+  
+          // Reset form fields
+          setEventID("");
+          setEventName("");
+          setProvince("");
+          setDistrict("");
+          setCity("");
+          setComments("");
+         
+  
           refetch();
-        });
+          closeModal();
+        }
       } catch (error) {
-        console.error("Error saving event:", error);
+        console.error("Failed to save event:", error);
+  
+        // Optionally, you can display the error to the user
+        setCoverImageError("Failed to save the event. Please try again.");
       }
+    } else {
+      console.log("Validation errors:", {
+        eventIDError,
+        eventNameError,
+        provinceError,
+        districtError,
+        cityError,
+        
+      });
     }
   };
   
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-    if (!allowedTypes.includes(file.type)) {
-      setCoverImageError("Only JPEG, PNG, and GIF formats are allowed.");
-      setCoverImage(null);
-      return;
-    }
-
-    setCoverImageError("");
-    setCoverImage(file);
-  };
 
   return (
-    // <Box  sx={{
-    //   "& .MuiDataGrid-root": {
-    //     border: "none",
-    //   },
-    //   "& .MuiDataGrid-cell": {
-    //     borderBottom: "none",
-    //   },
-    //   "& .MuiDataGrid-columnHeaders": {
-    //     backgroundColor: theme.palette.background.alt,
-    //     color: theme.palette.secondary[100],
-    //     borderBottom: "none",
-    //   },
-    //   "& .MuiDataGrid-virtualScroller": {
-    //     backgroundColor: theme.palette.primary.light,
-    //   },
-    //   "& .MuiDataGrid-footerContainer": {
-    //     backgroundColor: theme.palette.background.alt,
-    //     color: theme.palette.secondary[100],
-    //     borderTop: "none",
-    //   },
-    //   "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-    //     color: `${theme.palette.secondary[200]} !important`,
-    //   },
-    // }}>
-    <Modal
-      open={openModal}
-      onClose={closeModal}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={openModal} onClose={closeModal}>
       <Box
         sx={{
           position: "absolute",
           top: "50%",
           left: "50%",
-          transform: "translate(-50%,-50%)",
-          width: 700,
-          height: 600,
-          bgcolor: "#fff",
-          borderRadius: "20px",
+          transform: "translate(-50%, -50%)",
+          width: 600,
+          bgcolor: "background.paper",
+          borderRadius: "8px",
           boxShadow: 24,
           p: 4,
-          overflowY: "auto",
-        
-            "&.Mui-focused": { color: "#d67e75" },
-            "&.MuiInputLabel-shrink": { color: "#d67e75" },
-          
-          
         }}
       >
-        <h2 id="modal-modal-title">Create Event</h2>
-        <Box sx={{ mt: 6 }} >
+        <Typography variant="h6" component="h2" gutterBottom>
+          Create New Event
+        </Typography>
+        <Box sx={{ mt: 2 }}>
           <CustomTextField
             label="Event ID"
-            variant="outlined"
-            fullWidth
             value={eventID}
-            error={!!eventIDError}
-            helperText={eventIDError}
             onChange={(e) => validateEventID(e.target.value)}
-            sx={{
-              mb: 2,"& .MuiFormLabel-root": {
-                color: "#a3a3a3",
-              },
-              "& .Mui-focused .MuiFormLabel-root": {
-                color: "#0101",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused": {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                },
-              },
-              "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light,
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-            }}
+            fullWidth
+            error={Boolean(eventIDError)}
+            helperText={eventIDError}
           />
         </Box>
-        <Box sx={{ mt: 6 }}>
+        <Box sx={{ mt: 2 }}>
           <CustomTextField
             label="Event Name"
-            variant="outlined"
-            fullWidth
             value={eventName}
-            error={!!eventNameError}
-            helperText={eventNameError}
-
-            onChange={(e) => {
-              setEventName(e.target.value);
-              setEventNameError(validateEventName(e.target.value));
-            }}
-            
-            
-            sx={{
-              mb: 2,
-              "& .MuiFormLabel-root": {
-                color: "#a3a3a3",
-              },
-              "& .Mui-focused .MuiFormLabel-root": {
-                color: "#0101",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused": {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                },
-              },
-              "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.primary.light,
-          },
-          "& .MuiDataGrid-footerContainer": {
-            backgroundColor: theme.palette.background.alt,
-            color: theme.palette.secondary[100],
-            borderTop: "none",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.secondary[200]} !important`,
-          },
-            }}
-          />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <CustomTextField
-            label="Date"
-            type="date"
-            variant="outlined"
-            name="date"
-            value={eventDate}
+            onChange={(e) => validateEventName(e.target.value)}
             fullWidth
-            error={!!eventNameError}
+            error={Boolean(eventNameError)}
             helperText={eventNameError}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              inputProps: { min: getCurrentDate() },
-            }}
+          />
+        </Box>
+
+        <Box sx={{ mt: 2 }}>
+          <CustomTextField
+            label="Event Date"
+            type="date"
+            value={eventDate}
             onChange={(e) => setEventDate(e.target.value)}
-            sx={{
-              mr: 1,
-              mb: 2,
-              "& .MuiFormLabel-root": {
-                color: "#a3a3a3",
-              },
-              "& .Mui-focused .MuiFormLabel-root": {
-                color: "#d67e75",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused": {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                },
-              },
-              
-            }}
+            fullWidth
           />
         </Box>
-        <Box sx={{ mt: 6}}>
-          <h3>Location</h3>
-          <DropDownTextField
-            province={province}
-            district={district}
-            city={city}
-            onProvinceChange={setProvince}
-            onDistrictChange={setDistrict}
-            onCityChange={setCity}
-          />
+
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body1" gutterBottom>
+            Location:
+          </Typography>
+
+          <Box sx={{ mb: 2 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <CustomTextField
+                  select
+                  label="Province"
+                  value={province}
+                  onChange={(e) => validateProvince(e.target.value)}
+                  fullWidth
+                  error={Boolean(provinceError)}
+                  helperText={provinceError}
+                >
+                  {Object.keys(sriLankanData).map((province) => (
+                    <MenuItem key={province} value={province}>
+                      {province}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <CustomTextField
+                  select
+                  label="District"
+                  value={district}
+                  onChange={(e) => validateDistrict(e.target.value)}
+                  fullWidth
+                  error={Boolean(districtError)}
+                  helperText={districtError}
+                  disabled={!province}
+                >
+                  {districts.map((district) => (
+                    <MenuItem key={district} value={district}>
+                      {district}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <CustomTextField
+                  select
+                  label="Town"
+                  value={city}
+                  onChange={(e) => validateCity(e.target.value)}
+                  fullWidth
+                  error={Boolean(cityError)}
+                  helperText={cityError}
+                  disabled={!district}
+                >
+                  {cities.map((town) => (
+                    <MenuItem key={town} value={town}>
+                      {town}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-        <Box sx={{ mt: 6 }}>
+
+        <Box sx={{ mt: 2 }}>
           <TextField
             label="Comments"
-            variant="outlined"
-            name="comments"
-            value={comments}
-            fullWidth
             multiline
             rows={4}
+            value={comments}
             onChange={(e) => setComments(e.target.value)}
-            sx={{
-              mb: 2,
-              "& .MuiFormLabel-root": {
-                color: "#a3a3a3",
-              },
-              "& .Mui-focused .MuiFormLabel-root": {
-                color: "#d67e75",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused": {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                },
-              },
-            }}
-          />
-        </Box>
-        <Box sx={{ mt: 6 }}>
-          <TextField
-            type="file"
-            label="Cover Image"
-            variant="outlined"
-            name="coverImage"
             fullWidth
-            accept="image/*"
-            InputLabelProps={{
-              shrink: true,
-            }}
-            onChange={handleImageChange}
-            sx={{
-              mr: 1,
-              mb: 2,
-              "& .MuiFormLabel-root": {
-                color: "#a3a3a3",
-              },
-              "& .Mui-focused .MuiFormLabel-root": {
-                color: "#d67e75",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused": {
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#000",
-                  },
-                },
-              },
-            }}
           />
-          {coverImageError && (
-            <Typography variant="body2" color="error">
-              {coverImageError}
-            </Typography>
-          )}
         </Box>
+
+        
         <Box display="flex" justifyContent="flex-end">
           <Button
             type="button"
@@ -505,7 +387,6 @@ const EventCreateModal = ({ openModal, closeModal, refetch }) => {
         </Box>
       </Box>
     </Modal>
-    // </Box>
   );
 };
 
