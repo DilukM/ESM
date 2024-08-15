@@ -4,28 +4,20 @@ import mongoose from "mongoose";
 const mongoose = require('mongoose');
 
 const sponsorSchema = new mongoose.Schema({
-  eventID: {
+  sponsorID: {
     type: String,
     required: true,
     unique: true
   },
-  eventName: {
+  sponsorName: {
     type: String,
     required: true
   },
-  eventDate: {
+  sponsorDate: {
     type: Date,
     required: true
   },
-  province: {
-    type: String,
-    // required: true
-  },
-  district: {
-    type: String,
-    // required: true
-  },
-  city: {
+  donation: {
     type: String,
     // required: true
   },
