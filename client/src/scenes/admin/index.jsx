@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  DialogContentText,
   IconButton,
   Alert,
   TextField,
@@ -33,11 +34,40 @@ const Admin = () => {
   });
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+ 
 
+  const handleDelete = (itemID) => {
+    // setItemToDelete(itemID);
+    // setOpenConfirmDialog(true);
+  };
+
+
+
+  const handleConfirmDelete = () => {
+    // if (itemToDelete) {
+    //   deleteItemsIn(itemToDelete)
+    //     .unwrap()
+    //     .then((response) => {
+    //       console.log("Item deleted successfully");
+    //       refetch();
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error deleting item:", error);
+    //     });
+    // }
+    setOpenConfirmDialog(false);
+    // setItemToDelete(null);
+  };
+
+  const handleUpdateClick = (item) => {
+    // setSelectedItems(item); // Set the selected item data
+    // setShowupdateForm_in(true); // Show the update form
+  };
   const handleClose = () => {
     setOpen(false);
     refetch();
@@ -98,6 +128,80 @@ const Admin = () => {
         >
           Reset Password
         </Button>
+      ),
+    }, {
+      field: "actions",
+      headerName: "Actions",
+      flex: 0.7,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box display="flex" justifyContent="space-around">
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            mr={2}
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.secondary[400],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => handleDelete(params.row._id)}
+            >
+              Delete
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            sx={{
+              "& button": {
+                backgroundColor: theme.palette.primary[700],
+                color: "white",
+              },
+            }}
+          >
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => handleUpdateClick(params.row)}
+            >
+              Update
+            </Button>
+          </Box>
+          <Dialog
+            open={openConfirmDialog}
+            onClose={() => setOpenConfirmDialog(false)}
+            aria-labelledby="confirm-delete-dialog-title"
+            aria-describedby="confirm-delete-dialog-description"
+          >
+            <DialogTitle id="confirm-delete-dialog-title">
+              Confirm Deletion
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="confirm-delete-dialog-description">
+                Are you sure you want to delete this item? This action cannot be
+                undone.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setOpenConfirmDialog(false)}
+                color="primary"
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleConfirmDelete} color="error" autoFocus>
+                Delete
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Box>
       ),
     },
   ];
